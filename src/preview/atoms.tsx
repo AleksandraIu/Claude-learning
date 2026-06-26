@@ -39,7 +39,7 @@ export default function AtomsPreview() {
         <Section title="MenuSwitch">
           <div className="w-full">
             <Label>on / off (interactive)</Label>
-            <div className="flex items-center gap-xs bg-primary p-xs rounded-m w-fit">
+            <div className="flex items-center gap-xs p-xs rounded-m w-fit border border-gray-100">
               {['All teams', 'All templates'].map((label, i) => (
                 <MenuSwitch key={label} active={menuActive === i} onClick={() => setMenuActive(i)}>
                   {label}

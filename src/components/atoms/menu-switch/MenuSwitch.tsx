@@ -11,8 +11,7 @@ export default function MenuSwitch({ active = false, children = 'All teams', onC
     <button
       type="button"
       onClick={onClick}
-      className={`flex h-8 items-center justify-center px-[10px] rounded-s type-grotesk text-black
-        transition-all duration-150 whitespace-nowrap
+      className={`flex h-8 items-center justify-center px-[10px] rounded-s type-grotesk text-black whitespace-nowrap
         ${active ? 'border border-white' : ''}
         ${className}`}
     >

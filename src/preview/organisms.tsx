@@ -47,7 +47,7 @@ export default function OrganismsPreview() {
         <Section title="TopMenu">
           <div>
             <Label>all tabs / templates / off</Label>
-            <div className="bg-primary rounded-s overflow-hidden">
+            <div className="rounded-s overflow-hidden border border-gray-100">
               <TopMenu activeTab={activeTab} onTabChange={setActiveTab} />
             </div>
             <div className="mt-xs flex gap-xs">
@@ -67,13 +67,13 @@ export default function OrganismsPreview() {
         <Section title="Header">
           <div>
             <Label>default (TopMenu + SecondRow + pipeline bar)</Label>
-            <div className="bg-primary rounded-s overflow-hidden">
+            <div className="rounded-s overflow-hidden">
               <Header activeTab="all" pipelineValue={62} />
             </div>
           </div>
           <div>
             <Label>builder mode</Label>
-            <div className="bg-primary rounded-s overflow-hidden">
+            <div className="rounded-s overflow-hidden">
               <Header activeTab="templates" secondRowType="builder" pipelineValue={40} />
             </div>
           </div>

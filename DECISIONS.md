@@ -476,3 +476,42 @@ Already covered in D26 §3 (Header bar section vertical padding). Root cause: `p
 | **Card text whitespace** | `whitespace-nowrap` on name and role → text overflows column bounds | Removed `whitespace-nowrap` — text wraps naturally |
 | **Text column flex** | No `min-w-0` — flex child doesn't shrink below content width | Added `min-w-0` to text column and card container — allows shrink |
 | **Reason** | Figma 357:35635: cards are `flex-1` columns in a responsive-width board. At viewport widths < 1440px, 20px grotesk names overflow. Wrapping gives correct behaviour. |
+
+---
+
+## D27. Step 5.3 — Transparency + transition fixes (2026-06-26)
+
+### Figma MCP access blocker
+
+All four Figma MCP tools (`get_design_context`, `get_screenshot`, `get_metadata`, `use_figma`) returned "no edit access" for file `H6GFjHHnvVhFGb9bqiYs8T`. Node 357:35619 (Header fill) could not be read. Item 4 (Header background) was inferred from the current preview rendering (bg-primary = #ffe900). Manual verification recommended: open Figma Desktop → select 357:35619 → check Fill → confirm it maps to `--color-yellow-400` / `bg-primary`.
+
+### 1. MenuSwitch — transparent background
+
+| Decision | Before | After | Token |
+|---|---|---|---|
+| **Component bg** | No bg class on button (already transparent) ✓ | No change needed | — |
+| **Atoms preview container** | `bg-primary p-xs rounded-m` — yellow fill behind pills | `border border-gray-100 p-xs rounded-m` — outline only, no fill | `border-gray-100` = `--color-gray-100` |
+| **Reason** | `bg-primary` in preview wrapper was misrepresenting the component as having a yellow background. Component is transparent; in real usage it inherits the Header's `bg-primary`. Outline border makes bounds visible without adding a fill. |
+
+### 2. MenuSwitch — transition fix
+
+| Decision | Before | After |
+|---|---|---|
+| **Transition on button** | `transition-all duration-150` — fires on BOTH the button gaining active and the button losing active → both buttons animate on every click | Removed entirely — active border snaps on/off instantly; no flash on deselected button |
+| **Trade-off** | A sliding indicator (a single positioned element that moves) would animate ONLY motion, per spec, but requires DOM measurement or fixed-width pills — out of scope for this patch. Static active state (no transition) eliminates the deselect-flash bug with zero extra machinery. |
+
+### 3. TopMenu — transparent background
+
+| Decision | Before | After | Token |
+|---|---|---|---|
+| **Component bg** | No bg class on TopMenu container (already transparent) ✓ | No change needed | — |
+| **Organisms preview wrapper** | `bg-primary rounded-s overflow-hidden` — yellow fill wrapping standalone TopMenu | `border border-gray-100 rounded-s overflow-hidden` — outline only | `border-gray-100` |
+| **Reason** | Same as MenuSwitch: preview wrapper was making TopMenu appear filled. Component is transparent; full-context rendering (on yellow) is visible in the Header section of the same preview page. |
+
+### 4. Header — background color
+
+| Decision | Before | After | Token |
+|---|---|---|---|
+| **Background ownership** | No bg on Header component; preview wrapper provided `bg-primary` | `bg-primary` added to Header.tsx outer div — component owns its bg | `--color-primary: #ffe900` |
+| **Organisms preview wrappers** | `bg-primary rounded-s overflow-hidden` (two instances) | `rounded-s overflow-hidden` (bg removed — Header provides it) | — |
+| **Figma inference** | Could not read node 357:35619 fill directly (MCP access blocked). Color inferred as `bg-primary` from current preview rendering and TopMenu's `border-white` separator (indicates colored surface). Verify manually. |

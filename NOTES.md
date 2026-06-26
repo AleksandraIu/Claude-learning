@@ -3,6 +3,47 @@ Append-only. Newest entry first within each phase.
 
 ---
 
+## [Step 5.3: Transparency + transitions] — 2026-06-26
+
+### What changed
+
+| # | Item | File(s) | Change |
+|---|---|---|---|
+| 1 | MenuSwitch transparent bg | `atoms.tsx` | Preview container `bg-primary` → `border border-gray-100` (outline only; component itself always was transparent) |
+| 2 | MenuSwitch transition fix | `atoms/menu-switch/MenuSwitch.tsx` | Removed `transition-all duration-150` — active border snaps on/off; no flash on deselected button |
+| 3 | TopMenu transparent bg | `preview/organisms.tsx` | Preview wrapper `bg-primary` → `border border-gray-100` (component itself already transparent; full-context view is in Header section) |
+| 4 | Header background ownership | `organisms/header/Header.tsx` + `preview/organisms.tsx` | Header component gains `bg-primary`; preview wrappers drop their `bg-primary` (Header now owns its bg) |
+
+### Tokens used
+
+| Token | Usage |
+|---|---|
+| `bg-primary` (`--color-primary: #ffe900`) | Header outer div — component owns its background |
+| `border-gray-100` (`--color-gray-100: #eaeaea`) | Preview outlines for MenuSwitch and TopMenu demo containers |
+
+### Figma MCP blocker
+
+All four Figma tools (`get_design_context`, `get_screenshot`, `get_metadata`, `use_figma`) returned "no edit access" for file `H6GFjHHnvVhFGb9bqiYs8T`. Header fill for node 357:35619 could not be read directly. Color inferred as `bg-primary` (#ffe900) from current preview context. **Manual verification required:** open Figma Desktop → select node 357:35619 → confirm fill = `#ffe900` / `color/primary`. Logged D27.
+
+### Hardcoded # / px grep (touched files)
+
+Pre-existing D19/D24 gaps only: `text-[#979797]` stage labels (Header), `px-[10px]` MenuSwitch padding. Zero new hardcoded values.
+
+### Build
+
+`npm run build` → 106 modules, 0 TS errors, 0 Vite errors, 1.14s ✓
+
+### Verification
+
+1. MenuSwitch has NO yellow bg (preview container is outline-only, component transparent) ✓ ; switching does NOT animate the deselected button — transition removed ✓
+2. TopMenu preview wrapper transparent (outline border only) ✓ ; component itself was already transparent ✓
+3. Header component now owns `bg-primary` — renders yellow without relying on preview wrapper ✓
+4. Header bg matches Figma: inferred `bg-primary` (#ffe900) — **manual Figma verification pending** (MCP access blocked, D27)
+
+**4 items verified: 1-ish y, 2 y, 3 y, 4 pending-manual** | build ✓ | preview: http://localhost:5173/preview
+
+---
+
 ## [Step 5.2: Refine — MenuSwitch reclassification + Figma-accuracy fixes] — 2026-06-26
 
 ### What changed
