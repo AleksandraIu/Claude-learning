@@ -3,6 +3,38 @@ Append-only. Newest entry first within each phase.
 
 ---
 
+## [Step 5.5: Header ADD button color] — 2026-06-26
+
+### What changed
+
+**No code change.** Figma verification confirmed the ADD button is intentionally gold — not black like the action buttons.
+
+### Figma verification — node 357:35695
+
+| Property | Figma | Token | Match |
+|---|---|---|---|
+| Background | `#d1a63b` (`--color/controls/on-color/brown`) | `bg-gold-400` | ✓ |
+| Text | white (`--color/text-&-icon/on-color`) | `text-text-on-dark` | ✓ |
+| Radius | 999px (`--radius/over`) | `rounded-over` | ✓ |
+
+Figma screenshot shows gold pill labeled "ADD". Task condition: *"if Figma shows it black like the others, fix it"* — it doesn't; it's gold. No fix required.
+
+### Hardcoded # / px grep
+
+No files touched — nothing to grep.
+
+### Build
+
+No build needed (no code change). Last clean build: 106 modules, 0 errors (Step 5.4).
+
+### Prior fixes
+
+Header bg (`bg-primary` baked in) ✓ · MenuSwitch transparent + ON border ✓ · indicator-only transition ✓ · all unmodified.
+
+**ADD matches others: n/a — intentionally different per Figma | Prior fixes intact: y | Build: ✓ (no change) | Pushed to main: see commit below | Preview: http://localhost:5173/preview/organisms**
+
+---
+
 ## [Step 5.4: MenuSwitch ON-state border] — 2026-06-26
 
 ### What changed

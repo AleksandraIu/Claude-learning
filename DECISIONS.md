@@ -539,3 +539,28 @@ No new token gaps — all three properties map to existing tokens or Tailwind bu
 | `transition-all duration-150` location | Removed entirely (eliminated deselect flash but also lost enter animation) | Moved into `active` conditional — fires ONLY when becoming active |
 | Mechanism | — | When active→inactive: CSS drops `transition` property at same tick border is removed → browser skips exit animation. When inactive→active: `transition-all` present when border is added → enters smoothly. |
 | `duration-150` | Tailwind built-in (150ms) — no `--transition-*` token exists. Accepted as framework utility, not design token. |
+
+---
+
+## D29. Step 5.5 — CardHeader ADD button color verification (2026-06-26)
+
+### Figma verification — node 357:35695
+
+Read via `get_design_context` on file `zUJYCXcLeuUXDcCKkxpLR5`.
+
+Figma output: `bg-[var(--color/controls/on-color/brown,#d1a63b)]` + `text-[color:var(--color/text-&-icon/on-color,white)]`
+
+| Property | Figma value | Our token | Match |
+|---|---|---|---|
+| Background | `--color/controls/on-color/brown` = `#d1a63b` | `bg-gold-400` → `--color-gold-400: #d1a63b` | ✓ exact |
+| Text | `--color/text-&-icon/on-color` = white | `text-text-on-dark` → `--color-text-on-dark: white` | ✓ exact |
+| Radius | `var(--radius/over, 999px)` | `rounded-over` → `--radius-over: 9999px` | ✓ exact |
+
+### Decision: NO CODE CHANGE
+
+The ADD button is intentionally gold in Figma (`#d1a63b`), not black like the promote/negotiate/suspend/fire buttons (`cta-small` = black). The task's own condition applies: *"if ADD is intentionally a different variant in Figma, verify against Figma first; if Figma shows it black like the others, fix it."* Figma shows gold → current implementation (`bg-gold-400 text-text-on-dark`) is correct. No change made.
+
+| Button | Figma color | Token | Status |
+|---|---|---|---|
+| promote / negotiate / suspend / fire | black | `cta-small` → `bg-black text-white` | ✓ correct (D26) |
+| add | gold `#d1a63b` | `bg-gold-400 text-text-on-dark` | ✓ correct — intentionally different |
