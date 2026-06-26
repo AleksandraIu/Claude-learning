@@ -3,6 +3,38 @@ Append-only. Newest entry first within each phase.
 
 ---
 
+## [Step 5.1: Preview polish] — 2026-06-26
+
+### What changed (`src/preview/index.tsx` only — no components, tokens, or fonts touched)
+
+| Change | Before | After | Token used |
+|---|---|---|---|
+| Eyebrow contrast | `text-border` (gray-100 #eaeaea — near-invisible) | `text-black/50` | `--color-black` + opacity modifier |
+| Subtitle contrast | `text-border` | `text-black/50` | same |
+| Badge labels | `'Live'` (all four) | `'done'` × 3, `'in progress'` × 1 (Organisms) | — |
+| Organisms badge style | `bg-primary text-black` | `bg-bg-subtle text-black/50` | `--color-bg-subtle`, `--color-black` |
+| Badge padding | `py-xxxs` (2px — already correct) | unchanged | `--spacing-xxxs: 2px` |
+| Description line-height | `type-grotesk` default (leading-grotesk = 10px) | + `leading-h3` (18px) | `--leading-h3` |
+| Description color | `style={{ color: '#6b6b6b' }}` (hardcoded) | `text-black/50` | `--color-black` |
+| Layout | `grid` + inline `gridTemplateColumns` string | `flex flex-col gap-m` (4 full-width stacked rows) | `--spacing-m: 20px` |
+
+### Hardcoded # / px grep result
+`grep -n '#\|px' src/preview/index.tsx` → one hit: `px-xs py-xxxs` (Tailwind token utilities, not hardcoded values). **Zero hardcoded hex or inline px.**
+
+### Build
+`npm run build` → 106 modules, 0 TS errors, 0 Vite errors, 1.45s ✓
+
+### Verification
+1. Both header lines clearly readable — `text-black/50` ≈ #808080 on white, well above WCAG AA ✓
+2. Badges: Styles=done, Atoms=done, Molecules=done, Organisms=in progress ✓
+3. Badge 2px top/bottom padding via `py-xxxs` (`--spacing-xxxs: 2px`) ✓
+4. Descriptions: `leading-h3` (18px) on 11px grotesk = loose, readable ✓
+5. Layout: 4 full-width stacked rows, each navigates to layer page, persistent nav intact ✓
+
+Dev server: http://localhost:5177/preview
+
+---
+
 ## [Step 4: Atoms Refine + Molecules] — 2026-06-24
 
 ### Atoms refined (6 files updated)

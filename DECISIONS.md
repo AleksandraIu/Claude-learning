@@ -399,3 +399,17 @@ Note: `rounded-[12px]` still hardcoded — `--radius-l = 4px` in tokens doesn't 
 - `p-[10px]` — MenuSwitch horizontal padding (between `xs=8px` and `s=14px`). No token.
 - `gap-[50px]` — Kanban section gap (between `xl=30` and `xxl=60`). No token.
 - `pb-[84px]` — Kanban bottom padding (Figma uses `pb-[var(--font/size/h1)]`, repurposing font-size as spacing). No dedicated spacing token.
+
+---
+
+## D25. Preview Index Polish — /preview page only (2026-06-26)
+
+| Decision | Rationale |
+|---|---|
+| **Eyebrow + subtitle contrast: `text-border` → `text-black/50`** | `text-border` = gray-100 (#eaeaea) on white = near-invisible. `text-black/50` = 50% opacity on `--color-black` → ~#808080 equivalent — clearly readable as secondary, not full-black. Uses existing `black` token + Tailwind v4 opacity modifier (established pattern from D23/D24). No new token. |
+| **Badge labels: 'Live' → 'done' / 'in progress'** | "Live" conflates deployment status with build status. "done" reflects completion of that layer's component work. Organisms badge is "in progress" — organisms are built but the layer is still being iterated. |
+| **Organisms status: 'done' → 'in-progress' badge styling** | Badge uses `bg-bg-subtle text-black/50` instead of `bg-primary text-black`. Visually distinguishes in-progress from done without new tokens. All 4 cards remain clickable (no `pointer-events-none`). |
+| **Badge vertical padding: `py-xxxs` (2px) — kept as-is** | `--spacing-xxxs: 2px` already provides 2px top/bottom padding. No change needed — token was correct. |
+| **Description line-height: `type-grotesk` default (10px) → + `leading-h3` (18px)** | `--leading-grotesk = 10px` on 11px font is tighter than 1× — barely breathes on multi-word descriptions. Added `leading-h3` utility (maps to `--leading-h3: 18px`, an existing token) to override. Looser, more legible. |
+| **Description color: `style={{ color: '#6b6b6b' }}` → `text-black/50`** | Removed hardcoded hex. `text-black/50` visually matches intent (muted secondary) using existing `black` token. |
+| **Layout: CSS grid with inline `gridTemplateColumns` → `flex flex-col gap-m`** | Removes the only remaining inline style (hardcoded grid template string). `flex flex-col` is a Tailwind utility; `gap-m` maps to `--spacing-m: 20px` (existing token). Each card now spans full width — one per row, 4 rows total. |
