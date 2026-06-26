@@ -1,4 +1,3 @@
-export { default as MenuSwitch } from './menu-switch';
 export { default as SecondRow } from './second-row';
 export type { SecondRowType } from './second-row';
 export { default as TopMenu } from './top-menu';

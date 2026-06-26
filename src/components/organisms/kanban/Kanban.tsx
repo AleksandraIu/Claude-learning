@@ -74,11 +74,11 @@ export default function Kanban({ headline = 'Pipeline', columns = DEFAULT_COLUMN
             {/* Cards */}
             <div className="flex flex-col gap-xxxs items-start w-full">
               {col.cards.map((card, i) => (
-                <div key={i} className="bg-gray-100 flex gap-s items-start p-s rounded-s w-full">
+                <div key={i} className="bg-gray-100 flex gap-s items-start p-s rounded-s w-full min-w-0">
                   <Avatar variant="katya" className="shrink-0" />
-                  <div className="flex flex-col gap-xs items-start">
-                    <p className="type-h3 text-black tracking-[-0.4px] whitespace-nowrap">{card.name}</p>
-                    <p className="type-pixel tracking-[2px] uppercase text-black whitespace-nowrap">{card.role}</p>
+                  <div className="flex flex-col gap-xs items-start min-w-0">
+                    <p className="type-h3 text-black tracking-[-0.4px]">{card.name}</p>
+                    <p className="type-pixel tracking-[2px] uppercase text-black">{card.role}</p>
                   </div>
                 </div>
               ))}

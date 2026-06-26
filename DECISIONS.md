@@ -413,3 +413,66 @@ Note: `rounded-[12px]` still hardcoded — `--radius-l = 4px` in tokens doesn't 
 | **Description line-height: `type-grotesk` default (10px) → + `leading-h3` (18px)** | `--leading-grotesk = 10px` on 11px font is tighter than 1× — barely breathes on multi-word descriptions. Added `leading-h3` utility (maps to `--leading-h3: 18px`, an existing token) to override. Looser, more legible. |
 | **Description color: `style={{ color: '#6b6b6b' }}` → `text-black/50`** | Removed hardcoded hex. `text-black/50` visually matches intent (muted secondary) using existing `black` token. |
 | **Layout: CSS grid with inline `gridTemplateColumns` → `flex flex-col gap-m`** | Removes the only remaining inline style (hardcoded grid template string). `flex flex-col` is a Tailwind utility; `gap-m` maps to `--spacing-m: 20px` (existing token). Each card now spans full width — one per row, 4 rows total. |
+
+---
+
+## D26. Refine — MenuSwitch reclassification + Figma-accuracy fixes (2026-06-26)
+
+### 1. MenuSwitch: organism → atom
+
+| Decision | Rationale |
+|---|---|
+| **MenuSwitch moved to `src/components/atoms/menu-switch/`** | Figma node 357:35722 is a single interactive pill button — no composition of other atoms. It is atomic by definition (one concern: active/inactive tab button). |
+| **TopMenu import updated to `../../atoms/menu-switch/MenuSwitch`** | Follows new atom location. TopMenu remains an organism (composes MenuSwitch + Button). |
+| **Organisms barrel removes MenuSwitch; Atoms barrel adds it** | Consistent with reclassification. |
+| **Figma cross-page move: PENDING font fix** | Plugin sandbox cannot load "Akkurat LL Cyr TT" (same blocker as Step 1 Prepare). Cross-page `appendChild` requires `loadFontAsync` for all descendant text fonts. Must be done in Figma Desktop App with local fonts. |
+| **MenuSwitch style unchanged** | Figma 357:35722: `h-[32px] p-[10px] rounded-[4px] type-grotesk text-black` + white border when active. Code matches. D24 gap `p-[10px]` unchanged — no token for 10px. |
+
+### 2. TopMenu Generate Report button color
+
+| Decision | Before | After | Token |
+|---|---|---|---|
+| **Generate Report fill** | `Button variant="secondary"` → `bg-gray-100` | Inline button with `bg-bg` (white) | `--color-bg: white` |
+| **Reason** | Figma 357:35588: fill = `var(--color/bar/on-base-emty, white)` = white. `secondary` renders gray-100. | Matches Figma exactly. | Hover: `bg-bg-subtle` = `--color-bg-subtle: gray-100` |
+| **Button atom not modified** | Modifying atom is out of task scope. | Inlined in TopMenu to avoid className override complexity. | — |
+| **TopMenu Button import removed** | Button no longer used in TopMenu (both MenuSwitch and Generate Report are now inline). | Clean import. | — |
+
+### 3. Header bar section spacing
+
+| Decision | Before | After | Token |
+|---|---|---|---|
+| **Bar section vertical padding** | `py-s` (14px top + 14px bottom) | No vertical padding | Figma 357:35619 Frame 1382: `pt=0 pb=0` |
+| **Gap bar → labels** | `gap-xs` (8px) | `gap-xs` (8px) — unchanged | Figma gap=8 = `--spacing-xs` ✓ |
+| **Reason** | `py-s` created 14px whitespace above bar and below labels, making the bar float away from the content above/below it. Figma has zero vertical padding on that container. | — |
+
+### 4. Bar atom rebuild — big variant
+
+| Decision | Before | After |
+|---|---|---|
+| **Big variant dot structure** | Single 12×12px rounded circle per position | Two 5×5px circles stacked per column with `gap-xxxs` (2px) between rows |
+| **Figma reference** | 357:34112 big variant: each column = `flex-col gap-[2px]` with 2 × `size-[5px]` dots. Total column height = 5+2+5 = 12px ✓ |
+| **Dot size** | `dotPx = size === 'big' ? 12 : 5` | `DOT_PX = 5` (always 5px; D19 gap — no token for 5px) |
+| **Default variant** | 1 row of `dotPx`-sized dots | 1 row of 5px dots (unchanged visually, structurally correct) |
+| **Token gaps unchanged** | `rounded-[20px]`, `bg-[#b8c6c3]`, `bg-[#00867b]` | Same D19 documented gaps |
+
+### 5. CardHeader — action buttons + "add" button
+
+| Decision | Before | After | Token |
+|---|---|---|---|
+| **Action buttons (promote/negotiate/suspend/fire) in default variant** | `variant="on-color"` → `bg-white text-black` | `variant="cta-small"` → `bg-black text-white` | Figma 357:35712: `bg-[var(--color/black,black)]` |
+| **"add" button color** | `Button variant="on-color"` → `bg-white text-black` | Inline `bg-gold-400 text-text-on-dark` | `--color-gold-400: #d1a63b`, `--color-text-on-dark: white` |
+| **"add" button in variant2** | Missing | Added after action buttons | Same tokens as above |
+| **Reason** | Figma 357:35695 = gold (#d1a63b) "add" button with white text. Must be DIFFERENT from action buttons (black) — gold vs black satisfies requirement. `on-color` variant = bg-white not gold — mismatch fixed. |
+| **Button atom not modified** | No matching variant for `bg-gold-400 text-white`. Inlined in CardHeader using existing tokens only. | — |
+
+### 6. Bar spacing from text (Header pipeline)
+
+Already covered in D26 §3 (Header bar section vertical padding). Root cause: `py-s` = 14px extra padding above/below the bar+labels container. Fix: remove `py-s`.
+
+### 7. Kanban text overflow
+
+| Decision | Before | After |
+|---|---|---|
+| **Card text whitespace** | `whitespace-nowrap` on name and role → text overflows column bounds | Removed `whitespace-nowrap` — text wraps naturally |
+| **Text column flex** | No `min-w-0` — flex child doesn't shrink below content width | Added `min-w-0` to text column and card container — allows shrink |
+| **Reason** | Figma 357:35635: cards are `flex-1` columns in a responsive-width board. At viewport widths < 1440px, 20px grotesk names overflow. Wrapping gives correct behaviour. |

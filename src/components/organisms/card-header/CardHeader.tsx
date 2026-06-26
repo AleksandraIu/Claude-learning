@@ -1,6 +1,8 @@
 // CardHeader: full hero card for a person profile.
-// Default: golden/yellow tinted photo bg + name + role (gold text) + white action pills + dropdown tags.
-// Variant2: light photo bg with gradient + black name/role + cta-small action pills + SwitchGroup.
+// Default: golden/yellow tinted photo bg + name + role (gold text) + black action pills + gold "add" buttons.
+// Variant2: light photo bg with gradient + black name/role + cta-small action pills + SwitchGroup + gold "add".
+// D26: action buttons (promote/negotiate/suspend/fire) = cta-small (black, per Figma 357:35712).
+//   "add" button = bg-gold-400 text-text-on-dark (Figma 357:35695 = #d1a63b = gold-400 token).
 // Token gaps: D22 rounded-[12px] (rounds/l), D24 #ffb700 (mix-blend overlay), D19 gold-400 text.
 // Photo URLs from Figma MCP expire after 7 days — replace with permanent asset URLs in production.
 import Button from '../../atoms/button/Button';
@@ -23,6 +25,20 @@ interface CardHeaderProps {
   actions?: string[];
   photo?: string;
   className?: string;
+}
+
+// Gold "add" button — bg-gold-400 (existing token #d1a63b) + text-text-on-dark (white token).
+// Matches Figma node 357:35695. Different color from cta-small (black) action buttons.
+function AddButton({ onClick }: { onClick?: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="inline-flex h-8 items-center justify-center px-s py-xs rounded-over bg-gold-400 hover:opacity-90 transition-all duration-150 ease-in-out"
+    >
+      <span className="type-pixel tracking-[2px] uppercase whitespace-nowrap text-text-on-dark">add</span>
+    </button>
+  );
 }
 
 export default function CardHeader({
@@ -56,7 +72,7 @@ export default function CardHeader({
           <span className="type-pixel tracking-[2px] uppercase text-gold-400">access</span>
         </div>
 
-        {/* Center: name + role + actions */}
+        {/* Center: name + role + actions (D26: cta-small = black, per Figma 357:35712) */}
         <div className="relative flex flex-col gap-xl items-center w-full text-center">
           <div className="flex flex-col gap-xl items-start w-full">
             <p className="type-h1 text-black w-full text-center leading-[0.9] tracking-[-0.84px]">{name}</p>
@@ -64,22 +80,22 @@ export default function CardHeader({
           </div>
           <div className="flex items-center gap-xxxs">
             {actions.map(a => (
-              <Button key={a} variant="on-color">{a}</Button>
+              <Button key={a} variant="cta-small">{a}</Button>
             ))}
           </div>
         </div>
 
-        {/* Bottom: tag dropdowns */}
+        {/* Bottom: tag dropdowns + gold "add" buttons (357:35695) */}
         <div className="relative flex items-start justify-between w-full">
           <div className="flex flex-wrap gap-xxxs items-center">
             {teamTags.map(tag => (
               <Dropdown key={tag} variant="on-color" showLabel={false} defaultValue={tag} className="w-auto" />
             ))}
-            <Button variant="on-color">add</Button>
+            <AddButton />
           </div>
           <div className="flex flex-wrap gap-xxxs items-center justify-end">
             <Dropdown variant="on-color" showLabel={false} defaultValue={accessLevel} className="w-auto" />
-            <Button variant="on-color">add</Button>
+            <AddButton />
           </div>
         </div>
       </div>
@@ -102,12 +118,13 @@ export default function CardHeader({
         <p className="type-description uppercase text-black w-full text-center tracking-[-0.9px]">{title}</p>
       </div>
 
-      {/* CTA actions */}
+      {/* CTA actions + gold "add" button (D26: added per Figma 357:35695) */}
       <div className="relative flex flex-col gap-xl items-center">
         <div className="flex items-center gap-xxxs">
           {actions.map(a => (
             <Button key={a} variant="cta-small">{a}</Button>
           ))}
+          <AddButton />
         </div>
         <SwitchGroup items={switchItems} />
       </div>

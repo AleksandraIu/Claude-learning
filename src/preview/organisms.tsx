@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import PreviewNav from './PreviewNav';
 import {
-  MenuSwitch, SecondRow, TopMenu, Header,
+  SecondRow, TopMenu, Header,
   Kanban, Task, CardHeader,
 } from '../components/organisms';
 
@@ -20,27 +20,12 @@ function Label({ children }: { children: React.ReactNode }) {
 
 export default function OrganismsPreview() {
   const [activeTab, setActiveTab] = useState<'all' | 'templates' | 'off'>('all');
-  const [menuActive, setMenuActive] = useState(0);
 
   return (
     <div className="min-h-screen bg-bg text-text p-xxl">
       <div className="max-w-5xl mx-auto">
         <PreviewNav />
         <h1 className="type-h1 mb-xxl">Organisms</h1>
-
-        {/* MENU SWITCH */}
-        <Section title="MenuSwitch">
-          <div>
-            <Label>on / off state</Label>
-            <div className="flex items-center gap-xs bg-primary p-xs rounded-m w-fit">
-              {['All teams', 'All templates'].map((label, i) => (
-                <MenuSwitch key={label} active={menuActive === i} onClick={() => setMenuActive(i)}>
-                  {label}
-                </MenuSwitch>
-              ))}
-            </div>
-          </div>
-        </Section>
 
         {/* SECOND ROW */}
         <Section title="SecondRow">

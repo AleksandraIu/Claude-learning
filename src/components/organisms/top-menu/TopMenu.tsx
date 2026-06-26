@@ -1,7 +1,7 @@
 // TopMenu: app-level navigation bar (Hired & Wired HR app).
 // Renders on dark/colored surface — uses white border-b.
-import Button from '../../atoms/button/Button';
-import MenuSwitch from '../menu-switch/MenuSwitch';
+// D26: Generate Report bg = bg-bg (white per Figma 357:35588), not gray-100 (secondary).
+import MenuSwitch from '../../atoms/menu-switch/MenuSwitch';
 
 export type TopMenuTab = 'all' | 'templates' | 'off';
 
@@ -29,7 +29,13 @@ export default function TopMenu({
         <p className="type-h2 text-black whitespace-nowrap tracking-[-0.4px]">Hired &amp; Wired</p>
 
         <div className="flex items-center gap-m">
-          <Button variant="secondary" onClick={onReport}>Generate report</Button>
+          <button
+            type="button"
+            onClick={onReport}
+            className="inline-flex h-8 items-center justify-center px-s py-xs rounded-over bg-bg hover:bg-bg-subtle transition-all duration-150 ease-in-out"
+          >
+            <span className="type-pixel tracking-[2px] uppercase whitespace-nowrap text-text">Generate report</span>
+          </button>
 
           <div className="flex items-center gap-xxxs">
             <MenuSwitch active={activeTab === 'all'} onClick={() => onTabChange?.('all')}>

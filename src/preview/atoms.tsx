@@ -1,6 +1,7 @@
+import { useState } from 'react';
 import {
   Status, Switch, Tag, ErrorBanner, Flag, Avatar, AvatarGroup,
-  Icons, Graph, Bar, Input, TextArea, Dropdown, Button, SwitchGroup, List,
+  Icons, Graph, Bar, Input, TextArea, Dropdown, Button, SwitchGroup, List, MenuSwitch,
 } from '../components/atoms';
 import PreviewNav from './PreviewNav';
 
@@ -27,11 +28,26 @@ function Swatch({ label, children }: { label: string; children: React.ReactNode 
 }
 
 export default function AtomsPreview() {
+  const [menuActive, setMenuActive] = useState(0);
   return (
     <div className="min-h-screen bg-bg text-text p-xxl">
       <div className="max-w-5xl mx-auto">
         <PreviewNav />
         <h1 className="type-h1 mb-xxl">Atoms</h1>
+
+        {/* MENU SWITCH */}
+        <Section title="MenuSwitch">
+          <div className="w-full">
+            <Label>on / off (interactive)</Label>
+            <div className="flex items-center gap-xs bg-primary p-xs rounded-m w-fit">
+              {['All teams', 'All templates'].map((label, i) => (
+                <MenuSwitch key={label} active={menuActive === i} onClick={() => setMenuActive(i)}>
+                  {label}
+                </MenuSwitch>
+              ))}
+            </div>
+          </div>
+        </Section>
 
         {/* BUTTON */}
         <Section title="Button">

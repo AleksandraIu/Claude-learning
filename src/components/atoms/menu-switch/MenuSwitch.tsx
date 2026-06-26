@@ -1,4 +1,4 @@
-// Token gap (D24): p-[10px] between xs(8) and s(14) — no token. rounded-s used for rounded-xxs.
+// Token gap (D24): p-[10px] horizontal padding — between xs(8) and s(14), no exact token.
 interface MenuSwitchProps {
   active?: boolean;
   children?: React.ReactNode;

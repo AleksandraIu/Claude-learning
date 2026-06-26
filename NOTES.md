@@ -3,6 +3,61 @@ Append-only. Newest entry first within each phase.
 
 ---
 
+## [Step 5.2: Refine — MenuSwitch reclassification + Figma-accuracy fixes] — 2026-06-26
+
+### What changed
+
+| # | Item | File(s) | Change |
+|---|---|---|---|
+| 1 | MenuSwitch → atom | `atoms/menu-switch/` (new), `organisms/menu-switch/` (deleted), barrels, TopMenu import | Moved component; style unchanged |
+| 2 | TopMenu Generate Report button | `organisms/top-menu/TopMenu.tsx` | `bg-gray-100` → `bg-bg` (white, per Figma 357:35588). Inlined without Button atom. |
+| 3 | Header bar section spacing | `organisms/header/Header.tsx` | `py-s` (14px) removed from bar+labels container (Figma pt=0 pb=0 per 357:35619 Frame 1382) |
+| 4 | Bar big variant structure | `atoms/bar/Bar.tsx` | Each "big" position now renders 2×5px stacked dots (gap-xxxs) matching Figma 357:34112. Single 12px dot replaced. |
+| 5 | CardHeader action buttons | `organisms/card-header/CardHeader.tsx` | Default variant: `on-color` (white) → `cta-small` (black) per Figma 357:35712 |
+| 5 | CardHeader "add" button | `organisms/card-header/CardHeader.tsx` | `on-color` (white) → inline `bg-gold-400 text-text-on-dark` per Figma 357:35695 (#d1a63b). Added to variant2. |
+| 6 | Kanban text overflow | `organisms/kanban/Kanban.tsx` | Removed `whitespace-nowrap` from name/role text; added `min-w-0` to card+text containers |
+| — | Atoms preview | `preview/atoms.tsx` | MenuSwitch section added (interactive on/off demo on yellow bg) |
+| — | Organisms preview | `preview/organisms.tsx` | MenuSwitch section removed |
+
+### Tokens used / gaps
+
+| Token | Usage |
+|---|---|
+| `bg-bg` (`--color-bg: white`) | Generate Report button fill (TopMenu) |
+| `bg-bg-subtle` (`--color-bg-subtle: gray-100`) | Generate Report hover |
+| `text-text` (`--color-text: black`) | Generate Report label |
+| `bg-gold-400` (`--color-gold-400: #d1a63b`) | CardHeader "add" button fill |
+| `text-text-on-dark` (`--color-text-on-dark: white`) | CardHeader "add" button label |
+| `gap-xxxs` (`--spacing-xxxs: 2px`) | Bar big: row gap within each dot column |
+| Pre-existing D19 gaps | `bg-[#b8c6c3]`, `bg-[#00867b]`, `rounded-[20px]`, dot `style={{width:5,height:5}}` in Bar — unchanged |
+
+### Figma move status
+
+MenuSwitch Figma cross-page move: **PENDING font fix**. Plugin sandbox cannot load "Akkurat LL Cyr TT" (local font not available to browser plugin). Same blocker documented in Step 1 Prepare. Manual action required: open Figma Desktop App → drag `menu-switch` component set (357:35722) from `ds-organisms` to Atoms page.
+
+### Hardcoded # / px grep (touched files)
+
+All hits are pre-existing D19/D24 documented token gaps:
+- `text-[#cbcbcb]` Kanban count label (D19), `text-[#979797]` Header stage labels (D19)
+- `bg-[#b8c6c3]`, `bg-[#00867b]` Bar fills (D19), `rounded-[20px]` Bar radius (D19)
+- `bg-[#ffb700]` CardHeader golden overlay (D24), `rounded-[12px]` card radius (D22)
+- `style={{ width: DOT_PX, height: DOT_PX }}` where DOT_PX=5 (D19 — no 5px token)
+- **Zero new hardcoded values introduced.**
+
+### Build
+`npm run build` → 106 modules, 0 TS errors, 0 Vite errors, 1.33s ✓
+
+### Verification
+1. MenuSwitch now under Atoms (code + preview/atoms) ✓, styled per Figma (transparent bg + white border on active) ✓
+2. TopMenu Generate Report button: white fill (`bg-bg`) ✓
+3. Header bar section: `py-s` removed → bar sits flush with surrounding content ✓
+4. Bar big variant: 2×5px stacked dots per position, matches Figma 357:34112 structure ✓
+5. CardHeader action buttons: `cta-small` (black) ✓; "add" button: `bg-gold-400 text-text-on-dark` (gold/white) ✓; added to variant2 ✓
+6. Kanban text wraps, no overflow; `min-w-0` added ✓
+7. MenuSwitch Figma move: **pending** (font blocker, logged D26)
+
+---
+
 ## [Step 5.1: Preview polish] — 2026-06-26
 
 ### What changed (`src/preview/index.tsx` only — no components, tokens, or fonts touched)

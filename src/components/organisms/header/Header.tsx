@@ -27,8 +27,8 @@ export default function Header({
 
       {showSecondRow && <SecondRow type={secondRowType} />}
 
-      {/* Pipeline progress bar with stage labels */}
-      <div className="flex flex-col gap-xs px-m py-s w-full">
+      {/* Pipeline progress bar with stage labels — D26: pt=0 pb=0 per Figma 357:35619 Frame 1382 */}
+      <div className="flex flex-col gap-xs px-m w-full">
         <Bar value={pipelineValue} size="big" className="w-full" />
         <div className="flex items-start justify-between w-full">
           {PIPELINE_STAGES.map(stage => (
