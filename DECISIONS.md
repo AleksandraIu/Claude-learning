@@ -542,6 +542,29 @@ No new token gaps — all three properties map to existing tokens or Tailwind bu
 
 ---
 
+## D30. Step 5.6 — MenuSwitch ON-state border not rendering (root cause + fix) (2026-06-26)
+
+### Root cause
+
+`border-white` (`--color-white: #ffffff`) on a white/transparent preview background = **zero contrast — invisible**. The border code was always correct. Step 5.3 changed the atoms preview wrapper from `bg-primary` (#ffe900 yellow) to `border border-gray-100` (gray outline on white page). White border on white background cannot be seen.
+
+The component itself is designed to sit on `bg-primary` — in real app usage it is always inside Header which has `bg-primary`. The Figma node 357:35723 screenshot shows the white border against a dark/colored surface, confirming this is a context-dependent component.
+
+### Fix
+
+| File | Before | After |
+|---|---|---|
+| `src/preview/atoms.tsx` — MenuSwitch wrapper | `border border-gray-100 … w-fit` (gray outline, white bg) | `bg-primary p-xs rounded-m w-fit` (yellow context bg) |
+| `MenuSwitch.tsx` | unchanged | unchanged — `border-white` / 1px / `rounded-s` correct throughout |
+
+The component `<button>` retains no background class (transparent). Only the **preview wrapper** restores `bg-primary` to match the real usage context.
+
+### Token audit (Step 5.3 decision revisited)
+
+Step 5.3 intent: "menu-switch container must be transparent" — this referred to the COMPONENT having no fill (the button has no bg class ✓). It was misapplied to the preview context wrapper, stripping the yellow background that `border-white` requires for visibility. Preview context ≠ component fill.
+
+---
+
 ## D29. Step 5.5 — CardHeader ADD button color verification (2026-06-26)
 
 ### Figma verification — node 357:35695

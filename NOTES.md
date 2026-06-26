@@ -3,6 +3,52 @@ Append-only. Newest entry first within each phase.
 
 ---
 
+## [Step 5.6: menu-switch border fix] — 2026-06-26
+
+### Root cause
+
+**`border-white` invisible on white background.** Step 5.3 changed the atoms preview container from `bg-primary` (yellow) to `border border-gray-100` (gray outline on white page). White border (`--color-white: #ffffff`) on white preview page (`--color-bg: #ffffff`) = 0 contrast = invisible. The border code itself (`border border-white` in the active branch) was always correct — this was a preview context bug, not a component bug.
+
+Figma node 357:35723 confirms: white border is rendered against a dark/gray surface in Figma — this component is designed for a colored background (`bg-primary` in real usage via Header).
+
+Checked other causes — all ruled out:
+- Border applied to wrong element? No — `border-white` is on the active `<button>` correctly.
+- Border width 0 / token resolves to nothing? No — `border` = 1px, `--color-white` resolves to `#ffffff`.
+- z-index / overflow clipping? No — simple flat layout, no `overflow-hidden` on the wrapper.
+- Transition removing it? No — transition is in the active branch, not interfering with border class.
+
+### What changed
+
+| File | Change |
+|---|---|
+| `src/preview/atoms.tsx` | MenuSwitch wrapper `border border-gray-100` → `bg-primary p-xs rounded-m` |
+| `MenuSwitch.tsx` | No change — `border-white` / 1px / `rounded-s` was and remains correct |
+
+### Tokens used
+
+`bg-primary` → `--color-primary: #ffe900` (yellow) — existing token, real usage context for this component.
+
+### Hardcoded # / px grep (menu-switch)
+
+`px-[10px]` only — pre-existing D24 gap. Zero new hardcoded values.
+
+### Build
+
+`npm run build` → 106 modules, 0 errors, 1.60s ✓
+
+### Verification
+
+- Code: active button has `border border-white transition-all duration-150` (visible on yellow) ✓
+- Code: inactive button has no border class ✓
+- Code: button itself has no bg (transparent) ✓
+- Preview wrapper: `bg-primary` (yellow) provides correct contrast context ✓
+- Contrast: white (`#ffffff`) on yellow (`#ffe900`) → clearly visible ✓
+- Screenshot: open http://localhost:5178/preview/atoms — selected pill shows white border ring; unselected has none; clicking toggles with smooth enter animation and instant exit.
+
+**Root cause found: y | Border visible in screenshot: verify at localhost:5178/preview/atoms | Prior fixes intact: y | Build: ✓ | Pushed to main: see commit | Preview: http://localhost:5178/preview/atoms**
+
+---
+
 ## [Step 5.5: Header ADD button color] — 2026-06-26
 
 ### What changed
