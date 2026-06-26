@@ -1,0 +1,401 @@
+# DECISIONS.md — Every Naming & Structure Call
+**Principle:** One convention, no deviations, rationale on every line.
+
+---
+
+## D0. Mode
+
+| Decision | Rationale |
+|---|---|
+| **APPLY mode** (not plan-only) | `use_figma` present in MCP tools — write capability confirmed. Proceeding to rename in Figma, not just producing maps. |
+
+---
+
+## D1. Master Naming Convention
+
+| Rule | Decision | Rationale |
+|---|---|---|
+| Token path separator | `/` (slash) | Standard design token format; matches Style Dictionary convention |
+| Token segment casing | `lowercase` | Consistent with npm/CSS convention; no mixed-case ambiguity |
+| Component name separator | `-` (hyphen / kebab-case) | Maps cleanly to React file names; no space or underscore edge cases |
+| Component name casing | `all-lowercase-kebab` | React components use PascalCase in code; Figma names → file names → auto-PascalCase on import |
+| Abbreviations | None except industry-standard | Self-documenting names reduce cognitive load for new contributors |
+| Plurals in component names | Avoided | Component represents one instance; plural is the consumer's job |
+
+---
+
+## D2. Token Convention: `category/role/scale`
+
+| Token type | Pattern | Examples |
+|---|---|---|
+| Color | `color/[role]` | `color/primary`, `color/background` |
+| Font family | `font/family/[name]` | `font/family/serif`, `font/family/grotesk` |
+| Font size | `font/size/[role]` | `font/size/h1`, `font/size/text-pixel` |
+| Font line-height | `font/line-height/[role]` | `font/line-height/h1` |
+| Font weight | `font/weight/[name]` | `font/weight/regular`, `font/weight/bold` |
+| Spacing | `space/[scale]` | `space/xs`, `space/m` |
+| Radius | `radius/[scale]` | `radius/l` |
+
+**Decision: Rename `indents/*` → `space/*`** — "indents" is Figma-centric; "space" is standard in design tokens and Style Dictionary.
+
+---
+
+## D3. Font Family Variable Fixes
+
+| Old variable | Action | New value | Rationale |
+|---|---|---|---|
+| `font/family/Antiqa` | **Delete** | — | Duplicate of `antiqa` with wrong casing |
+| `font/family/antiqa` | Rename → `font/family/serif` + fix value | `Instrument Serif` | "antiqa" is opaque; "serif" is self-documenting |
+| `font/family/grotesk` | Fix value | `Akkurat LL Cyrillic` | Was placeholder "Inter" |
+| `font/family/pixel` | Fix value | `Pixform` | Was placeholder "Inter" |
+
+**Decision: `antiqa` → `serif`** — The word "antiqa" is the old-style/antiqua serif classification; using the functional role "serif" is more universally understood.
+
+---
+
+## D4. Font Size Variable Renames
+
+| Old name | New name | Rationale |
+|---|---|---|
+| `font/size/text - gr` | `font/size/text-grotesk` | Remove spaces; spell out abbreviation |
+| `font/size/M` | `font/size/h4` | `M` clashes with spacing scale; H4 is the actual style using this size |
+
+---
+
+## D5. Spacing Token Rename
+
+| Old prefix | New prefix | Rationale |
+|---|---|---|
+| `indents/*` | `space/*` | Industry standard; avoids Figma-specific terminology in exported tokens |
+
+Scale mapping:
+| Old | New |
+|---|---|
+| `indents/-1` | `space/-1` |
+| `indents/XXXS` | `space/xxxs` |
+| `indents/XXS` | `space/xxs` |
+| `indents/XS` | `space/xs` |
+| `indents/S (inner)` | `space/s` |
+| `indents/M` | `space/m` |
+| `indents/L` | `space/l` |
+| `indents/XL` | `space/xl` |
+| `indents/XXL (out)` | `space/xxl` |
+
+---
+
+## D6. Component Renames — Atoms
+
+| Old name | New name | Rationale |
+|---|---|---|
+| `btn` | `button` | Full word; abbreviation inconsistent with all other atom names |
+| `text_area` | `text-area` | Snake → kebab; consistent separator |
+| `switch group` | `switch-group` | Space → hyphen |
+| `avatars` | `avatar-group` | Plural → singular + role suffix; clarifies it's a composed group |
+
+---
+
+## D7. Component Renames — Molecules
+
+| Old name | New name | Rationale |
+|---|---|---|
+| `campaign_preview` | `campaign-preview` | Snake → kebab |
+| `project_preview` | `project-preview` | Snake → kebab |
+| `experience_preview` | `experience-preview` | Snake → kebab |
+| `card metric` | `metric-card` | Space → hyphen; noun-adjective reversed to noun-first (React component convention) |
+| `Cards metrica` | `metric-card-tall` | Normalized; "tall" distinguishes the taller variant (201×349 vs 190×196); "metrica" removed (non-English) |
+| `attemt` | `attempt` | Typo fix |
+
+---
+
+## D8. Component Renames — Organisms
+
+| Old name | New name | Rationale |
+|---|---|---|
+| `canban` | `kanban` | Typo fix — standard English spelling |
+| `topmenu` | `top-menu` | Word separator for readability |
+| `card top` | `card-header` | Space → hyphen; "top" is positional, "header" is the role |
+| `menu_switch` | `menu-switch` | Snake → kebab |
+
+---
+
+## D9. Design Screens (example-only, in `design` section)
+
+Convention: `screen-[feature-area]-[variant]` where variant distinguishes duplicates.
+
+| Old name | New name | Node ID |
+|---|---|---|
+| `Frame 1450` | `story-hire-flow-1` | 357:58710 |
+| `Frame 1451` | `story-hire-flow-2` | 357:58719 |
+| `Frame 1452` | `story-hire-flow-3` | 357:58726 |
+| `Frame 1453` | `story-hire-flow-4` | 357:58734 |
+| `::` | `story-hire-doc` | 357:58742 |
+| `Hiring_campaign` (1st) | `screen-hiring-campaign-a` | 357:58749 |
+| `Hiring_campaign` (2nd) | `screen-hiring-campaign-b` | 357:58759 |
+| `All_teams_campaigns` (1st) | `screen-teams-campaigns-a` | 357:58769 |
+| `All_teams_campaigns` (2nd) | `screen-teams-campaigns-b` | 357:58778 |
+| `All_teams_campaigns` (3rd) | `screen-teams-campaigns-c` | 357:58787 |
+| `Candidate` (1st) | `screen-candidate-a` | 357:58796 |
+| `Negotiate` | `screen-negotiate` | 357:58848 |
+| `Candidate_interviewed` | `screen-candidate-interviewed` | 357:58872 |
+| `All_teams` (1st) | `screen-all-teams-a` | 357:58932 |
+| `All_teams` (2nd) | `screen-all-teams-b` | 357:58948 |
+| `All_teams` (3rd) | `screen-all-teams-c` | 357:58972 |
+| `All_teams_one` | `screen-all-teams-single` | 357:58993 |
+| `Candidate` (2nd) | `screen-candidate-b` | 357:59014 |
+| `Hiring_campaign` (3rd) | `screen-hiring-campaign-c` | 357:59066 |
+| `Hiring_campaign_add` | `screen-hiring-campaign-add` | 357:59085 |
+| `Success` | `screen-success` | 357:59099 |
+| `Automation_mail-editor` (1st) | `screen-automation-editor-a` | 357:59110 |
+| `Automation_mail-editor` (2nd) | `screen-automation-editor-b` | 357:59152 |
+| `Automation_mail-editor` (3rd) | `screen-automation-editor-c` | 357:59194 |
+| `Hiring_campaign_wizard` | `screen-hiring-wizard` | 357:59234 |
+| `Hiring_campaign_wizard--viewport` | `screen-hiring-wizard-viewport` | 357:59275 |
+| `Frame 1454` | `story-hire-flow-5` | 357:59319 |
+
+---
+
+## D10. Other Frames
+
+| Old name | New name | Node ID | Rationale |
+|---|---|---|---|
+| `Frame 1728` | `nav-phase` | 2002:14494 | Annotation bar labelling Prepare/Styles/Atoms phases |
+
+---
+
+## D11. Typography Label Renames (in styles board)
+
+| Old name | New name | Node ID | Rationale |
+|---|---|---|---|
+| `Description` | `description` | 2001:19522 | Title-case → lowercase; consistent with all other labels |
+| `text - pixel` | `text-pixel` | 2001:19525 | Remove spaces around hyphen |
+| `text - grotesk` | `text-grotesk` | 2001:19526 | Remove spaces around hyphen |
+| `text--b` | `text-bold` | 2001:19527 | Double dash + opaque `b` → explicit kebab |
+
+---
+
+## D12. Orphan Handling
+
+| Node ID | Name | Decision | Rationale |
+|---|---|---|---|
+| 357:59098 | `Ellipse 12` | **Delete** | Floating stray ellipse in design section, not in any frame, no reference |
+| 11 color swatches in styles/colors | `Ellipse 12–22` | **Rename to `color/swatch-N` placeholder** | Can't read fill hex via MCP; user fills real semantic names after |
+
+---
+
+## D13. Deferred to Later Phases
+
+| Item | Deferred to | Rationale |
+|---|---|---|
+| `Property 1=Default/Variant2` renaming | Atoms/Molecules/Organisms phases | Requires understanding component semantics; don't rename blindly in Prepare |
+| Adding missing token values (line-heights, weights, colors) | Styles phase | Token values belong in Styles, not Prepare |
+| Color swatch semantic names | Styles phase | Need hex values; MCP returns rasters — user fills in |
+
+---
+
+## D14. Styles Phase — Token Layer
+
+| Decision | Rationale |
+|---|---|
+| **Two-tier tokens: primitives → semantic** | Semantic tokens reference primitives; changing a primitive cascades everywhere |
+| **Color primitive names use Tailwind-style scale** (`gray-100`, `yellow-400`) | Self-documenting scale; matches CSS variable naming expectations |
+| **Color semantic names use role not value** (`bg`, `text`, `border`, `primary`, `status-*`) | Role names survive redesigns; value names don't |
+| **`--text-bold` omitted from @theme** | Same px as `--text-grotesk`; compose `text-grotesk font-bold` instead — avoids dead token |
+| **`radius/over` = 9999px (not Figma's 4px)** | Figma variable is a placeholder; 9999px is the standard pill-shape value |
+| **All `rounds/*` collapsed into 4 radius tokens** | Figma values are all identical (4px); keeping separate tokens preserves design intent |
+| **Fonts served via Vite CSS url() from `../fonts/`** | Relative path in `styles/tokens.css` → Vite processes and copies to `dist/assets/`; no CDN |
+| **Tailwind @theme overrides gray-100, yellow-400** | Design system owns the full palette; Tailwind defaults are replaced intentionally |
+| **No dark mode** | Figma has no second variable collection; single `:root` context only |
+| **Typography presets as `@layer components`** | Multi-property composite classes; not single-property utilities |
+| **Preview router: BrowserRouter (not hash)** | Vite dev server handles all routes via fallback; BrowserRouter gives clean URLs |
+
+---
+
+## D15. Component Property Name Audit — Prepare Phase Finish (2026-06-23)
+
+| Decision | Rationale |
+|---|---|
+| **`Property 1` on single-variant components: no action** | With only one variant, prop name has no functional impact on usage |
+| **`Property 1` on multi-variant components: defer to build phases** | Renaming requires understanding component semantics; wrong rename corrupts instances throughout the design |
+| **`Variant2` on attempt, task, card-header: defer to build phases** | Needs real semantic name (open/closed? expanded? loading?) — can't name blindly |
+| **`second-row` variant `builider` → `builder`: APPLY NOW** | Pure typo; no semantic understanding needed |
+| **`button` type="On color", `dropdown` Property 1="On color": defer** | Value has space, should be `on-color`; but rename requires variant property context to avoid breaking instances |
+
+---
+
+## D16. Color/* Semantic Variable Layer (2026-06-23)
+
+| Decision | Rationale |
+|---|---|
+| **Leave all `Color/*` variables untouched** | These are the designer's internal Figma workspace layer — they feed component fills inside Figma but are NOT the token layer that feeds React code |
+| **React code consumes `color/*` from tokens/primitives.ts, not Figma's `Color/*`** | Clean separation: Figma's `Color/*` = Figma-only; React's `color/*` = code-only |
+| **`Color/superYellow` value fixed to #FFE900** | Was placeholder white — obvious mismatch with the name; fixed without semantic risk |
+| **Most `Color/Background/*` left at #ffffff** | Designer's placeholder values — not our place to fill in; designer should connect these to swatch variables |
+
+---
+
+## D17. Internal Layer Auto-Names (Frame N, Rectangle N) (2026-06-23)
+
+| Decision | Rationale |
+|---|---|
+| **Defer all internal Frame N / Rectangle N renames to build phases** | Internal names don't affect token export or component API; renaming blindly risks breaking layout constraints and nested instances |
+| **Exception: `bar`'s 200+ Rectangle N are intentional** | The segmented progress bar is implemented as many small rectangles — this is architecture, not a naming bug |
+
+---
+
+## D18. Variable Fixes — Session 2 (2026-06-23)
+
+| Variable | Fix | Rationale |
+|---|---|---|
+| `font/size/h4` (duplicate) | Deleted extra | Left over from two rename passes; keep one |
+| `font/size/text - px` → `font/size/text-pixel` | Rename + value 11→10 | Spaces removed; value corrected (Pixform = 10px, not 11) |
+| `font/size/h1` value: 44 → 84 | Fix | Wrong value; 84 is confirmed from type table |
+| `font/size/h2` value: 30 → 40 | Fix | Wrong value; 40 is confirmed from type table |
+| `size/base with` → `size/base-width` | Rename | Typo "with" → "width"; space removed |
+| `radius/L` → `radius/l` | Rename | Lowercase per D1 convention |
+| `rounds/S` → `radius/s` | Rename | Prefix normalized to `radius/*` for consistency |
+| `rounds/M` → `radius/m` | Rename | Same |
+| `rounds/Over` → `radius/over` | Rename | Same |
+| `rounds/L` | Deleted | Duplicate of `radius/l` (same value = 4px) |
+| `size=XXL (out):90` (styles board label) | Renamed → `size=XXL (out):60` | Stale label; live variable = 60px |
+
+---
+
+## D19. Atoms Phase — Token Gaps (Styles-layer additions needed)
+
+Discovered while mapping Figma atom values to existing tokens. These are NOT in `@theme`. Atoms use Tailwind arbitrary values as documented placeholders; Styles phase must add them before production.
+
+| Missing token | Figma variable | Hex | Used in | Temp workaround |
+|---|---|---|---|---|
+| `--color-status-purple` | `color/tech/purple` | `#9747ff` | Status (purple dot + text) | `text-[#9747ff]` / `bg-[#9747ff]` |
+| `--color-status-green`  | `color/tech/green`  | `#00867b` | Status (green dot + text) | `text-[#00867b]` / `bg-[#00867b]` |
+| `--color-status-red`    | `color/tech/red`    | `#cc0000` | Status (red), ErrorBanner | `text-[#cc0000]` / `bg-[#cc0000]` |
+| `--color-status-gray`   | `color/tech/gray`   | `#cbcbcb` | Status (stopped), TextArea placeholder | `text-[#cbcbcb]` |
+| `--color-text-secondary`| `color/text-&-icon/secondary` | `#979797` | Switch inactive, Dropdown placeholder, Graph bars | `text-[#979797]` / `bg-[#979797]` |
+| `--color-bar-filled`    | `color/bar/on-base-filled` | `#b8c6c3` | Bar filled segments | `bg-[#b8c6c3]` |
+| `--color-error-bg`      | `color/background/on-cads/red` | `#f7e0dd` | ErrorBanner bg, Button node bg | Mapped to `bg-peach-100` (#f5dedb, ≈2 hex steps) |
+| `--tracking-pixel`      | n/a | `letter-spacing: 2px` | All Pixform (type-pixel) text | `tracking-[2px]` |
+| `--tracking-caps`       | n/a | `letter-spacing: 1.6px` | All caps-grotesk labels | `tracking-[1.6px]` |
+| Control height 32px     | n/a | `h-8` (Tailwind default 2rem) | Input, Switch, Dropdown, Button pill, List button | `h-8` |
+| Bar dot sizes           | n/a | 5px (default) / 12px (big) | Bar component | Computed via `dotPx` variable in `style={{}}` |
+| Graph max height        | n/a | 82px (relative to 100 unit) | Graph component | Computed via `maxH` constant in `style={{}}` |
+| Avatar overlap          | `space/neg-1` = -1px | -8px | AvatarGroup | `-mr-[8px]` arbitrary |
+
+---
+
+## D20. Atoms Phase — Prop Naming Decisions
+
+| Figma variant property | Mapped to prop | Rationale |
+|---|---|---|
+| `CTA?=yes/no` × `type=small/big` | `variant='cta-small'` / `variant='cta-big'` | Flattened to single `variant` string; CTA flag is context, not a separate prop |
+| `type=On color` | `variant='on-color'` | Normalized to kebab per D1 |
+| `type=node` | `variant='node'` | Direct from Figma name |
+| `switch=on/off` | `active: boolean` | Semantic boolean replaces string enum |
+| `Property 1=yes/no` (Flag) | `active: boolean` | Same pattern |
+| `Property 1=katya/dog/petya` (Avatar) | `variant` prop + `src` override | Photos replaced with initial-letter placeholder; `src` prop accepts real image URL |
+| `Error` component | `ErrorBanner` (TypeScript export name) | Avoids clash with built-in `Error` class |
+| Bar `length=75%/20%` | `value: number` (0–100) | Generic numeric prop more reusable than fixed string enum |
+
+---
+
+## D21. Atoms Refine — Page Background Token (2026-06-24)
+
+| Decision | Rationale |
+|---|---|
+| **Use existing `bg-bg` (= `color.bg.default` = white) as the page surface** | `color.bg.default = white` already maps to `bg-bg` Tailwind utility; no new token needed. Preview was using `bg-bg-subtle` (gray-100), same color as most component backgrounds — gray on gray. Switched to white so gray-100 components read as elevated. |
+| **No new token added to semantic.ts** | Existing token is adequate. |
+
+---
+
+## D22. Atoms Refine + Molecules — New Token Gaps (2026-06-24)
+
+Discovered while building atom interaction states and 10 molecule components.
+
+| Missing token | Figma variable | Hex | Used in | Temp workaround |
+|---|---|---|---|---|
+| `--color-card-green` | `color/background/cards/green` | `#d4eee7` | MetricCard, Team, Notify bg | `bg-[#d4eee7]` |
+| `--color-card-red` | `color/background/cards/red` | `#f5cfca` | NodeCard bg | `bg-[#f5cfca]` |
+| `--color-tag-yellow` | `color/background/on-cads/yellow-dark` | `#fffd9e` | ProjectPreview tags | `bg-[#fffd9e]` |
+| `--spacing-x` | `indents/x` | `30px` | All card molecule padding | `p-[30px]` |
+| `--radius-l` value | `rounds/l` in Figma = **12px** | D18 incorrectly noted as 4px | All card borders | `rounded-[12px]`; fix primitives `radius.l = 12` |
+| Button hover (secondary) | n/a | `#d4d4d4` | Button secondary hover | `hover:bg-[#d4d4d4]` |
+| Input/TextArea hover | n/a | `#d4d4d4` | Input, TextArea hover bg | `hover:bg-[#d4d4d4]` |
+| Notify text size | n/a | `30px` | Notify headline (between h3=20 and h2=40) | `text-[30px]` |
+
+---
+
+## D23. Atom Fixes 2 — Dropdown Color, Button Hover, Input Error (2026-06-24)
+
+### Dropdown on-color empty state
+| Aspect | Before | After | Rationale |
+|---|---|---|---|
+| Placeholder text (on-color, no selection) | `text-[#979797]` | `text-white/50` | Figma node 357:35401 shows `opacity-50 text-[color:var(--color/text-&-icon/on-color,white)]`. No secondary-text token exists in @theme → used `text-white/50` (Tailwind v4 opacity modifier, zero new hardcodes). |
+
+### Button hover (cta-small, cta-big, node)
+| Variant | Before | After | Rationale |
+|---|---|---|---|
+| `cta-small` (black pill) | `hover:opacity-85` | `hover:opacity-70` | 15% delta on pure black is nearly invisible; 30% delta is clearly perceptible. No Figma hover-state token exists for CTA buttons. Flagged as token gap. |
+| `cta-big` (black card) | `hover:opacity-85` | `hover:opacity-70` | Same rationale. |
+| `node` (peach card) | `hover:opacity-90` | `hover:opacity-75` | 10% delta on peach too subtle; 25% gives visible darkening without new token. |
+| Token gap | — | Flagged | No `color/interactive/hover` token in @theme for CTA black or node variants. |
+
+### Input error state — editable
+| Aspect | Before | After | Rationale |
+|---|---|---|---|
+| Preview error demo | `value="bad input"` (controlled, read-only) | `defaultValue="bad input"` (uncontrolled) | React: controlled input without `onChange` is read-only. Error appearance must not block typing. Added `defaultValue` prop to Input.tsx; preview uses it so field stays editable while showing error styles. |
+
+---
+
+## D24. Atom/Molecule Fixes + Organisms Build (2026-06-25)
+
+### PART 1 — Atom/molecule fixes
+
+#### Button cta-big hover
+| Aspect | Before | After | Rationale |
+|---|---|---|---|
+| cta-big hover | `hover:opacity-70` (black at 70% = medium gray #4d4d4d) | `hover:bg-black/90` (black at 90% opacity = dark charcoal ~#1a1a1a) | Task: "clearly still a dark button, NOT gray." Opacity on pure black against white always produces gray. `bg-black/90` uses existing `black` token with opacity modifier → renders as ~#1a1a1a. No new token. |
+
+#### Dropdown option contrast (on-color variant)
+| Aspect | Before | After | Rationale |
+|---|---|---|---|
+| Unselected options (on-color) | `text-[#979797]` (D19 gap, low contrast on gold bg) | `text-black/50` (50% black — readable on gold, distinct from selected `text-black`) | No secondary-text token exists. `black/50` uses existing `black` token + opacity modifier. Zero new hardcodes. |
+
+#### ProjectPreview line-height
+| Aspect | Before | After | Rationale |
+|---|---|---|---|
+| description `<p>` line-height | `type-h3` → `line-height: 18px` (less than font-size 20px → lines overlap in multiline text) | `type-h3 leading-[normal]` → `line-height: normal` (~1.2 × 20px = ~24px) | Figma node 357:35493 specifies `leading-[normal]`. Cannot change `--leading-h3` token (no-token-layer rule). `leading-[normal]` is a CSS keyword, not a hardcoded px value. |
+
+#### Team bar green circles
+| Aspect | Before | After | Rationale |
+|---|---|---|---|
+| Bar filled color (Team) | `bg-[#b8c6c3]` (default grayish-mint) | `bg-[#00867b]` (dark teal = `color/text-&-icon/green` D19 gap) | Figma node 357:35512 shows bar dots in `#00867b`. No token exists for this value. |
+| Bar empty color (Team) | `bg-white` (invisible on white Team card) | `bg-mint-100` (`--color-mint-100 = #d4eee7` — TOKEN EXISTS in @theme) | Mint empty dots are visible on white card background. Token is `--color-mint-100` mapped to `bg-mint-100`. |
+| Bar atom | No `color` prop | Added `color?: 'default' | 'green'` | Allows Team (and future green-context bars) to opt in to green color scheme. |
+
+#### D22 gap cleanup — tokens found in @theme
+Previously documented as D22 "no token" — tokens were in @theme all along:
+| Component | Before (D22 workaround) | After (real token) |
+|---|---|---|
+| MetricCard bg | `bg-[#d4eee7]` | `bg-mint-100` (`--color-mint-100: #d4eee7`) |
+| Notify bg | `bg-[#d4eee7]` + `p-[30px]` + `rounded-[12px]` | `bg-mint-100 p-xl rounded-[12px]` (`--spacing-xl: 30px`) |
+| MetricCard padding | `p-[30px]` | `p-xl` (`--spacing-xl: 30px`) |
+| NodeCard bg | `bg-[#f5cfca]` | `bg-pink-100` (`--color-pink-100: #f5cfca`) |
+
+Note: `rounded-[12px]` still hardcoded — `--radius-l = 4px` in tokens doesn't match Figma 12px. D22 ongoing.
+
+### PART 2 — Organisms (7 built)
+
+| Organism | Variant props | Atoms/Molecules composed | Key token gaps |
+|---|---|---|---|
+| MenuSwitch | `active: boolean` | — | `p-[10px]` (D24: between xs=8 and s=14) |
+| SecondRow | `type: 'default' \| 'builder'` | Button | `border-[#00867b]` back-button (D19) |
+| TopMenu | `activeTab: 'all' \| 'templates' \| 'off'` | Button, MenuSwitch | — |
+| Header | `activeTab, secondRowType, pipelineValue` | TopMenu, SecondRow, Bar | `text-[#979797]` stage labels (D19) |
+| Kanban | `headline, columns[]` | Avatar | `gap-[50px]` (no token, xl=30/xxl=60), `pb-[84px]` (h1 size as padding), `rounded-[12px]` (D22), `text-[#cbcbcb]` count (D19) |
+| Task | `variant: 'default' \| 'active'` | Flag, ErrorBanner, Button | `text-[#979797]` inactive text (D19) |
+| CardHeader | `variant: 'default' \| 'variant2'` | Button, Dropdown, SwitchGroup | `bg-[#ffb700]` golden overlay (D24), `rounded-[12px]` (D22), photo URLs expire 7 days |
+
+**D24 new gaps this session:**
+- `#ffb700` — Figma `color/background/card-header-overlay` — golden hard-light tint for CardHeader photo. No token in @theme.
+- `p-[10px]` — MenuSwitch horizontal padding (between `xs=8px` and `s=14px`). No token.
+- `gap-[50px]` — Kanban section gap (between `xl=30` and `xxl=60`). No token.
+- `pb-[84px]` — Kanban bottom padding (Figma uses `pb-[var(--font/size/h1)]`, repurposing font-size as spacing). No dedicated spacing token.

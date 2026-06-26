@@ -1,0 +1,66 @@
+export const primitives = {
+  color: {
+    black:        '#000000',
+    'gray-100':   '#eaeaea',
+    white:        '#ffffff',
+    'yellow-400': '#ffe900',
+    'gold-400':   '#d1a63b',
+    'pink-100':   '#f5cfca',
+    'rose-100':   '#fad5e7',
+    'purple-100': '#ddd6ef',
+    'olive-100':  '#e0e2a4',
+    'mint-100':   '#d4eee7',
+    'peach-100':  '#f5dedb',
+  },
+  font: {
+    family: {
+      serif:   'Instrument Serif',
+      pixel:   'Pixform',
+      grotesk: 'Akkurat LL Cyrillic',
+    },
+    size: {
+      h1:           '84px',
+      h2:           '40px',
+      description:  '30px',
+      h3:           '20px',
+      h4:           '15px',
+      'text-pixel':   '10px',
+      'text-grotesk': '11px',
+      caps:           '8px',
+    },
+    lineHeight: {
+      h1:           '76px',
+      h2:           '36px',
+      description:  '27px',
+      h3:           '18px',
+      h4:           '14px',
+      'text-pixel':   '9px',
+      'text-grotesk': '10px',
+      caps:           '7px',
+    },
+    weight: {
+      regular:  400,
+      semibold: 600,
+      bold:     700,
+    },
+  },
+  space: {
+    'neg-1': '-1px',
+    xxxs:    '2px',
+    xxs:     '4px',
+    xs:      '8px',
+    s:       '14px',
+    m:       '20px',
+    l:       '24px',
+    xl:      '30px',
+    xxl:     '60px',
+  },
+  radius: {
+    l:    '4px',
+    m:    '4px',
+    s:    '4px',
+    over: '9999px',
+  },
+} as const;
+
+export type Primitives = typeof primitives;

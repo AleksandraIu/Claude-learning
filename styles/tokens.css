@@ -1,0 +1,194 @@
+/* ============================================================
+   DESIGN SYSTEM TOKENS — Tailwind v4 CSS-first
+   Source: Figma zUJYCXcLeuUXDcCKkxpLR5 node 2001:19512
+   2026-06-23
+   Rule: Tailwind utilities first; raw var() only where no utility exists.
+   ============================================================ */
+
+/* ----------------------------------------------------------
+   @font-face — local files only. No CDN, no Google Fonts.
+   Paths are relative to this file (styles/), resolving to <root>/fonts/.
+   ---------------------------------------------------------- */
+@font-face {
+  font-family: 'Instrument Serif';
+  src: url('../fonts/InstrumentSerif-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Instrument Serif';
+  src: url('../fonts/InstrumentSerif-Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Akkurat LL Cyrillic';
+  src: url('../fonts/AkkuratLLCyrTT-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Akkurat LL Cyrillic';
+  src: url('../fonts/AkkuratLLCyrTT-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Pixform';
+  src: url('../fonts/Pixform.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ----------------------------------------------------------
+   @theme — single source for all Tailwind utilities.
+   No hardcoded values in any component — always derive from these.
+   ---------------------------------------------------------- */
+@theme {
+
+  /* === PRIMITIVES — COLOR PALETTE === */
+  --color-black:      #000000;
+  --color-gray-100:   #eaeaea;
+  --color-white:      #ffffff;
+  --color-yellow-400: #ffe900;
+  --color-gold-400:   #d1a63b;
+  --color-pink-100:   #f5cfca;
+  --color-rose-100:   #fad5e7;
+  --color-purple-100: #ddd6ef;
+  --color-olive-100:  #e0e2a4;
+  --color-mint-100:   #d4eee7;
+  --color-peach-100:  #f5dedb;
+
+  /* === SEMANTIC — COLOR ALIASES === */
+  --color-bg:             var(--color-white);
+  --color-bg-subtle:      var(--color-gray-100);
+  --color-bg-ink:         var(--color-black);
+  --color-text:           var(--color-black);
+  --color-text-on-dark:   var(--color-white);
+  --color-text-subtle:    var(--color-gray-100);
+  --color-border:         var(--color-gray-100);
+  --color-primary:        var(--color-yellow-400);
+  --color-primary-hover:  var(--color-gold-400);
+  --color-status-pink:    var(--color-pink-100);
+  --color-status-rose:    var(--color-rose-100);
+  --color-status-purple:  var(--color-purple-100);
+  --color-status-olive:   var(--color-olive-100);
+  --color-status-mint:    var(--color-mint-100);
+  --color-status-peach:   var(--color-peach-100);
+
+  /* === FONT FAMILIES → font-{name} utilities === */
+  --font-serif:   'Instrument Serif', serif;
+  --font-pixel:   'Pixform', monospace;
+  --font-grotesk: 'Akkurat LL Cyrillic', sans-serif;
+
+  /* === FONT SIZES → text-{name} utilities === */
+  --text-h1:          84px;
+  --text-h2:          40px;
+  --text-description: 30px;
+  --text-h3:          20px;
+  --text-h4:          15px;
+  --text-pixel:       10px;
+  --text-grotesk:     11px;
+  --text-caps:         8px;
+  /* text-bold omitted: same px as text-grotesk. Compose: text-grotesk + font-bold */
+
+  /* === LINE HEIGHTS → leading-{name} utilities === */
+  --leading-h1:          76px;
+  --leading-h2:          36px;
+  --leading-description: 27px;
+  --leading-h3:          18px;
+  --leading-h4:          14px;
+  --leading-pixel:        9px;
+  --leading-grotesk:     10px;
+  --leading-caps:         7px;
+
+  /* === SPACING → p-{name}, m-{name}, gap-{name} etc. === */
+  --spacing-neg-1: -1px;
+  --spacing-xxxs:   2px;
+  --spacing-xxs:    4px;
+  --spacing-xs:     8px;
+  --spacing-s:     14px;
+  --spacing-m:     20px;
+  --spacing-l:     24px;
+  --spacing-xl:    30px;
+  --spacing-xxl:   60px;
+
+  /* === RADIUS → rounded-{name} utilities === */
+  --radius-l:    4px;
+  --radius-m:    4px;
+  --radius-s:    4px;
+  --radius-over: 9999px;
+  /* All rounds/* in Figma = 4px. over=9999px is semantic (pill shape). */
+}
+
+/* ----------------------------------------------------------
+   Typography preset classes — composite (family + size + leading).
+   Use .type-h1 etc. on any element to apply the full style.
+   ---------------------------------------------------------- */
+@layer components {
+  .type-h1 {
+    font-family: var(--font-serif);
+    font-size: var(--text-h1);
+    line-height: var(--leading-h1);
+    font-weight: 400;
+  }
+  .type-h2 {
+    font-family: var(--font-serif);
+    font-size: var(--text-h2);
+    line-height: var(--leading-h2);
+    font-weight: 400;
+  }
+  .type-description {
+    font-family: var(--font-pixel);
+    font-size: var(--text-description);
+    line-height: var(--leading-description);
+    font-weight: 400;
+  }
+  .type-h3 {
+    font-family: var(--font-grotesk);
+    font-size: var(--text-h3);
+    line-height: var(--leading-h3);
+    font-weight: 600;
+  }
+  .type-h4 {
+    font-family: var(--font-grotesk);
+    font-size: var(--text-h4);
+    line-height: var(--leading-h4);
+    font-weight: 600;
+  }
+  .type-pixel {
+    font-family: var(--font-pixel);
+    font-size: var(--text-pixel);
+    line-height: var(--leading-pixel);
+    font-weight: 400;
+  }
+  .type-grotesk {
+    font-family: var(--font-grotesk);
+    font-size: var(--text-grotesk);
+    line-height: var(--leading-grotesk);
+    font-weight: 400;
+  }
+  .type-bold {
+    font-family: var(--font-grotesk);
+    font-size: var(--text-grotesk);
+    line-height: var(--leading-grotesk);
+    font-weight: 700;
+  }
+  .type-caps {
+    font-family: var(--font-grotesk);
+    font-size: var(--text-caps);
+    line-height: var(--leading-caps);
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+}

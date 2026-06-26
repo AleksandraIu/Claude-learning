@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>setup · design systems in claude code</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F4F2EC;
+    --paper-2:#ECEAE0;
+    --ink:#181712;
+    --ink-soft:#605C50;
+    --ink-faint:#8C887A;
+    --line:#DCD8CB;
+    --accent:#2D2AF2;
+    --accent-soft:#E5E4FC;
+    --good:#1C7A4B;
+    --term-bg:#15140F;
+    --term-fg:#EDEAE0;
+    --term-dim:#8B897C;
+    --term-accent:#9D9BFF;
+    --radius:14px;
+    --maxw:740px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;
+    font-weight:450;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    padding-bottom:120px;
+  }
+
+  /* ---------- switcher bar ---------- */
+  .bar{
+    position:sticky;top:0;z-index:50;
+    background:rgba(244,242,236,.86);
+    backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--line);
+  }
+  .bar-inner{
+    max-width:var(--maxw);margin:0 auto;
+    padding:14px 24px;
+    display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+    justify-content:space-between;
+  }
+  .brandmark{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:600;font-size:14px;letter-spacing:-.01em;
+    display:flex;align-items:center;gap:8px;color:var(--ink);
+  }
+  .brandmark .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);display:inline-block}
+  .switchers{display:flex;gap:10px;flex-wrap:wrap}
+  .seg{
+    display:inline-flex;background:var(--paper-2);
+    border:1px solid var(--line);border-radius:999px;padding:3px;gap:2px;
+  }
+  .seg button{
+    font-family:'Inter',sans-serif;font-size:13px;font-weight:500;
+    color:var(--ink-soft);background:transparent;border:none;cursor:pointer;
+    padding:6px 14px;border-radius:999px;transition:all .18s ease;letter-spacing:.01em;
+  }
+  .seg button:hover{color:var(--ink)}
+  .seg button.active{background:var(--ink);color:var(--paper)}
+
+  /* ---------- hero ---------- */
+  .hero{max-width:var(--maxw);margin:0 auto;padding:64px 24px 40px}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;
+    letter-spacing:.08em;color:var(--accent);margin-bottom:20px;
+  }
+  h1{
+    font-family:'Space Grotesk',sans-serif;font-weight:700;
+    font-size:clamp(34px,6vw,52px);line-height:1.04;letter-spacing:-.02em;
+    margin-bottom:18px;
+  }
+  .hero .lede{font-size:18px;color:var(--ink-soft);max-width:56ch}
+  .meta-row{
+    display:flex;gap:24px;flex-wrap:wrap;margin-top:28px;
+    font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--ink-faint);
+  }
+  .meta-row b{color:var(--ink);font-weight:500}
+
+  /* ---------- steps ---------- */
+  main{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  .step{
+    border-top:1px solid var(--line);
+    padding:44px 0;
+    display:grid;grid-template-columns:48px 1fr;gap:24px;
+  }
+  .step>div{min-width:0}
+  .step > div{min-width:0}
+  .step-num{
+    font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:15px;
+    color:var(--accent);padding-top:4px;
+  }
+  .step-head{margin-bottom:6px}
+  .step h2{
+    font-family:'Space Grotesk',sans-serif;font-weight:600;
+    font-size:24px;letter-spacing:-.01em;line-height:1.2;
+  }
+  .step-time{
+    font-family:'JetBrains Mono',monospace;font-size:11.5px;
+    color:var(--ink-faint);margin-top:4px;letter-spacing:.04em;
+  }
+  .step-body{margin-top:18px;display:flex;flex-direction:column;gap:16px;min-width:0}
+  .step-body p{font-size:15.5px;color:var(--ink)}
+  .step-body p.muted{color:var(--ink-soft)}
+
+  /* navigation instruction */
+  .nav-step{
+    display:flex;gap:12px;align-items:flex-start;
+    background:var(--paper-2);border:1px solid var(--line);
+    border-radius:var(--radius);padding:14px 16px;
+  }
+  .nav-step .ic{
+    flex-shrink:0;width:22px;height:22px;border-radius:6px;
+    background:var(--ink);color:var(--paper);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;margin-top:1px;
+  }
+  .nav-step .nav-txt{font-size:14.5px;line-height:1.5}
+  .nav-step .path{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--ink)}
+  .nav-step .path .arrow{color:var(--accent);padding:0 4px;font-weight:700}
+  .nav-step kbd{
+    font-family:'JetBrains Mono',monospace;font-size:12px;
+    background:var(--paper);border:1px solid var(--line);border-bottom-width:2px;
+    border-radius:5px;padding:1px 6px;color:var(--ink);
+  }
+
+  /* code block */
+  .cmd{position:relative;border-radius:var(--radius);overflow:hidden;border:1px solid #2a2820;max-width:100%;min-width:0}
+  .step > *{min-width:0}
+  .step-body{min-width:0}
+  .step-body > *{min-width:0;max-width:100%}
+  .cmd-top{
+    display:flex;align-items:center;justify-content:space-between;
+    background:#1e1c16;padding:6px 13px;border-bottom:1px solid #2a2820;
+  }
+  .cmd-label{
+    font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--term-dim);letter-spacing:.04em;
+  }
+  .copy-btn{
+    font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;
+    color:var(--term-fg);background:#2a2820;border:1px solid #3a3830;
+    border-radius:6px;padding:3px 10px;cursor:pointer;transition:all .15s ease;
+    display:flex;align-items:center;gap:6px;
+  }
+  .copy-btn:hover{background:#34322a;border-color:#4a473c}
+  .copy-btn.copied{background:var(--good);border-color:var(--good);color:#fff}
+  .cmd pre{
+    background:var(--term-bg);padding:9px 16px;overflow-x:auto;white-space:pre;
+    font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.45;color:var(--term-fg);
+    scrollbar-width:thin;scrollbar-color:#3a3830 transparent;
+  }
+  .cmd pre::-webkit-scrollbar{height:6px}
+  .cmd pre::-webkit-scrollbar-track{background:transparent}
+  .cmd pre::-webkit-scrollbar-thumb{background:#3a3830;border-radius:3px}
+  .cmd pre .prompt{color:var(--term-accent);user-select:none}
+  .cmd pre .comment{color:var(--term-dim)}
+  .cmd pre .out{color:var(--term-dim)}
+
+  .note{
+    font-size:13.5px;color:var(--ink-soft);
+    border-left:2px solid var(--accent);padding:2px 0 2px 14px;
+  }
+  .note b{color:var(--ink);font-weight:600}
+
+  .callout{
+    background:var(--accent-soft);border-radius:var(--radius);
+    padding:16px 18px;font-size:14px;color:#26248a;
+  }
+  .callout b{font-weight:600}
+
+  .why{
+    display:flex;gap:10px;align-items:baseline;
+    font-size:13.5px;color:var(--ink-soft);
+    background:var(--paper-2);border:1px dashed var(--line);
+    border-radius:var(--radius);padding:12px 15px;
+  }
+  .why .wt{
+    font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:500;
+    letter-spacing:.1em;color:var(--accent);flex-shrink:0;
+    text-transform:uppercase;padding-top:2px;
+  }
+  .why span:last-child b{color:var(--ink);font-weight:600}
+
+  .why{
+    background:var(--paper-2);border:1px solid var(--line);
+    border-radius:var(--radius);padding:14px 16px 15px;
+  }
+  .why .why-tag{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;
+    color:var(--accent);display:block;margin-bottom:6px;
+  }
+  .why p{font-size:14px;color:var(--ink-soft);line-height:1.55}
+  .why b{color:var(--ink);font-weight:600}
+
+  /* checklist */
+  .check{display:flex;flex-direction:column;gap:10px}
+  .check-item{
+    display:flex;gap:12px;align-items:flex-start;
+    background:var(--paper-2);border:1px solid var(--line);
+    border-radius:var(--radius);padding:14px 16px;font-size:14.5px;
+  }
+  .check-item .box{
+    flex-shrink:0;width:20px;height:20px;border-radius:6px;
+    border:1.5px solid var(--accent);color:var(--accent);
+    display:flex;align-items:center;justify-content:center;font-size:12px;margin-top:1px;
+  }
+  .check-item b{font-weight:600}
+  .check-item .sub{color:var(--ink-soft);font-size:13px;display:block;margin-top:2px}
+  .check-item a{color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent-soft)}
+  .check-item a:hover{border-bottom-color:var(--accent)}
+
+  /* troubleshooting */
+  .trouble{display:flex;flex-direction:column;gap:0}
+  details{border-bottom:1px solid var(--line)}
+  details summary{
+    cursor:pointer;list-style:none;padding:16px 0;
+    font-size:15px;font-weight:500;display:flex;align-items:center;gap:12px;
+  }
+  details summary::-webkit-details-marker{display:none}
+  details summary .tw{
+    font-family:'JetBrains Mono',monospace;color:var(--accent);
+    transition:transform .2s ease;font-size:14px;
+  }
+  details[open] summary .tw{transform:rotate(45deg)}
+  details .ans{padding:0 0 18px 26px;font-size:14px;color:var(--ink-soft);display:flex;flex-direction:column;gap:12px}
+
+  footer{
+    max-width:var(--maxw);margin:40px auto 0;padding:32px 24px;
+    border-top:1px solid var(--line);
+    font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-faint);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;
+  }
+
+  a.inline{color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent-soft)}
+  a.inline:hover{border-bottom-color:var(--accent)}
+
+  @media (max-width:560px){
+    .step{grid-template-columns:1fr;gap:10px}
+    .step-num{padding-top:0}
+    .bar-inner{gap:10px}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body class="os-mac lang-en">
+
+  <div class="bar">
+    <div class="bar-inner">
+      <div class="brandmark"><span class="dot"></span><span id="bm">design systems · setup</span></div>
+      <div class="switchers">
+        <div class="seg" id="seg-os">
+          <button data-os="mac" class="active">macos</button>
+          <button data-os="win">windows</button>
+        </div>
+        <div class="seg" id="seg-lang">
+          <button data-lang="en" class="active">en</button>
+          <button data-lang="ru">ру</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <header class="hero">
+    <div class="eyebrow" id="hero-eyebrow"></div>
+    <h1 id="hero-title"></h1>
+    <p class="lede" id="hero-lede"></p>
+    <div class="meta-row" id="hero-meta"></div>
+  </header>
+
+  <main id="steps"></main>
+
+  <footer>
+    <span id="foot-left"></span>
+    <span id="foot-right"></span>
+  </footer>
+
+<script>
+/* ===================== content ===================== */
+const ICONS = {check:'✓'};
+
+const T = {
+  en: {
+    brand:'design systems · setup',
+    eyebrow:'before week 1 · ~30 min',
+    title:'get your machine ready',
+    lede:'install everything you need to run figma → claude code → react. do this once, before the first lesson. follow your path — pick macos or windows above.',
+    meta:[['time','~30 min'],['you need','figma pro · claude pro'],['result','figma + claude code, connected']],
+    footL:'design systems in claude code',
+    footR:'made for <a class="inline" href="https://wannabe.ru" target="_blank" rel="noopener">wannabe</a>',
+    copy:'copy', copied:'copied',
+    steps:[
+      {
+        n:'01', title:'before you start', time:'2 min',
+        body:[
+          {p:'two paid accounts and a few minutes. open these in your browser and make sure you can log in:'},
+          {check:[
+            {b:'figma pro (full or dev seat)', sub:'needed for the mcp connection. a viewer seat won\'t work.', link:['figma.com','https://figma.com']},
+            {b:'claude pro or max', sub:'this is what signs claude code in. a free claude account won\'t run it.', link:['claude.ai','https://claude.ai']},
+            {b:'a modern browser', sub:'chrome or edge — the figma and claude sign-ins open in your browser.'},
+          ]},
+          {why:'the whole course runs on these two — <b>figma</b> is where you design, <b>claude</b> is the agent that turns the design into code. no accounts, no course.'},
+          {note:'<b>no coding background needed.</b> from here on you only paste commands — every one has a copy button. nothing is typed by hand.'}
+        ]
+      },
+      {
+        n:'02', title:'set up your terminal', time:'5 min',
+        body:[
+          {p:'these are the base tools every command below depends on. do this once and the rest just works.'},
+          {os:'mac', blocks:[
+            {p:'<b>1 · command line tools.</b> they give you git and the build tools homebrew needs. open <b>terminal</b> (press <kbd>⌘</kbd> + <kbd>space</kbd>, type <code>terminal</code>, hit enter) and paste:'},
+            {cmd:{label:'terminal', code:'<span class="prompt">$ </span>xcode-select --install'}},
+            {p:'a small apple dialog pops up → click <b>install</b> → wait a few minutes for it to finish.'},
+            {p:'<b>2 · homebrew</b> — the package manager that installs everything else. paste:'},
+            {cmd:{label:'terminal', code:'<span class="prompt">$ </span>/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'}},
+            {p:'it may ask for your mac password — you won\'t see it as you type, that\'s normal.'},
+            {note:'at the end homebrew prints a <b>“next steps”</b> block. if <code>brew -v</code> later says “command not found”, run this once to finish setup:'},
+            {cmd:{label:'terminal', code:'<span class="prompt">$ </span>echo \'eval "$(/opt/homebrew/bin/brew shellenv)"\' >> ~/.zprofile && eval "$(/opt/homebrew/bin/brew shellenv)"'}},
+            {p:'confirm both are alive:'},
+            {cmd:{label:'terminal', code:'<span class="prompt">$ </span>git --version && brew -v'}},
+            {term:{label:'you should see two version lines', code:'<span class="out">git version 2.xx.x\nHomebrew 4.x.x</span>'}},
+          ]},
+          {os:'win', blocks:[
+            {p:'<b>1 · use powershell, not command prompt.</b> press <kbd>⊞ win</kbd>, type <code>powershell</code>, hit enter — every command below goes here.'},
+            {p:'<b>2 · winget</b> — windows already ships with it, just confirm:'},
+            {cmd:{label:'powershell', code:'<span class="prompt">> </span>winget -v'}},
+            {term:{label:'you should see a version like', code:'<span class="out">v1.x.x</span>'}},
+            {note:'nothing shows up? open the <b>microsoft store</b>, update <b>app installer</b>, then reopen powershell.'},
+            {p:'<b>3 · git</b> — windows doesn\'t include it, so install it now:'},
+            {cmd:{label:'powershell', code:'<span class="prompt">> </span>winget install -e --id Git.Git'}},
+          ]},
+          {why:'this is the foundation everything else sits on. on mac, command line tools give you git plus the build tools homebrew needs, and homebrew installs the rest. on windows, winget is built in and git fills the one gap. skip this and the later commands fail with confusing errors.'},
+        ]
+      },
+      {
+        n:'03', title:'install node.js', time:'2 min',
+        body:[
+          {os:'mac', blocks:[
+            {p:'one command:'},
+            {cmd:{label:'terminal', code:'<span class="prompt">$ </span>brew install node'}},
+          ]},
+          {os:'win', blocks:[
+            {p:'one command:'},
+            {cmd:{label:'powershell', code:'<span class="prompt">> </span>winget install -e --id OpenJS.NodeJS.LTS'}},
+          ]},
+          {p:'close your terminal, open a fresh one, then check it landed:'},
+          {cmd:{label:'terminal', code:'<span class="prompt">$ </span>node -v'}},
+          {term:{label:'you should see something like', code:'<span class="out">v22.11.0</span>'}},
+          {why:'<b>node</b> is what runs the react project you build in week 2. without it, nothing you make will render.'},
+        ]
+      },
+      {
+        n:'04', title:'install vs code', time:'2 min',
+        body:[
+          {os:'mac', blocks:[
+            {cmd:{label:'terminal', code:'<span class="prompt">$ </span>brew install --cask visual-studio-code'}},
+          ]},
+          {os:'win', blocks:[
+            {cmd:{label:'powershell', code:'<span class="prompt">> </span>winget install -e --id Microsoft.VisualStudioCode'}},
+          ]},
+          {p:'open it once from your apps so the system trusts it.'},
+          {why:'vs code is your home base for the course — it\'s where you\'ll see your files, your design system, and run claude code right inside the editor.'},
+        ]
+      },
+      {
+        n:'05', title:'install claude code', time:'5 min',
+        body:[
+          {p:'the agent itself. native installer, one command.'},
+          {os:'mac', blocks:[
+            {p:'in <b>terminal</b>, paste:'},
+            {cmd:{label:'terminal', code:'<span class="prompt">$ </span>curl -fsSL https://claude.ai/install.sh | bash'}},
+            {p:'when it finishes, <b>close terminal and open a fresh one</b> (this is what activates the <code>claude</code> command). then start it:'},
+            {cmd:{label:'terminal', code:'<span class="prompt">$ </span>claude'}},
+            {p:'a browser tab opens — <b>sign in with your claude pro/max account</b> and approve. you\'re in.'},
+            {note:'<b>never</b> put <code>sudo</code> in front of the install command. if something asks for it, stop — see step 08.'},
+          ]},
+          {os:'win', blocks:[
+            {p:'in <b>powershell</b>, paste:'},
+            {cmd:{label:'powershell', code:'<span class="prompt">> </span>irm https://claude.ai/install.ps1 | iex'}},
+            {p:'when it finishes, <b>close powershell and open a fresh one</b> (this is what activates the <code>claude</code> command). then start it:'},
+            {cmd:{label:'powershell', code:'<span class="prompt">> </span>claude'}},
+            {p:'a browser tab opens — <b>sign in with your claude pro/max account</b> and approve. you\'re in.'},
+          ]},
+          {p:'confirm the version:'},
+          {cmd:{label:'terminal', code:'<span class="prompt">$ </span>claude --version'}},
+          {term:{label:'you should see', code:'<span class="out">Claude Code vX.X.X</span>'}},
+          {why:'this is the core tool of the entire course — it reads your figma and writes your react. every other thing you just installed exists to support it.'},
+        ]
+      },
+      {
+        n:'06', title:'connect figma', time:'7 min',
+        body:[
+          {p:'this links claude code to your figma over a secure browser approval — <b>no token to copy, no key to paste anywhere.</b> three parts: install the plugin, approve access, get figma ready.'},
+          {p:'<b>1 · install the plugin.</b> in your terminal, paste:'},
+          {cmd:{label:'terminal', code:'<span class="prompt">$ </span>claude plugin install figma@claude-plugins-official'}},
+          {p:'<b>2 · approve access.</b> this is your “token” — handled for you:'},
+          {nav:['a','if claude code is running,','restart it']},
+          {nav:['b','type','<code>/plugin</code> and press <kbd>enter</kbd>']},
+          {nav:['c','use the','<kbd>→</kbd> arrow key to open the <b>installed</b> tab']},
+          {nav:['d','select','<b>figma</b> → press <kbd>enter</kbd> to start authorising']},
+          {nav:['e','press <kbd>enter</kbd> again to launch the browser →','make sure you\'re logged into the right figma account, then click <b>allow access</b>']},
+          {nav:['f','back in the terminal,','run <code>/plugin</code> again — figma should now show <b>connected</b>']},
+          {callout:'expecting to paste an access token? you don\'t need one here. the <b>allow access</b> screen <i>is</i> the auth — it hands claude a token behind the scenes and stores it for you.'},
+          {p:'<b>3 · get figma ready.</b> for the write-back lessons (claude editing figma, ui → figma), keep the figma <b>desktop app</b> open while you work, and make sure your account has dev-mode access — a full or dev seat.'},
+          {why:'this is the spine of the course — the live link that lets claude read your designs and write back into figma. every single lesson is built on top of it.'},
+          {note:'<b>three things must be true for “allow access” to work:</b><br>• you\'re on a <b>paid figma seat</b> — a pro plan, full or dev. a free or viewer account hits a <b>403</b>.<br>• if you have several figma accounts, the browser must be signed into the <b>right one</b>: the paid account that holds the files you\'ll actually work in.<br>• the link is <b>per-account</b> — if you ever switch figma accounts, repeat the connect prompt (<code>/plugin</code> → figma → authorise) for the new one.'},
+        ]
+      },
+      {
+        n:'07', title:'check it all works', time:'3 min',
+        body:[
+          {p:'one last pass. open vs code, then open its built-in terminal:'},
+          {nav:['→','in vs code (top menu):','<b>terminal</b><span class="arrow">→</span><b>new terminal</b>']},
+          {p:'run claude\'s built-in health check:'},
+          {cmd:{label:'terminal', code:'<span class="prompt">$ </span>claude doctor'}},
+          {p:'it should report claude code installed and signed in. then start claude and ask it one thing to prove figma is live:'},
+          {cmd:{label:'inside claude', code:'<span class="prompt">› </span>what figma tools do you have access to?'}},
+          {why:'five minutes now means you won\'t lose the first lesson to something that quietly didn\'t connect.'},
+          {callout:'<b>all green?</b> you\'re ready for week 1. if anything failed, the fixes below cover almost every case.'},
+        ]
+      },
+      {
+        n:'08', title:'if something breaks', time:'',
+        body:[
+          {trouble:[
+            {q:'“claude: command not found” (mac) / “not recognized” (win)', a:[
+              {os:'mac', t:'the install worked but your terminal hasn\'t picked it up. close terminal completely and open a brand new window. still stuck? run <code>source ~/.zshrc</code> then try again.'},
+              {os:'win', t:'close powershell completely and open a brand new window — the path only loads in fresh windows. then try <code>claude --version</code> again.'},
+            ]},
+            {q:'brew / winget says “command not found”', a:[
+              {os:'mac', t:'homebrew didn\'t finish wiring itself into your shell. run the <code>eval</code> line from step 02, open a fresh terminal, and try <code>brew -v</code> again.'},
+              {os:'win', t:'your windows is missing app installer. open the microsoft store, search <b>app installer</b>, install/update it, then reopen powershell.'},
+            ]},
+            {q:'the installer asked me to use sudo', a:[{t:'don\'t. running an install with <code>sudo</code> breaks future updates. use the commands exactly as written, with nothing in front of them.'}]},
+            {q:'node -v shows nothing or an old version', a:[{t:'claude code and the react project need <b>node 18 or newer</b>. reinstall it (step 03), open a fresh terminal, and check again.'}]},
+            {q:'figma gives a 403 / access error', a:[{t:'your figma account is on a view-only seat. the mcp connection needs a <b>full or dev seat</b> on a pro plan. switch seats (or ask your workspace admin), then reconnect: <code>/plugin</code> → figma → re-authorise.'}]},
+            {q:'figma shows “connected” but claude can\'t see my file', a:[{t:'open the <b>figma desktop app</b> and the file you\'re pointing at, then paste the file\'s share link into your prompt. the desktop app needs to be running for the live read/write tools.'}]},
+          ]}
+        ]
+      },
+    ]
+  },
+
+  ru: {
+    brand:'дизайн-системы · настройка',
+    eyebrow:'до первой недели · ~30 мин',
+    title:'подготовь компьютер',
+    lede:'установи всё, что нужно для связки figma → claude code → react. это делается один раз, до первого урока. выбери свой путь — macos или windows сверху.',
+    meta:[['время','~30 мин'],['нужно','figma pro · claude pro'],['итог','figma + claude code, связаны']],
+    footL:'дизайн-системы в claude code',
+    footR:'для <a class="inline" href="https://wannabe.ru" target="_blank" rel="noopener">wannabe</a>',
+    copy:'копировать', copied:'скопировано',
+    steps:[
+      {
+        n:'01', title:'перед стартом', time:'2 мин',
+        body:[
+          {p:'два платных аккаунта и пара минут. открой их в браузере и убедись, что заходишь:'},
+          {check:[
+            {b:'figma pro (full или dev-место)', sub:'нужно для подключения mcp. viewer-место не подойдёт.', link:['figma.com','https://figma.com']},
+            {b:'claude pro или max', sub:'под этим аккаунтом авторизуется claude code. бесплатный аккаунт его не запустит.', link:['claude.ai','https://claude.ai']},
+            {b:'современный браузер', sub:'chrome или edge — входы в figma и claude открываются в браузере.'},
+          ]},
+          {why:'весь курс держится на этих двух — <b>figma</b>, где ты проектируешь, и <b>claude</b>, агент, который превращает дизайн в код. нет аккаунтов — нет курса.'},
+          {note:'<b>код знать не нужно.</b> дальше ты только вставляешь команды — у каждой есть кнопка «копировать». ничего не набирается руками.'}
+        ]
+      },
+      {
+        n:'02', title:'настрой терминал', time:'5 мин',
+        body:[
+          {p:'это базовые инструменты, на которых держатся все команды ниже. делается один раз — дальше всё просто работает.'},
+          {os:'mac', blocks:[
+            {p:'<b>1 · command line tools.</b> дают git и сборочные инструменты, которые нужны homebrew. открой <b>terminal</b> (нажми <kbd>⌘</kbd> + <kbd>space</kbd>, набери <code>terminal</code>, enter) и вставь:'},
+            {cmd:{label:'terminal', code:'<span class="prompt">$ </span>xcode-select --install'}},
+            {p:'появится маленькое окно apple → нажми <b>install</b> → подожди пару минут, пока закончит.'},
+            {p:'<b>2 · homebrew</b> — пакетный менеджер, который ставит всё остальное. вставь:'},
+            {cmd:{label:'terminal', code:'<span class="prompt">$ </span>/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'}},
+            {p:'он может попросить пароль от мака — при вводе он не отображается, это нормально.'},
+            {note:'в конце homebrew печатает блок <b>«next steps»</b>. если потом <code>brew -v</code> пишет «command not found», выполни это один раз, чтобы дозавершить настройку:'},
+            {cmd:{label:'terminal', code:'<span class="prompt">$ </span>echo \'eval "$(/opt/homebrew/bin/brew shellenv)"\' >> ~/.zprofile && eval "$(/opt/homebrew/bin/brew shellenv)"'}},
+            {p:'проверь, что оба на месте:'},
+            {cmd:{label:'terminal', code:'<span class="prompt">$ </span>git --version && brew -v'}},
+            {term:{label:'должно показать две строки с версиями', code:'<span class="out">git version 2.xx.x\nHomebrew 4.x.x</span>'}},
+          ]},
+          {os:'win', blocks:[
+            {p:'<b>1 · используй powershell, а не command prompt.</b> нажми <kbd>⊞ win</kbd>, набери <code>powershell</code>, enter — все команды ниже вводятся здесь.'},
+            {p:'<b>2 · winget</b> — в windows уже встроен, нужно только проверить:'},
+            {cmd:{label:'powershell', code:'<span class="prompt">> </span>winget -v'}},
+            {term:{label:'должна показаться версия вроде', code:'<span class="out">v1.x.x</span>'}},
+            {note:'ничего не вышло? открой <b>microsoft store</b>, обнови <b>app installer</b> и переоткрой powershell.'},
+            {p:'<b>3 · git</b> — windows его не включает, поставь сейчас:'},
+            {cmd:{label:'powershell', code:'<span class="prompt">> </span>winget install -e --id Git.Git'}},
+          ]},
+          {why:'это фундамент, на котором стоит всё остальное. на mac command line tools дают git и сборочные инструменты для homebrew, а homebrew ставит всё прочее. на windows winget встроен, а git закрывает единственный пробел. пропустишь — и поздние команды упадут с непонятными ошибками.'},
+        ]
+      },
+      {
+        n:'03', title:'установи node.js', time:'2 мин',
+        body:[
+          {os:'mac', blocks:[
+            {p:'одна команда:'},
+            {cmd:{label:'terminal', code:'<span class="prompt">$ </span>brew install node'}},
+          ]},
+          {os:'win', blocks:[
+            {p:'одна команда:'},
+            {cmd:{label:'powershell', code:'<span class="prompt">> </span>winget install -e --id OpenJS.NodeJS.LTS'}},
+          ]},
+          {p:'закрой терминал, открой новое окно и проверь, что встало:'},
+          {cmd:{label:'terminal', code:'<span class="prompt">$ </span>node -v'}},
+          {term:{label:'должно показать что-то вроде', code:'<span class="out">v22.11.0</span>'}},
+          {why:'<b>node</b> запускает react-проект, который ты собираешь на второй неделе. без него ничего не отрендерится.'},
+        ]
+      },
+      {
+        n:'04', title:'установи vs code', time:'2 мин',
+        body:[
+          {os:'mac', blocks:[
+            {cmd:{label:'terminal', code:'<span class="prompt">$ </span>brew install --cask visual-studio-code'}},
+          ]},
+          {os:'win', blocks:[
+            {cmd:{label:'powershell', code:'<span class="prompt">> </span>winget install -e --id Microsoft.VisualStudioCode'}},
+          ]},
+          {p:'открой его один раз из приложений, чтобы система ему доверяла.'},
+          {why:'vs code — твоя база на курсе: тут ты видишь файлы, свою дизайн-систему и запускаешь claude code прямо в редакторе.'},
+        ]
+      },
+      {
+        n:'05', title:'установи claude code', time:'5 мин',
+        body:[
+          {p:'сам агент. нативный установщик, одна команда.'},
+          {os:'mac', blocks:[
+            {p:'в <b>terminal</b> вставь:'},
+            {cmd:{label:'terminal', code:'<span class="prompt">$ </span>curl -fsSL https://claude.ai/install.sh | bash'}},
+            {p:'когда закончит — <b>закрой terminal и открой новое окно</b> (именно это включает команду <code>claude</code>). затем запусти:'},
+            {cmd:{label:'terminal', code:'<span class="prompt">$ </span>claude'}},
+            {p:'откроется вкладка браузера — <b>войди под аккаунтом claude pro/max</b> и подтверди. готово.'},
+            {note:'<b>никогда</b> не пиши <code>sudo</code> перед командой установки. если что-то его просит — остановись, смотри шаг 08.'},
+          ]},
+          {os:'win', blocks:[
+            {p:'в <b>powershell</b> вставь:'},
+            {cmd:{label:'powershell', code:'<span class="prompt">> </span>irm https://claude.ai/install.ps1 | iex'}},
+            {p:'когда закончит — <b>закрой powershell и открой новое окно</b> (именно это включает команду <code>claude</code>). затем запусти:'},
+            {cmd:{label:'powershell', code:'<span class="prompt">> </span>claude'}},
+            {p:'откроется вкладка браузера — <b>войди под аккаунтом claude pro/max</b> и подтверди. готово.'},
+          ]},
+          {p:'проверь версию:'},
+          {cmd:{label:'terminal', code:'<span class="prompt">$ </span>claude --version'}},
+          {term:{label:'должно показать', code:'<span class="out">Claude Code vX.X.X</span>'}},
+          {why:'это главный инструмент всего курса — он читает твою figma и пишет твой react. всё остальное, что ты только что поставил, существует ради него.'},
+        ]
+      },
+      {
+        n:'06', title:'подключи figma', time:'7 мин',
+        body:[
+          {p:'это связывает claude code с твоей figma через безопасное подтверждение в браузере — <b>никакой токен копировать не нужно, никаких ключей никуда вставлять.</b> три части: поставить плагин, подтвердить доступ, подготовить figma.'},
+          {p:'<b>1 · поставь плагин.</b> в терминале вставь:'},
+          {cmd:{label:'terminal', code:'<span class="prompt">$ </span>claude plugin install figma@claude-plugins-official'}},
+          {p:'<b>2 · подтверди доступ.</b> это и есть твой «токен» — он делается за тебя:'},
+          {nav:['а','если claude code запущен,','перезапусти его']},
+          {nav:['б','набери','<code>/plugin</code> и нажми <kbd>enter</kbd>']},
+          {nav:['в','стрелкой','<kbd>→</kbd> перейди на вкладку <b>installed</b>']},
+          {nav:['г','выбери','<b>figma</b> → нажми <kbd>enter</kbd>, чтобы начать авторизацию']},
+          {nav:['д','нажми <kbd>enter</kbd> ещё раз, чтобы открыть браузер →','убедись, что ты залогинен в нужном аккаунте figma, затем нажми <b>allow access</b>']},
+          {nav:['е','вернись в терминал и','снова набери <code>/plugin</code> — figma должна показать <b>connected</b>']},
+          {callout:'ждёшь, что нужно вставить токен доступа? здесь он не нужен. экран <b>allow access</b> <i>и есть</i> авторизация — он выдаёт claude токен за кулисами и сохраняет его за тебя.'},
+          {p:'<b>3 · подготовь figma.</b> для уроков с обратной записью (claude правит figma, ui → figma) держи <b>десктоп-приложение figma</b> открытым во время работы и убедись, что у аккаунта есть доступ к dev mode — full или dev-место.'},
+          {why:'это стержень курса — живой канал, через который claude читает твои макеты и пишет обратно в figma. каждый урок строится поверх него.'},
+          {note:'<b>чтобы «allow access» сработал, должны выполняться три условия:</b><br>• у тебя <b>платное место в figma</b> — pro-план, full или dev. free или viewer даёт <b>403</b>.<br>• если у тебя несколько аккаунтов figma, в браузере залогинен <b>нужный</b>: платный, в котором лежат файлы, где ты реально работаешь.<br>• связь привязана <b>к аккаунту</b> — если когда-нибудь сменишь аккаунт figma, повтори промпт подключения (<code>/plugin</code> → figma → авторизуйся) для нового.'},
+        ]
+      },
+      {
+        n:'07', title:'проверь, что всё работает', time:'3 мин',
+        body:[
+          {p:'последний прогон. открой vs code, затем его встроенный терминал:'},
+          {nav:['→','в vs code (верхнее меню):','<b>terminal</b><span class="arrow">→</span><b>new terminal</b>']},
+          {p:'запусти встроенную проверку claude:'},
+          {cmd:{label:'terminal', code:'<span class="prompt">$ </span>claude doctor'}},
+          {p:'она покажет, что claude code установлен и авторизован. затем запусти claude и спроси одну вещь, чтобы подтвердить, что figma на связи:'},
+          {cmd:{label:'внутри claude', code:'<span class="prompt">› </span>какие инструменты figma тебе доступны?'}},
+          {why:'пять минут сейчас — и ты не потеряешь первый урок из-за того, что что-то тихо не подключилось.'},
+          {callout:'<b>всё зелёное?</b> ты готов к первой неделе. если что-то упало — фиксы ниже закрывают почти все случаи.'},
+        ]
+      },
+      {
+        n:'08', title:'если что-то сломалось', time:'',
+        body:[
+          {trouble:[
+            {q:'«claude: command not found» (mac) / «not recognized» (win)', a:[
+              {os:'mac', t:'установка прошла, но терминал её не подхватил. полностью закрой terminal и открой новое окно. всё ещё нет? выполни <code>source ~/.zshrc</code> и попробуй снова.'},
+              {os:'win', t:'полностью закрой powershell и открой новое окно — путь подгружается только в свежих окнах. затем снова набери <code>claude --version</code>.'},
+            ]},
+            {q:'brew / winget пишет «command not found»', a:[
+              {os:'mac', t:'homebrew не дописался в твой shell. выполни строку <code>eval</code> из шага 02, открой новый терминал и снова проверь <code>brew -v</code>.'},
+              {os:'win', t:'в windows нет app installer. открой microsoft store, найди <b>app installer</b>, поставь/обнови его и переоткрой powershell.'},
+            ]},
+            {q:'установщик просит использовать sudo', a:[{t:'не делай этого. установка через <code>sudo</code> ломает будущие обновления. используй команды ровно как написано, без ничего перед ними.'}]},
+            {q:'node -v ничего не показывает или старую версию', a:[{t:'claude code и react-проекту нужен <b>node 18 или новее</b>. переустанови его (шаг 03), открой новый терминал и проверь снова.'}]},
+            {q:'figma выдаёт 403 / ошибку доступа', a:[{t:'твой аккаунт figma на viewer-месте. для mcp нужно <b>full или dev-место</b> на pro-плане. смени место (или попроси админа воркспейса), затем переподключись: <code>/plugin</code> → figma → авторизуйся заново.'}]},
+            {q:'figma показывает «connected», но claude не видит мой файл', a:[{t:'открой <b>десктоп-приложение figma</b> и нужный файл, затем вставь ссылку-share этого файла в промпт. для живых инструментов чтения/записи десктоп должен быть запущен.'}]},
+          ]}
+        ]
+      },
+    ]
+  }
+};
+
+/* ===================== state + render ===================== */
+let curLang = 'en';
+let curOS = 'mac';
+
+function esc(s){return s;}
+
+function renderCmd(c, label){
+  return `<div class="cmd">
+    <div class="cmd-top">
+      <span class="cmd-label">${c.label||label||''}</span>
+      <button class="copy-btn" type="button"><span class="ci">⧉</span><span class="ct">${T[curLang].copy}</span></button>
+    </div>
+    <pre>${c.code}</pre>
+  </div>`;
+}
+function renderTerm(t){
+  return `<div class="cmd">
+    <div class="cmd-top"><span class="cmd-label">${t.label||''}</span></div>
+    <pre>${t.code}</pre>
+  </div>`;
+}
+function renderNav(parts){
+  // accept both [a,b,c] and [[a,b,c]]
+  if(Array.isArray(parts[0])) parts = parts[0];
+  // parts: [num/label-prefix, lead text, value(html), optional href]
+  const num = parts[0];
+  const lead = parts[1]||'';
+  const val = parts[2]||'';
+  const href = parts[3];
+  const valHtml = href ? `<a class="path" href="${href}" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent-soft)">${val}</a>` : `<span class="path">${val}</span>`;
+  return `<div class="nav-step"><span class="ic">${num}</span><span class="nav-txt">${lead} ${valHtml}</span></div>`;
+}
+function renderCheck(items){
+  return `<div class="check">`+items.map(it=>{
+    const link = it.link ? `<a href="${it.link[1]}" target="_blank" rel="noopener">${it.link[0]}</a>` : '';
+    return `<div class="check-item"><span class="box">${ICONS.check}</span><span><b>${it.b}</b> ${link}<span class="sub">${it.sub}</span></span></div>`;
+  }).join('')+`</div>`;
+}
+function renderTrouble(items){
+  return `<div class="trouble">`+items.map(it=>{
+    const ans = it.a.map(a=>{
+      if(a.os && a.os!==curOS) return '';
+      return `<p>${a.t}</p>`;
+    }).join('');
+    return `<details><summary><span class="tw">+</span>${it.q}</summary><div class="ans">${ans}</div></details>`;
+  }).join('')+`</div>`;
+}
+
+function renderBlock(b){
+  if(b.p!==undefined) return `<p class="${b.class||''}">${b.p}</p>`;
+  if(b.muted) return `<p class="muted">${b.muted}</p>`;
+  if(b.note) return `<div class="note">${b.note}</div>`;
+  if(b.why) return `<div class="why"><span class="why-tag">${curLang==='ru'?'зачем это':'why this'}</span><p>${b.why}</p></div>`;
+  if(b.callout) return `<div class="callout">${b.callout}</div>`;
+  if(b.why) return `<div class="why"><span class="wt">why</span><span>${b.why}</span></div>`;
+  if(b.cmd) return renderCmd(b.cmd);
+  if(b.term) return renderTerm(b.term);
+  if(b.nav) return renderNav(b.nav);
+  if(b.check) return renderCheck(b.check);
+  if(b.trouble) return renderTrouble(b.trouble);
+  if(b.os){ // os-gated group of blocks
+    if(b.os!==curOS) return '';
+    return b.blocks.map(renderBlock).join('');
+  }
+  return '';
+}
+
+function render(){
+  const L = T[curLang];
+  document.documentElement.lang = curLang;
+  document.body.className = `os-${curOS} lang-${curLang}`;
+
+  document.getElementById('bm').textContent = L.brand;
+  document.getElementById('hero-eyebrow').textContent = L.eyebrow;
+  document.getElementById('hero-title').textContent = L.title;
+  document.getElementById('hero-lede').textContent = L.lede;
+  document.getElementById('hero-meta').innerHTML = L.meta.map(m=>`<span>${m[0]} · <b>${m[1]}</b></span>`).join('');
+  document.getElementById('foot-left').textContent = L.footL;
+  document.getElementById('foot-right').innerHTML = L.footR;
+
+  const main = document.getElementById('steps');
+  main.innerHTML = L.steps.map(s=>{
+    const body = s.body.map(renderBlock).join('');
+    const time = s.time ? `<div class="step-time">${s.time}</div>` : '';
+    return `<section class="step" id="step-${s.n}">
+      <div class="step-num">${s.n}</div>
+      <div>
+        <div class="step-head"><h2>${s.title}</h2>${time}</div>
+        <div class="step-body">${body}</div>
+      </div>
+    </section>`;
+  }).join('');
+
+  bindCopy();
+}
+
+function bindCopy(){
+  document.querySelectorAll('.copy-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const pre = btn.closest('.cmd').querySelector('pre');
+      // strip prompt symbols + comments from copied text, keep the real command
+      const clone = pre.cloneNode(true);
+      clone.querySelectorAll('.prompt').forEach(e=>e.remove());
+      const text = clone.textContent.trim();
+      navigator.clipboard.writeText(text).then(()=>{
+        btn.classList.add('copied');
+        const ct = btn.querySelector('.ct');
+        const prev = ct.textContent;
+        ct.textContent = T[curLang].copied;
+        btn.querySelector('.ci').textContent = '✓';
+        setTimeout(()=>{
+          btn.classList.remove('copied');
+          ct.textContent = T[curLang].copy;
+          btn.querySelector('.ci').textContent = '⧉';
+        },1500);
+      });
+    });
+  });
+}
+
+document.getElementById('seg-os').addEventListener('click',e=>{
+  const b = e.target.closest('button'); if(!b) return;
+  curOS = b.dataset.os;
+  document.querySelectorAll('#seg-os button').forEach(x=>x.classList.toggle('active',x===b));
+  render();
+});
+document.getElementById('seg-lang').addEventListener('click',e=>{
+  const b = e.target.closest('button'); if(!b) return;
+  curLang = b.dataset.lang;
+  document.querySelectorAll('#seg-lang button').forEach(x=>x.classList.toggle('active',x===b));
+  render();
+});
+
+render();
+</script>
+</body>
+</html>

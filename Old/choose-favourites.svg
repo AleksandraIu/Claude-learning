@@ -1,0 +1,183 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="390" height="844" viewBox="0 0 390 844" overflow="hidden">
+
+  <defs>
+    <!-- Main card shadow -->
+    <filter id="f-card" x="-20%" y="-5%" width="140%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="16"
+                    flood-color="#000000" flood-opacity="0.14"/>
+    </filter>
+    <!-- Ghost card shadow -->
+    <filter id="f-ghost" x="-20%" y="-5%" width="140%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="10"
+                    flood-color="#000000" flood-opacity="0.10"/>
+    </filter>
+    <!-- Blue button glow -->
+    <filter id="f-btn" x="-60%" y="-60%" width="220%" height="220%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4"
+                    flood-color="#0a84ff" flood-opacity="0.30"/>
+    </filter>
+  </defs>
+
+  <!-- ═══════════════════════════════════════════
+       BACKGROUND
+       ═══════════════════════════════════════════ -->
+  <rect id="background" x="0" y="0" width="390" height="844" fill="#ffffff"/>
+
+  <!-- ═══════════════════════════════════════════
+       STATUS BAR  (y 0–44)
+       ═══════════════════════════════════════════ -->
+  <g id="status-bar">
+
+    <!-- Time "13:44" -->
+    <text id="status-time"
+          x="20" y="28"
+          font-family="SF Pro Display,-apple-system,BlinkMacSystemFont,Helvetica Neue,sans-serif"
+          font-size="15" font-weight="600" fill="#000000"
+          letter-spacing="-0.3">13:44</text>
+
+    <!-- Signal bars (4 bars, bottom-aligned at y=30) -->
+    <g id="icon-signal">
+      <rect x="300"   y="26" width="3" height="4"  rx="1" fill="#000000"/>
+      <rect x="305.5" y="24" width="3" height="6"  rx="1" fill="#000000"/>
+      <rect x="311"   y="21" width="3" height="9"  rx="1" fill="#000000"/>
+      <rect x="316.5" y="18" width="3" height="12" rx="1" fill="#000000"/>
+    </g>
+
+    <!-- Wi-Fi (16×12 icon, origin at 326,18) -->
+    <g id="icon-wifi" transform="translate(326,18)">
+      <!-- dot -->
+      <path d="M8 9.5C8.55 9.5 9 9.95 9 10.5C9 11.05 8.55 11.5 8 11.5
+               C7.45 11.5 7 11.05 7 10.5C7 9.95 7.45 9.5 8 9.5Z"
+            fill="#000000"/>
+      <!-- inner arc -->
+      <path d="M5.17 7.41C5.94 6.64 7 6.2 8 6.2C9 6.2 10.06 6.64 10.83 7.41
+               L11.89 6.35C10.83 5.3 9.46 4.7 8 4.7
+               C6.54 4.7 5.17 5.3 4.11 6.35L5.17 7.41Z"
+            fill="#000000"/>
+      <!-- outer arc -->
+      <path d="M2.34 4.58C3.85 3.08 5.86 2.2 8 2.2C10.14 2.2 12.15 3.08 13.66 4.58
+               L14.72 3.52C12.92 1.73 10.57 0.7 8 0.7
+               C5.43 0.7 3.08 1.73 1.28 3.52L2.34 4.58Z"
+            fill="#000000"/>
+    </g>
+
+    <!-- Battery (body 25×12 at x=348,y=17; tip 2×5 at x=373.5,y=21.5) -->
+    <g id="icon-battery">
+      <rect x="348" y="17" width="25" height="12" rx="3"
+            fill="none" stroke="#000000" stroke-width="1.5"/>
+      <rect x="350.5" y="19" width="16" height="8" rx="1.5" fill="#000000"/>
+      <rect x="373.5" y="21.5" width="2" height="5" rx="1" fill="#000000"/>
+    </g>
+
+  </g><!-- /status-bar -->
+
+  <!-- ═══════════════════════════════════════════
+       HEADER  (y 44–100, h=56, center y=72)
+       ═══════════════════════════════════════════ -->
+  <g id="header">
+
+    <!-- Close button: circle cx=36 cy=72 r=18 -->
+    <circle id="btn-close-bg" cx="36" cy="72" r="18"
+            fill="#ffffff" stroke="#e0e0e0" stroke-width="1.5"/>
+    <!-- × icon (12×12 centred on 36,72) -->
+    <path id="btn-close-x"
+          d="M30 66 L42 78 M42 66 L30 78"
+          stroke="#000000" stroke-width="1.8"
+          stroke-linecap="round"/>
+
+    <!-- Title centred at x=195 -->
+    <text id="header-title"
+          x="195" y="78"
+          font-family="SF Pro Display,-apple-system,BlinkMacSystemFont,Helvetica Neue,sans-serif"
+          font-size="17" font-weight="700" fill="#000000"
+          text-anchor="middle" letter-spacing="-0.3">Choose Favourites</text>
+
+    <!-- Confirm button: circle cx=354 cy=72 r=18, blue fill -->
+    <circle id="btn-confirm-bg" cx="354" cy="72" r="18"
+            fill="#0a84ff" filter="url(#f-btn)"/>
+    <!-- checkmark (fits within r≈11 of centre) -->
+    <path id="btn-confirm-check"
+          d="M347 72 L351.5 76.5 L362 65"
+          stroke="#ffffff" stroke-width="1.9"
+          stroke-linecap="round" stroke-linejoin="round"
+          fill="none"/>
+
+  </g><!-- /header -->
+
+  <!-- ═══════════════════════════════════════════
+       CAROUSEL  (track y=100–748)
+       Cards: top=112, bottom=736, h=624
+       Main card x=35, w=320  (35+320=355; 390-355=35 margin each side)
+       Ghost cards ±290px beyond center → 30px slivers visible
+       ═══════════════════════════════════════════ -->
+  <g id="carousel">
+
+    <!-- Left ghost card — rightmost 30 px visible (x −290 to 30) -->
+    <rect id="card-ghost-left"
+          x="-290" y="112" width="320" height="624" rx="18"
+          fill="#d1d1d6" opacity="0.75" filter="url(#f-ghost)"/>
+
+    <!-- Right ghost card — leftmost 30 px visible (x 360 to 390) -->
+    <rect id="card-ghost-right"
+          x="360" y="112" width="320" height="624" rx="18"
+          fill="#d1d1d6" opacity="0.75" filter="url(#f-ghost)"/>
+
+    <!-- Main card -->
+    <rect id="card-main"
+          x="35" y="112" width="320" height="624" rx="18"
+          fill="#c7c7cc" filter="url(#f-card)"/>
+
+    <!-- Selection toggle: empty white-outlined circle, bottom-right of card -->
+    <!-- cx = 35+320−14 = 341,  cy = 112+624−14 = 722 -->
+    <circle id="card-select-toggle"
+            cx="341" cy="722" r="13"
+            fill="none" stroke="#ffffff" stroke-width="2"/>
+
+  </g><!-- /carousel -->
+
+  <!-- ═══════════════════════════════════════════
+       THUMBNAIL STRIP  (section y=748–844)
+
+       Geometry:
+         padding-top   10 px  → row top = 758
+         row height    53 px  (triangle 6 + margin 3 + thumb 44)
+         row bottom         = 811
+         strip-dot margin   8 px
+         strip-dot center   = 821.5
+         padding-bottom 20 px → 844 − 20 − 5 = 819 top ✓
+
+         9 thumbs × 32 px + 8 gaps × 5 px = 328 px total
+         left start = (390 − 328) / 2 = 31 px
+         thumb centres at multiples of 37 px from x=47
+       ═══════════════════════════════════════════ -->
+  <g id="thumbnail-strip">
+
+    <!-- Thumbs 1–4 (inactive, y=767 h=44) -->
+    <rect id="thumb-1" x="31"  y="767" width="32" height="44" rx="6" fill="#c7c7cc"/>
+    <rect id="thumb-2" x="68"  y="767" width="32" height="44" rx="6" fill="#c7c7cc"/>
+    <rect id="thumb-3" x="105" y="767" width="32" height="44" rx="6" fill="#c7c7cc"/>
+    <rect id="thumb-4" x="142" y="767" width="32" height="44" rx="6" fill="#c7c7cc"/>
+
+    <!-- Active-thumb indicator: downward triangle above thumb 5 -->
+    <!-- thumb-5 centre-x = 179+16 = 195                        -->
+    <!-- triangle top=758, bottom=764, base half-width=5 px      -->
+    <polygon id="thumb-active-indicator"
+             points="190,758 200,758 195,764"
+             fill="#000000"/>
+
+    <!-- Thumb 5 (active, slightly darker) -->
+    <rect id="thumb-5-active" x="179" y="767" width="32" height="44" rx="6" fill="#aeaeb2"/>
+
+    <!-- Thumbs 6–9 (inactive) -->
+    <rect id="thumb-6" x="216" y="767" width="32" height="44" rx="6" fill="#c7c7cc"/>
+    <rect id="thumb-7" x="253" y="767" width="32" height="44" rx="6" fill="#c7c7cc"/>
+    <rect id="thumb-8" x="290" y="767" width="32" height="44" rx="6" fill="#c7c7cc"/>
+    <rect id="thumb-9" x="327" y="767" width="32" height="44" rx="6" fill="#c7c7cc"/>
+
+    <!-- Strip dot below the row -->
+    <circle id="strip-dot" cx="195" cy="821" r="2.5" fill="#c7c7cc"/>
+
+  </g><!-- /thumbnail-strip -->
+
+</svg>

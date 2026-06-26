@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__plugin_figma_figma__get_screenshot",
+      "Bash(curl -s -o /tmp/figma_screenshot.png \"https://www.figma.com/api/mcp/asset/852bd454-1fed-480e-961b-87f80d9bafae\")",
+      "Bash(open *)",
+      "mcp__plugin_figma_figma__get_metadata",
+      "mcp__plugin_figma_figma__get_variable_defs",
+      "mcp__plugin_figma_figma__get_design_context",
+      "Bash(python3 -c ' *)",
+      "Bash(python3 *)",
+      "mcp__plugin_figma_figma__use_figma",
+      "Bash(npm run *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5173/)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5175/)",
+      "Bash(curl -s http://localhost:5175/)",
+      "Bash(kill %1)",
+      "Bash(curl -s -o \"/private/tmp/claude-501/-Users-aleksandraiuzhanina-Claude-learning/b50f352e-3048-4d1c-93ef-73fdec0b7501/scratchpad/styles-board.png\" \"https://www.figma.com/api/mcp/asset/796bb6c5-ab63-469d-a128-6f57e39469eb\")",
+      "Bash(grep -rn '#[0-9a-fA-F]\\\\{3,6\\\\}' \"/Users/aleksandraiuzhanina/Claude learning/src/components/atoms/\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5173/preview/atoms)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5176/)",
+      "Bash(curl -s -o /dev/null -w \" %{http_code}\" http://localhost:5176/preview/atoms)"
+    ]
+  }
+}

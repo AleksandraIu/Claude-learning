@@ -1,0 +1,46 @@
+{
+  "_comment": "Raw token extract from Figma. Source of truth: node 2001:19512. Live variable value wins over any seeded reference.",
+  "extractedAt": "2026-06-23",
+  "figmaFile": "zUJYCXcLeuUXDcCKkxpLR5",
+  "figmaNode": "2001:19512",
+  "colors": {
+    "swatch-1":  { "hex": "#000000", "label": "black" },
+    "swatch-2":  { "hex": "#eaeaea", "label": "gray-100" },
+    "swatch-3":  { "hex": "#ffffff", "label": "white" },
+    "swatch-4":  { "hex": "#ffe900", "label": "yellow-400" },
+    "swatch-5":  { "hex": "#d1a63b", "label": "gold-400" },
+    "swatch-6":  { "hex": "#f5cfca", "label": "pink-100" },
+    "swatch-7":  { "hex": "#fad5e7", "label": "rose-100" },
+    "swatch-8":  { "hex": "#ddd6ef", "label": "purple-100" },
+    "swatch-9":  { "hex": "#e0e2a4", "label": "olive-100" },
+    "swatch-10": { "hex": "#d4eee7", "label": "mint-100" },
+    "swatch-11": { "hex": "#f5dedb", "label": "peach-100" }
+  },
+  "typography": {
+    "h1":           { "family": "Instrument Serif",    "size": 84, "lineHeight": 76, "weight": "Regular" },
+    "h2":           { "family": "Instrument Serif",    "size": 40, "lineHeight": 36, "weight": "Regular" },
+    "description":  { "family": "Pixform",             "size": 30, "lineHeight": 27, "weight": "Regular" },
+    "h3":           { "family": "Akkurat LL Cyrillic", "size": 20, "lineHeight": 18, "weight": "Semibold" },
+    "h4":           { "family": "Akkurat LL Cyrillic", "size": 15, "lineHeight": 14, "weight": "Semibold" },
+    "text-pixel":   { "family": "Pixform",             "size": 10, "lineHeight":  9, "weight": "Regular" },
+    "text-grotesk": { "family": "Akkurat LL Cyrillic", "size": 11, "lineHeight": 10, "weight": "Regular" },
+    "text-bold":    { "family": "Akkurat LL Cyrillic", "size": 11, "lineHeight": 10, "weight": "Bold" },
+    "caps":         { "family": "Akkurat LL Cyrillic", "size":  8, "lineHeight":  7, "weight": "Regular", "transform": "uppercase" }
+  },
+  "spacing": {
+    "neg-1":  -1,
+    "xxxs":    2,
+    "xxs":     4,
+    "xs":      8,
+    "s":      14,
+    "m":      20,
+    "l":      24,
+    "xl":     30,
+    "xxl":    60,
+    "_reconciliation": "XXL: variable value=60, layer label said 90 — live wins"
+  },
+  "radius": {
+    "l": 4,
+    "_note": "radius/L confirmed from Figma variable. rounds/* tokens TBD after value check."
+  }
+}
