@@ -520,17 +520,15 @@ All four Figma MCP tools (`get_design_context`, `get_screenshot`, `get_metadata`
 
 ## D28. Step 5.4 — MenuSwitch ON-state border (2026-06-26)
 
-### Figma MCP blocker
+### Border properties — node 357:35723 (ON / active state) — verified from Figma
 
-All Figma tools (`get_design_context`, `get_screenshot`) returned "no edit access" for node 357:35723. Border properties inferred from prior-session Figma reading (Step 5.2, where the border was established as `border-white`).
+Read via `get_design_context` on file `zUJYCXcLeuUXDcCKkxpLR5` (shared copy with edit access). Figma output: `border border-solid border-white … rounded-[var(--space/xxs,4px)]`
 
-### Border properties — node 357:35723 (ON / active state)
-
-| Property | Value | Token |
-|---|---|---|
-| Border color | White | `border-white` → `--color-white: #ffffff` ✓ |
-| Border width | 1px | Tailwind `border` utility (1px default) — no spacing token for 1px stroke; `--spacing-neg-1: -1px` is offset only |
-| Border radius | 4px | `rounded-s` → `--radius-s: 4px` ✓ (already on button base) |
+| Property | Figma value | Token | Match |
+|---|---|---|---|
+| Border color | `border-white` / `--color/white` | `border-white` → `--color-white: #ffffff` | ✓ exact |
+| Border width | `border` / 1px solid | Tailwind `border` utility (1px default) | ✓ exact |
+| Border radius | `var(--space/xxs, 4px)` = 4px | `rounded-s` → `--radius-s: 4px` (on base button) | ✓ exact |
 
 No new token gaps — all three properties map to existing tokens or Tailwind built-ins.
 

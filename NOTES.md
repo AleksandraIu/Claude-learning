@@ -43,7 +43,7 @@ Figma MCP blocked (no edit access). Border inferred from prior-session implement
 - Background still transparent (no bg class on button or container) ✓
 - Prior fix (bg-primary wrapper removed from atoms preview) intact ✓
 
-**Border matches Figma: pending manual (MCP blocked) | Prior fixes intact: y | Build: ✓ | Preview: http://localhost:5173/preview/atoms**
+**Border matches Figma: y (verified via zUJYCXcLeuUXDcCKkxpLR5 node 357:35723) | Prior fixes intact: y | Build: ✓ | Preview: http://localhost:5173/preview/atoms**
 
 ---
 
