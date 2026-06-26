@@ -3,6 +3,50 @@ Append-only. Newest entry first within each phase.
 
 ---
 
+## [Step 5.4: MenuSwitch ON-state border] — 2026-06-26
+
+### What changed
+
+| File | Change |
+|---|---|
+| `src/components/atoms/menu-switch/MenuSwitch.tsx` | `transition-all duration-150` moved from (removed) into `active` conditional — enters with animation, exits instantly |
+
+### Border properties (node 357:35723)
+
+Figma MCP blocked (no edit access). Border inferred from prior-session implementation:
+
+| Property | Value | Token |
+|---|---|---|
+| Color | White | `border-white` / `--color-white` ✓ |
+| Width | 1px | Tailwind `border` utility ✓ |
+| Radius | 4px | `rounded-s` (on base button) ✓ |
+
+### Transition behaviour
+
+- Inactive → active: `transition-all duration-150` is added with the border → border animates in smoothly
+- Active → inactive: CSS drops transition property at the same tick border is removed → exit is instant, deselected button shows no effect
+- Result: only the indicator entering the active state animates; switching away has zero visual effect on the old button
+
+### Hardcoded # / px grep
+
+`px-[10px]` only — pre-existing D24 gap. Zero new hardcoded values.
+
+### Build
+
+`npm run build` → 106 modules, 0 errors, 1.44s ✓
+
+### Verification
+
+- Active option shows `border border-white` with `transition-all duration-150` → border visible on yellow bg ✓
+- Unselected options have no border and no transition class ✓
+- Switching away: no flash/effect on deselected button (transition removed at exit) ✓
+- Background still transparent (no bg class on button or container) ✓
+- Prior fix (bg-primary wrapper removed from atoms preview) intact ✓
+
+**Border matches Figma: pending manual (MCP blocked) | Prior fixes intact: y | Build: ✓ | Preview: http://localhost:5173/preview/atoms**
+
+---
+
 ## [Step 5.3: Transparency + transitions] — 2026-06-26
 
 ### What changed

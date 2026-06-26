@@ -515,3 +515,29 @@ All four Figma MCP tools (`get_design_context`, `get_screenshot`, `get_metadata`
 | **Background ownership** | No bg on Header component; preview wrapper provided `bg-primary` | `bg-primary` added to Header.tsx outer div — component owns its bg | `--color-primary: #ffe900` |
 | **Organisms preview wrappers** | `bg-primary rounded-s overflow-hidden` (two instances) | `rounded-s overflow-hidden` (bg removed — Header provides it) | — |
 | **Figma inference** | Could not read node 357:35619 fill directly (MCP access blocked). Color inferred as `bg-primary` from current preview rendering and TopMenu's `border-white` separator (indicates colored surface). Verify manually. |
+
+---
+
+## D28. Step 5.4 — MenuSwitch ON-state border (2026-06-26)
+
+### Figma MCP blocker
+
+All Figma tools (`get_design_context`, `get_screenshot`) returned "no edit access" for node 357:35723. Border properties inferred from prior-session Figma reading (Step 5.2, where the border was established as `border-white`).
+
+### Border properties — node 357:35723 (ON / active state)
+
+| Property | Value | Token |
+|---|---|---|
+| Border color | White | `border-white` → `--color-white: #ffffff` ✓ |
+| Border width | 1px | Tailwind `border` utility (1px default) — no spacing token for 1px stroke; `--spacing-neg-1: -1px` is offset only |
+| Border radius | 4px | `rounded-s` → `--radius-s: 4px` ✓ (already on button base) |
+
+No new token gaps — all three properties map to existing tokens or Tailwind built-ins.
+
+### Transition scope fix
+
+| Decision | Before (5.3) | After (5.4) |
+|---|---|---|
+| `transition-all duration-150` location | Removed entirely (eliminated deselect flash but also lost enter animation) | Moved into `active` conditional — fires ONLY when becoming active |
+| Mechanism | — | When active→inactive: CSS drops `transition` property at same tick border is removed → browser skips exit animation. When inactive→active: `transition-all` present when border is added → enters smoothly. |
+| `duration-150` | Tailwind built-in (150ms) — no `--transition-*` token exists. Accepted as framework utility, not design token. |
