@@ -42,7 +42,7 @@ export default function Profile({
         </div>
         <Status variant="green" />
       </div>
-      <Bar value={barValue} size="default" className="flex-1 min-w-0" />
+      <Bar value={barValue} size="default" color="green" className="flex-1 min-w-0" />
     </div>
   );
 }

@@ -1,9 +1,9 @@
 // TopMenu: app-level navigation bar (Hired & Wired HR app).
-// Renders on dark/colored surface — uses white border-b.
+// D31: bg-bg-page (F2F2F2) — border-b border-border replaces white border.
 // D26: Generate Report bg = bg-bg (white per Figma 357:35588), not gray-100 (secondary).
-import MenuSwitch from '../../atoms/menu-switch/MenuSwitch';
+import SwitchGroup from '../../atoms/switch-group/SwitchGroup';
 
-export type TopMenuTab = 'all' | 'templates' | 'off';
+export type TopMenuTab = 'all' | 'templates';
 
 interface TopMenuProps {
   activeTab?: TopMenuTab;
@@ -23,7 +23,7 @@ export default function TopMenu({
   className = '',
 }: TopMenuProps) {
   return (
-    <div className={`flex items-center justify-between px-m py-s border-b border-white w-full ${className}`}>
+    <div className={`flex items-center justify-between px-m py-s border-b border-border w-full ${className}`}>
       {/* Left: logo + nav tabs */}
       <div className="flex items-center gap-xxl">
         <p className="type-h2 text-black whitespace-nowrap tracking-[-0.4px]">Hired &amp; Wired</p>
@@ -37,14 +37,11 @@ export default function TopMenu({
             <span className="type-pixel tracking-[2px] uppercase whitespace-nowrap text-text">Generate report</span>
           </button>
 
-          <div className="flex items-center gap-xxxs">
-            <MenuSwitch active={activeTab === 'all'} onClick={() => onTabChange?.('all')}>
-              All teams
-            </MenuSwitch>
-            <MenuSwitch active={activeTab === 'templates'} onClick={() => onTabChange?.('templates')}>
-              All templates
-            </MenuSwitch>
-          </div>
+          <SwitchGroup
+            items={[{ label: 'All teams' }, { label: 'All templates' }]}
+            activeIndex={activeTab === 'all' ? 0 : 1}
+            onSelect={(i) => onTabChange?.(i === 0 ? 'all' : 'templates')}
+          />
         </div>
       </div>
 

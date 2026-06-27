@@ -22,7 +22,7 @@ export default function Header({
   className = '',
 }: HeaderProps) {
   return (
-    <div className={`flex flex-col items-start w-full bg-primary ${className}`}>
+    <div className={`flex flex-col items-start w-full bg-bg-page border-b border-border ${className}`}>
       <TopMenu activeTab={activeTab} />
 
       {showSecondRow && <SecondRow type={secondRowType} />}

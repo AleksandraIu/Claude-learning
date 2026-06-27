@@ -19,8 +19,8 @@ const DOT_PX = 5; // D19 gap — no 5px spacing token
 
 export default function Bar({ value = 75, size = 'default', color = 'default', total = 100, className = '' }: BarProps) {
   const filled = Math.round((Math.min(100, Math.max(0, value)) / 100) * total);
-  const filledCls = color === 'green' ? 'bg-[#00867b]' : 'bg-[#b8c6c3]';
-  const emptyCls  = color === 'green' ? 'bg-mint-100'  : 'bg-white';
+  const filledCls = color === 'green' ? 'bg-team-strong' : 'bg-[#b8c6c3]';
+  const emptyCls  = color === 'green' ? 'bg-team-soft'   : 'bg-white';
 
   return (
     <div

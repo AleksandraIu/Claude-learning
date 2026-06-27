@@ -118,13 +118,12 @@ export default function CardHeader({
         <p className="type-description uppercase text-black w-full text-center tracking-[-0.9px]">{title}</p>
       </div>
 
-      {/* CTA actions + gold "add" button (D26: added per Figma 357:35695) */}
+      {/* CTA actions (D31: AddButton removed from variant2 per Step 5.8) */}
       <div className="relative flex flex-col gap-xl items-center">
         <div className="flex items-center gap-xxxs">
           {actions.map(a => (
             <Button key={a} variant="cta-small">{a}</Button>
           ))}
-          <AddButton />
         </div>
         <SwitchGroup items={switchItems} />
       </div>

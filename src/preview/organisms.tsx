@@ -19,10 +19,10 @@ function Label({ children }: { children: React.ReactNode }) {
 }
 
 export default function OrganismsPreview() {
-  const [activeTab, setActiveTab] = useState<'all' | 'templates' | 'off'>('all');
+  const [activeTab, setActiveTab] = useState<'all' | 'templates'>('all');
 
   return (
-    <div className="min-h-screen bg-bg text-text p-xxl">
+    <div className="min-h-screen bg-bg-page text-text p-xxl">
       <div className="max-w-5xl mx-auto">
         <PreviewNav />
         <h1 className="type-h1 mb-xxl">Organisms</h1>
@@ -51,7 +51,7 @@ export default function OrganismsPreview() {
               <TopMenu activeTab={activeTab} onTabChange={setActiveTab} />
             </div>
             <div className="mt-xs flex gap-xs">
-              {(['all', 'templates', 'off'] as const).map(tab => (
+              {(['all', 'templates'] as const).map(tab => (
                 <button key={tab} onClick={() => setActiveTab(tab)}
                   className={`type-pixel tracking-[2px] uppercase px-xs py-xxxs rounded-s text-black transition-colors
                     ${activeTab === tab ? 'bg-gray-100' : 'bg-transparent hover:bg-gray-100/50'}`}

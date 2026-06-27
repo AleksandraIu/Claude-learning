@@ -587,3 +587,34 @@ The ADD button is intentionally gold in Figma (`#d1a63b`), not black like the pr
 |---|---|---|---|
 | promote / negotiate / suspend / fire | black | `cta-small` → `bg-black text-white` | ✓ correct (D26) |
 | add | gold `#d1a63b` | `bg-gold-400 text-text-on-dark` | ✓ correct — intentionally different |
+
+---
+
+## D31. Step 5.8 — Layout, SwitchGroup migration, page bg + circle colors
+
+### New tokens added (styles/tokens.css)
+
+| Token | Type | Value | Rationale |
+|---|---|---|---|
+| `--color-gray-200` | primitive | `#f2f2f2` | Page background (#F2F2F2 per spec) |
+| `--color-teal-500` | primitive | `#00867b` | Dark teal (bar green filled, team-strong); resolves D19 hardcoded gap |
+| `--color-bg-page` | semantic | `var(--color-gray-200)` | Applied to all preview page outer divs |
+| `--color-team-strong` | semantic | `var(--color-teal-500)` | Bar filled (green variant) + Team left circles |
+| `--color-team-soft` | semantic | `var(--color-mint-100)` | Bar empty (green variant) + Team right circles; `mint-100` = `#d4eee7` already existed |
+
+### 9 items resolved
+
+| # | Item | Decision |
+|---|---|---|
+| 1 | PreviewNav font | `type-caps` (8px) → `type-grotesk uppercase` (11px). Tracking-[1.6px] kept explicitly (not in `type-grotesk` preset). |
+| 2 | Styles page h1 | `<h1 className="type-h1 mb-xxl">Styles</h1>` added at top of content div (after sticky nav, before Colors section). |
+| 3 | MenuSwitch migration | Deleted `src/components/atoms/menu-switch/` (MenuSwitch.tsx + index.ts). Removed from atoms/index.ts barrel. TopMenu.tsx: import replaced with `SwitchGroup`; two MenuSwitch instances → one `<SwitchGroup>` with controlled activeIndex. `TopMenuTab` type narrowed from `'all' \| 'templates' \| 'off'` to `'all' \| 'templates'`. Preview organisms.tsx: removed 'off' button, narrowed state type. atoms.tsx preview: removed MenuSwitch section + state. index.tsx: organisms desc updated (7→6, removed MenuSwitch from list). |
+| 4 | All pages bg | `bg-bg` → `bg-bg-page` on all 5 preview page outer divs (atoms, molecules, organisms, styles, index). Styles sticky nav also updated. |
+| 5 | Header bg + separator | `bg-primary` → `bg-bg-page border-b border-border`. TopMenu: `border-b border-white` → `border-b border-border` (white border invisible on #f2f2f2). |
+| 6 | Profile Bar color | `<Bar>` in Profile (long variant): added `color="green"` prop. Figma node 357:35448 shows dark teal dots. |
+| 7 | Bar.tsx tokenized | `bg-[#00867b]` → `bg-team-strong`; `bg-mint-100` → `bg-team-soft` (green empty branch). Default branch unchanged (still has D19 gap #b8c6c3 and bg-white). |
+| 8 | CardHeader variant2 | Removed `<AddButton />` from variant2 action row. AddButton still present in default variant (both spots — teams row + access row). |
+| 9 | Kanban layout | Board div: `w-full` → `min-w-[1100px]` (D31: no token for 1100px, hardcoded — between xxl=60px spacing; this is width, no spacing token applies). Headline: `w-[830px]` → `w-full`. Card names: added `whitespace-nowrap`. |
+
+### Remaining D19 gaps NOT in scope for Step 5.8
+`bg-[#00867b]` still appears in: Status.tsx (dot/text), Notify.tsx (headline text), SecondRow.tsx (back button border). These are tracked D19 gaps; only Bar.tsx was in scope.

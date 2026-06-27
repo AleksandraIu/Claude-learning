@@ -27,13 +27,13 @@ const layers = [
     label: 'Organisms',
     badge: 'in progress',
     status: 'in-progress' as const,
-    desc: '7 organisms — MenuSwitch, SecondRow, TopMenu, Header, Kanban, Task, CardHeader',
+    desc: '6 organisms — SecondRow, TopMenu, Header, Kanban, Task, CardHeader',
   },
 ];
 
 export default function PreviewIndex() {
   return (
-    <div className="min-h-screen bg-bg text-text p-xxl">
+    <div className="min-h-screen bg-bg-page text-text p-xxl">
       <div className="max-w-4xl mx-auto">
         <p className="type-caps text-black/50 mb-m tracking-widest">Design System</p>
         <h1 className="type-h1 mb-xxs">Preview</h1>

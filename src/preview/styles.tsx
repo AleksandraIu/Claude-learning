@@ -69,15 +69,16 @@ function SubLabel({ children }: { children: React.ReactNode }) {
 
 export default function StylesPreview() {
   return (
-    <div className="min-h-screen bg-bg text-text">
+    <div className="min-h-screen bg-bg-page text-text">
       {/* Nav */}
-      <div className="sticky top-0 bg-bg border-b border-border z-10">
+      <div className="sticky top-0 bg-bg-page border-b border-border z-10">
         <div className="max-w-5xl mx-auto px-xxl py-xs">
           <PreviewNav />
         </div>
       </div>
 
       <div className="max-w-5xl mx-auto p-xxl space-y-xxl">
+        <h1 className="type-h1 mb-xxl">Styles</h1>
 
         {/* ── COLORS ── */}
         <section>

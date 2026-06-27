@@ -3,6 +3,34 @@ Append-only. Newest entry first within each phase.
 
 ---
 
+## [Step 5.8: layout + SwitchGroup migration + page bg + circle colors] — 2026-06-27
+
+### What changed (9 items)
+
+| File | Change |
+|---|---|
+| `styles/tokens.css` | +2 primitives (gray-200 #f2f2f2, teal-500 #00867b) + 3 semantics (bg-page, team-strong, team-soft) |
+| `src/preview/PreviewNav.tsx` | `type-caps` → `type-grotesk uppercase` (8→11px, all links + separator) |
+| `src/preview/styles.tsx` | Added `<h1 type-h1>Styles</h1>`; outer + sticky nav bg → `bg-bg-page` |
+| `src/preview/atoms.tsx` | Removed MenuSwitch section + state + import; outer bg → `bg-bg-page` |
+| `src/preview/molecules.tsx` | Outer bg → `bg-bg-page` |
+| `src/preview/organisms.tsx` | Outer bg → `bg-bg-page`; removed 'off' tab state/button |
+| `src/preview/index.tsx` | Outer bg → `bg-bg-page`; organisms desc 7→6, removed MenuSwitch |
+| `src/components/atoms/menu-switch/` | Deleted (MenuSwitch.tsx + index.ts) |
+| `src/components/atoms/index.ts` | Removed MenuSwitch export |
+| `src/components/organisms/top-menu/TopMenu.tsx` | Import MenuSwitch → SwitchGroup; 2x MenuSwitch → SwitchGroup controlled; TopMenuTab type removed 'off'; border-white → border-border |
+| `src/components/organisms/header/Header.tsx` | `bg-primary` → `bg-bg-page border-b border-border` |
+| `src/components/molecules/profile/Profile.tsx` | Bar in long variant: added `color="green"` |
+| `src/components/atoms/bar/Bar.tsx` | Green filled: `bg-[#00867b]` → `bg-team-strong`; green empty: `bg-mint-100` → `bg-team-soft` |
+| `src/components/organisms/card-header/CardHeader.tsx` | Removed `<AddButton />` from variant2 action row |
+| `src/components/organisms/kanban/Kanban.tsx` | Board: `w-full` → `min-w-[1100px]`; headline: `w-[830px]` → `w-full`; card names: +`whitespace-nowrap` |
+
+### Build: PASS (0 errors, 5 pre-existing CSS warnings unrelated to this step)
+
+---
+
+
+
 ## [Step 5.6: menu-switch border fix] — 2026-06-26
 
 ### Root cause

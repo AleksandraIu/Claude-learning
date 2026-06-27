@@ -15,7 +15,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 export default function MoleculesPreview() {
   return (
-    <div className="min-h-screen bg-bg text-text p-xxl">
+    <div className="min-h-screen bg-bg-page text-text p-xxl">
       <div className="max-w-5xl mx-auto">
         <PreviewNav />
         <h1 className="type-h1 mb-xxl">Molecules</h1>

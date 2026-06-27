@@ -58,9 +58,11 @@
   /* === PRIMITIVES — COLOR PALETTE === */
   --color-black:      #000000;
   --color-gray-100:   #eaeaea;
+  --color-gray-200:   #f2f2f2;  /* D31: page background */
   --color-white:      #ffffff;
   --color-yellow-400: #ffe900;
   --color-gold-400:   #d1a63b;
+  --color-teal-500:   #00867b;  /* D31: bar green-filled / team-strong; resolves D19 gap */
   --color-pink-100:   #f5cfca;
   --color-rose-100:   #fad5e7;
   --color-purple-100: #ddd6ef;
@@ -70,6 +72,7 @@
 
   /* === SEMANTIC — COLOR ALIASES === */
   --color-bg:             var(--color-white);
+  --color-bg-page:        var(--color-gray-200);   /* D31: all preview page backgrounds */
   --color-bg-subtle:      var(--color-gray-100);
   --color-bg-ink:         var(--color-black);
   --color-text:           var(--color-black);
@@ -78,6 +81,8 @@
   --color-border:         var(--color-gray-100);
   --color-primary:        var(--color-yellow-400);
   --color-primary-hover:  var(--color-gold-400);
+  --color-team-strong:    var(--color-teal-500);   /* D31: bar filled (green), Team dark teal */
+  --color-team-soft:      var(--color-mint-100);   /* D31: bar empty (green), Team light teal */
   --color-status-pink:    var(--color-pink-100);
   --color-status-rose:    var(--color-rose-100);
   --color-status-purple:  var(--color-purple-100);

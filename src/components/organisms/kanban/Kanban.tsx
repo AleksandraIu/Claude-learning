@@ -60,9 +60,9 @@ export default function Kanban({ headline = 'Pipeline', columns = DEFAULT_COLUMN
   // D24: gap-[50px] not in tokens (xl=30, xxl=60); pb-[84px] = Figma pb-[var(--font/size/h1)]
   return (
     <div className={`flex flex-col items-center gap-[50px] pb-[84px] px-xl w-full ${className}`}>
-      <p className="type-h1 text-black text-center tracking-[-0.84px] w-[830px] leading-[0.9]">{headline}</p>
+      <p className="type-h1 text-black text-center tracking-[-0.84px] w-full leading-[0.9]">{headline}</p>
 
-      <div className="bg-white flex gap-l items-start p-xl rounded-[12px] w-full">
+      <div className="bg-white flex gap-l items-start p-xl rounded-[12px] min-w-[1100px]">
         {columns.map(col => (
           <div key={col.title} className="flex flex-col gap-m items-start flex-1 min-w-0">
             {/* Column header */}
@@ -77,7 +77,7 @@ export default function Kanban({ headline = 'Pipeline', columns = DEFAULT_COLUMN
                 <div key={i} className="bg-gray-100 flex gap-s items-start p-s rounded-s w-full min-w-0">
                   <Avatar variant="katya" className="shrink-0" />
                   <div className="flex flex-col gap-xs items-start min-w-0">
-                    <p className="type-h3 text-black tracking-[-0.4px]">{card.name}</p>
+                    <p className="type-h3 text-black tracking-[-0.4px] whitespace-nowrap">{card.name}</p>
                     <p className="type-pixel tracking-[2px] uppercase text-black">{card.role}</p>
                   </div>
                 </div>
