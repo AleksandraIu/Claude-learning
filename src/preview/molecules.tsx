@@ -73,8 +73,8 @@ export default function MoleculesPreview() {
 
         {/* METRIC CARDS */}
         <Section title="Metric Card">
-          <MetricCard />
-          <MetricCard title="Performance" label="Overall: Great" bars={[{ value: 100 }, { value: 78 }, { value: 55 }]} />
+          <MetricCard className="w-[190px]" />
+          <MetricCard title="Performance" label="Overall: Great" bars={[{ value: 100 }, { value: 78 }, { value: 55 }]} className="w-[190px]" />
         </Section>
 
         <Section title="Metric Card Tall">

@@ -3,6 +3,47 @@ Append-only. Newest entry first within each phase.
 
 ---
 
+## [Step 6: Pages + Release Notes] — 2026-06-28
+
+### Screens built
+
+| Screen | Figma node | Components |
+|---|---|---|
+| screen-all-teams-a | 357:58932 | Header · CardHeader(default) · 4×MetricCard · 6×Team |
+| screen-all-teams-single | 357:58993 | Header · CardHeader(variant2) · Notify · Team section (10×Profile long) |
+| screen-candidate-b | 357:59014 | Header · CardHeader(variant2) · Notify · Achievements · PersonalDev · Reports/Mentoring |
+
+### Files created / modified
+
+| File | Action |
+|---|---|
+| `src/preview/pages/ScreenAllTeamsA.tsx` | New |
+| `src/preview/pages/ScreenAllTeamsSingle.tsx` | New |
+| `src/preview/pages/ScreenCandidateB.tsx` | New |
+| `src/preview/release-notes.tsx` | New — renders NOTES.md via Vite ?raw |
+| `src/vite-env.d.ts` | New — Vite client types for ?raw import |
+| `src/App.tsx` | +4 routes |
+| `src/preview/PreviewNav.tsx` | Pages section added (2-row nav) |
+| `src/preview/index.tsx` | Pages section added at bottom |
+| `src/components/molecules/metric-card/MetricCard.tsx` | Added bg prop, removed hardcoded w-[190px] |
+| `src/preview/molecules.tsx` | MetricCard usage: +className=w-[190px] |
+
+### Off-scale indents logged (D32)
+
+- `pt-[90px]` — all 3 screens, header-to-content gap
+- `gap-[90px]` — screen-candidate-b Reports section (Figma space/xxl=90)
+- `max-w-[830px]` — Figma content frame width
+
+### Flagged missing tokens (D32)
+
+#646905, #fffd9e, #f7e0dd, #ffe3f1 — closest existing alternatives used, no new tokens added
+
+### Build: PASS (0 errors, 5 pre-existing CSS warnings)
+
+---
+
+
+
 ## [Step 5.8: layout + SwitchGroup migration + page bg + circle colors] — 2026-06-27
 
 ### What changed (9 items)

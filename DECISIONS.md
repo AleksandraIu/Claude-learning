@@ -618,3 +618,59 @@ The ADD button is intentionally gold in Figma (`#d1a63b`), not black like the pr
 
 ### Remaining D19 gaps NOT in scope for Step 5.8
 `bg-[#00867b]` still appears in: Status.tsx (dot/text), Notify.tsx (headline text), SecondRow.tsx (back button border). These are tracked D19 gaps; only Bar.tsx was in scope.
+
+---
+
+## D32. Step 6 — Pages + Release Notes
+
+### Screen names confirmed from Figma (file zUJYCXcLeuUXDcCKkxpLR5)
+
+| Node | Expected | Confirmed |
+|---|---|---|
+| 357:58932 | screen-all-teams-a | ✓ screen-all-teams-a |
+| 357:58993 | screen-all-teams-single | ✓ screen-all-teams-single |
+| 357:59014 | screen-candidate-b | ✓ screen-candidate-b |
+
+### Per-screen composition
+
+| Screen | Components used |
+|---|---|
+| screen-all-teams-a | Header, CardHeader(default), MetricCard×4, Team×6 |
+| screen-all-teams-single | Header, CardHeader(variant2), Notify, Profile(long)×10 |
+| screen-candidate-b | Header, CardHeader(variant2), Notify, Bar, Button, Profile(short)×6 |
+
+### Off-scale layout indents (sanctioned px exceptions)
+
+| Value | Screen(s) | Reason |
+|---|---|---|
+| `pt-[90px]` | all 3 screens | Header h=88 (screens 1&2) or h=114 (screen 3), content y=178/204; gap=90px in both cases. Nearest token: xxl=60px. No 90px token. |
+| `gap-[90px]` | screen-candidate-b (Reports section) | Figma `space/xxl=90px` ≠ our `--spacing-xxl=60px`. Reports-to/Mentoring sub-section gap. |
+| `max-w-[830px]` | all 3 screens | Figma content frame width = 830px (node w=830); centered in 1440px viewport. No token for 830px width. |
+
+Note: `rounded-[12px]` is pre-existing D22 gap, not new. `tracking-[-0.4px]`, `tracking-[1.6px]`, `tracking-[2px]` are pre-existing throughout codebase.
+
+### Flagged missing tokens (no code invented, closest alternative used)
+
+| Missing color | Figma token | Hex | Used in | Decision |
+|---|---|---|---|---|
+| (none) | `color/text-&-icon/yellow-dark` | `#646905` | Achievements section heading + item text | No token; using `text-black` |
+| (none) | `color/controls/on-color/yellow-dark` | `#fffd9e` | Achievements button bg | No token; using `Button variant="secondary"` (bg-gray-100) |
+| (none) | `color/background/on-cads/red` | `#f7e0dd` | Profile chip bg (Reports to) | No token; using `Profile variant="short"` (bg-peach-100 = #f5dedb, close) |
+| (none) | `color/background/on-cads/pink` | `#ffe3f1` | Profile chip bg (Mentoring) | No token; using `Profile variant="short"` (bg-peach-100) |
+
+### Component variant added
+
+**MetricCard.tsx**: Added `bg` prop (string, defaults to `'bg-mint-100'`). Removed hardcoded `w-[190px]`; callers pass width via `className`. Required because screen-all-teams-a needs 4 MetricCards with different bg colors (pink-100, rose-100, purple-100, olive-100) — all existing tokens. molecules.tsx updated to pass `className="w-[190px]"` for existing usage.
+
+### Release Notes
+
+Auto-generated from `NOTES.md` via Vite `?raw` import. Parses `## [Step...]` entries into a styled timeline. Added `src/vite-env.d.ts` with `/// <reference types="vite/client" />` for raw import typing.
+
+### Routes added
+
+| Path | Component |
+|---|---|
+| `/preview/pages/screen-all-teams-a` | ScreenAllTeamsA |
+| `/preview/pages/screen-all-teams-single` | ScreenAllTeamsSingle |
+| `/preview/pages/screen-candidate-b` | ScreenCandidateB |
+| `/preview/release-notes` | ReleaseNotes |
