@@ -14,7 +14,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 }
 
 function Label({ children }: { children: React.ReactNode }) {
-  return <p className="type-caps text-[#979797] tracking-[1.6px] mb-xs">{children}</p>;
+  return <p className="type-caps text-text-subtle tracking-[1.6px] mb-xs">{children}</p>;
 }
 
 function Swatch({ label, children }: { label: string; children: React.ReactNode }) {

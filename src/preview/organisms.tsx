@@ -5,17 +5,20 @@ import {
   Kanban, Task, CardHeader,
 } from '../components/organisms';
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function Section({ title, subtitle, children }: { title: string; subtitle?: string; children: React.ReactNode }) {
   return (
     <section className="mb-xxl">
-      <h2 className="type-h3 mb-m pb-xxs border-b border-gray-100">{title}</h2>
+      <div className="mb-m pb-xxs border-b border-gray-100">
+        <h2 className="type-h3">{title}</h2>
+        {subtitle && <p className="type-grotesk text-text-subtle mt-xxxs">{subtitle}</p>}
+      </div>
       <div className="flex flex-col gap-m">{children}</div>
     </section>
   );
 }
 
 function Label({ children }: { children: React.ReactNode }) {
-  return <p className="type-caps text-[#979797] tracking-[1.6px] mb-xs">{children}</p>;
+  return <p className="type-caps text-text-subtle tracking-[1.6px] mb-xs">{children}</p>;
 }
 
 export default function OrganismsPreview() {
@@ -27,8 +30,8 @@ export default function OrganismsPreview() {
         <PreviewNav />
         <h1 className="type-h1 mb-xxl">Organisms</h1>
 
-        {/* SECOND ROW */}
-        <Section title="SecondRow">
+        {/* SECOND ROW — part of Header composition */}
+        <Section title="SecondRow" subtitle="Used inside Header as the second row (breadcrumb / builder bar)">
           <div>
             <Label>default (breadcrumb)</Label>
             <div className="border border-gray-100 rounded-s overflow-hidden">
@@ -43,8 +46,8 @@ export default function OrganismsPreview() {
           </div>
         </Section>
 
-        {/* TOP MENU */}
-        <Section title="TopMenu">
+        {/* TOP MENU — part of Header composition */}
+        <Section title="TopMenu" subtitle="Used inside Header as the first row (logo + navigation + user links)">
           <div>
             <Label>all tabs / templates / off</Label>
             <div className="rounded-s overflow-hidden border border-gray-100">
@@ -63,16 +66,16 @@ export default function OrganismsPreview() {
           </div>
         </Section>
 
-        {/* HEADER */}
-        <Section title="Header">
+        {/* HEADER — composes TopMenu + SecondRow */}
+        <Section title="Header" subtitle="Composes TopMenu (row 1) + SecondRow (row 2). Transparent with z-10 for hero overlay.">
           <div>
-            <Label>default (TopMenu + SecondRow)</Label>
+            <Label>default — TopMenu + SecondRow (breadcrumb)</Label>
             <div className="rounded-s overflow-hidden">
               <Header activeTab="all" />
             </div>
           </div>
           <div>
-            <Label>builder mode</Label>
+            <Label>builder mode — TopMenu + SecondRow (save / deploy)</Label>
             <div className="rounded-s overflow-hidden">
               <Header activeTab="templates" secondRowType="builder" />
             </div>
@@ -102,7 +105,7 @@ export default function OrganismsPreview() {
             <CardHeader variant="default" className="max-w-[830px]" />
           </div>
           <div>
-            <Label>variant2 (light)</Label>
+            <Label>variant2 (full-bleed light hero — used in all 3 screens)</Label>
             <CardHeader variant="variant2" className="max-w-[830px]" />
           </div>
         </Section>

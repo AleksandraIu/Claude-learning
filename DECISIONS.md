@@ -892,3 +892,51 @@ No new tokens. `border-white` uses existing `--color-white: #ffffff`.
 - Build: ✓ 0 errors
 - Screenshot: hero 3D-object image visible from y=0; header nav overlaid transparently on top;
   no white/gray separator band; metric cards visible below hero
+
+---
+
+## D37 — Preview information hierarchy & readability (Step 6.6)
+
+### Token change
+| Token | Before | After | Why |
+|---|---|---|---|
+| `--color-gray-500` | (new primitive) | `#666666` | Muted text base — 4.5:1 contrast on bg-page (#f2f2f2) |
+| `--color-text-subtle` | `var(--color-gray-100)` (#eaeaea — invisible as text) | `var(--color-gray-500)` (#666666) | One step darker; now legible |
+
+All `text-[#979797]` and `text-black/50` in preview replaced with `text-text-subtle`.
+`text-black/70` and `text-black/50` uses in release-notes body lines also replaced.
+
+### Badge removal (index.tsx)
+LayerCard previously always rendered a badge span. Changed: badge only renders when
+`status !== 'done'`. All 4 layers are `'done'` → zero badges appear. Badge field removed
+from data array; only 'in-progress' (when needed) would show.
+
+### Pages card secondary styling (index.tsx)
+Layer cards: full bordered card with type-h3 label (unchanged).
+Pages section: compact border-l list — `border-l-2 border-border pl-m py-xs` with
+label + desc inline. Visually subordinate. Pages heading: `type-h4 uppercase tracking-[1.6px]`
+(smaller than layer heading) to reinforce "examples, not system layers" hierarchy.
+
+### Breadcrumb restructure (PreviewNav.tsx)
+| Before | After |
+|---|---|
+| Row 1: Design System / Styles / Atoms / Molecules / Organisms | Row 1: Design System / Styles / Atoms / Molecules / Organisms / Release Notes |
+| Row 2: Pages / All Teams A / All Teams Single / Candidate B / Release Notes | Row 2: "Pages ›" + All Teams A · All Teams Single · Candidate B (type-caps, lighter) |
+
+Release Notes moved to primary row (it's a system doc, not an example page).
+Secondary row uses `type-caps` + `·` separators instead of `/` — visually subordinate.
+
+### Organisms page composition order (organisms.tsx)
+Section order changed to show composition:
+1. SecondRow — "Used inside Header as the second row"
+2. TopMenu — "Used inside Header as the first row"
+3. Header — "Composes TopMenu (row 1) + SecondRow (row 2). Transparent with z-10 for hero overlay."
+4. Task, CardHeader, Kanban (unchanged)
+
+Section component gains optional `subtitle` prop for composition annotations.
+
+### Hardcoded values report (D37)
+No new hardcoded hex or px values introduced. Pre-existing:
+- `tracking-[1.6px]` throughout preview (pre-existing, no token scale entry)
+- `tracking-[2px]` in organisms tab buttons (pre-existing)
+- `max-w-[830px]`, `w-[160px]` etc. in preview scaffold (pre-existing)

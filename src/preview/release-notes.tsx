@@ -46,7 +46,7 @@ function BodyLine({ line }: { line: string }) {
     return (
       <div className="flex gap-m border-b border-border py-xxxs">
         {cells.map((cell, i) => (
-          <span key={i} className={`type-grotesk flex-1 min-w-0 break-words ${i === 0 ? 'text-black font-bold' : 'text-black/50'}`}>
+          <span key={i} className={`type-grotesk flex-1 min-w-0 break-words ${i === 0 ? 'text-black font-bold' : 'text-text-subtle'}`}>
             {cell.replace(/`/g, '')}
           </span>
         ))}
@@ -75,7 +75,7 @@ export default function ReleaseNotes() {
             <article key={i} className="border-l-2 border-primary pl-l">
               <div className="flex items-baseline gap-m mb-m flex-wrap">
                 <p className="type-h3 text-black">{entry.title}</p>
-                <p className="type-caps tracking-[1.6px] uppercase text-black/50 whitespace-nowrap">
+                <p className="type-caps tracking-[1.6px] uppercase text-text-subtle whitespace-nowrap">
                   {entry.date}
                 </p>
               </div>

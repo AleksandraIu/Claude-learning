@@ -861,3 +861,28 @@ No new tokens added. bg-bg-page (existing, #f2f2f2) used for graph bars.
 **Screenshot proof:** hero image (3D spheres/objects) starts flush at y=0; "Hired & Wired" nav overlaid transparently; no visible band; metric cards below with type colors. Build: 0 errors.
 
 **Reminder:** Figma MCP assets expire in 7 days. Re-run D36 when deploying to staging/prod with permanent asset URLs.
+
+## [Step 6.6: preview hierarchy polish]
+
+**Token:** `--color-text-subtle` darkened from `--color-gray-100` (#eaeaea, invisible as text) to new
+`--color-gray-500` (#666666, 4.5:1 contrast on #f2f2f2). All preview muted text (`text-[#979797]`,
+`text-black/50`) replaced with `text-text-subtle`.
+
+**Badges:** LayerCard now suppresses badge when `status === 'done'`. All 4 layers are done → zero
+badges rendered. Only 'in-progress' would show a badge.
+
+**Pages cards:** Replaced full card boxes with compact border-l list under a small "PAGES" heading.
+Visually distinct from layer cards — subordinate hierarchy.
+
+**Breadcrumb:** Release Notes moved to primary nav row (system doc). 3 screen links in secondary
+row as `type-caps` with `·` separators ("Pages › All Teams A · All Teams Single · Candidate B").
+
+**Organisms order:** SecondRow → TopMenu → Header (with subtitle annotations showing composition).
+Section component gained optional `subtitle` prop.
+
+**Grep:** No new hardcoded hex or px values. Pre-existing `tracking-[1.6px]` and `tracking-[2px]`
+remain flagged from prior steps.
+
+**Build:** ✓ 0 errors. Screenshots verified: index shows no badges, Pages section compact, 
+descriptions legible (#666666 on #f2f2f2). Organisms shows SecondRow→TopMenu→Header order with
+composition subtitles. Breadcrumb primary/secondary separation visible.
