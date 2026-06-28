@@ -36,7 +36,7 @@ const MENTORING = [
 export default function ScreenCandidateB() {
   return (
     <div className="min-h-screen bg-bg-page">
-      <Header activeTab="all" pipelineValue={62} />
+      <Header activeTab="all" />
 
       {/* D32: pt-[90px] off-scale — header h=114, content y=204, gap=90px */}
       <div className="pt-[90px] pb-xxl">

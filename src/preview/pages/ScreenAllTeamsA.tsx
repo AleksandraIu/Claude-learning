@@ -1,5 +1,5 @@
 // screen-all-teams-a — Figma node 357:58932
-// Composition: Header + CardHeader(default) + 4×MetricCard + 6×Team (2-col grid)
+// Composition: Header + CardHeader(variant2) + 4×MetricCard + 6×Team (2-col grid)
 // D32: pt-[90px] is off-scale (header h=88, content y=178, gap=90px; nearest token: xxl=60px)
 import Header from '../../components/organisms/header/Header';
 import CardHeader from '../../components/organisms/card-header/CardHeader';
@@ -25,13 +25,13 @@ const TEAMS = [
 export default function ScreenAllTeamsA() {
   return (
     <div className="min-h-screen bg-bg-page">
-      <Header activeTab="all" pipelineValue={62} showSecondRow={false} />
+      <Header activeTab="all" showSecondRow={false} />
 
       {/* D32: pt-[90px] off-scale — header h=88, content y=178, gap=90px */}
       <div className="pt-[90px] pb-xxl">
         <div className="max-w-[830px] mx-auto flex flex-col gap-xxs">
 
-          <CardHeader variant="default" />
+          <CardHeader variant="variant2" />
 
           {/* 4 MetricCards — equal width, gap-xxs (4px) */}
           <div className="flex gap-xxs">

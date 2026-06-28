@@ -66,15 +66,15 @@ export default function OrganismsPreview() {
         {/* HEADER */}
         <Section title="Header">
           <div>
-            <Label>default (TopMenu + SecondRow + pipeline bar)</Label>
+            <Label>default (TopMenu + SecondRow)</Label>
             <div className="rounded-s overflow-hidden">
-              <Header activeTab="all" pipelineValue={62} />
+              <Header activeTab="all" />
             </div>
           </div>
           <div>
             <Label>builder mode</Label>
             <div className="rounded-s overflow-hidden">
-              <Header activeTab="templates" secondRowType="builder" pipelineValue={40} />
+              <Header activeTab="templates" secondRowType="builder" />
             </div>
           </div>
         </Section>

@@ -1,7 +1,8 @@
 // TopMenu: app-level navigation bar (Hired & Wired HR app).
 // D31: bg-bg-page (F2F2F2) — border-b border-border replaces white border.
 // D26: Generate Report bg = bg-bg (white per Figma 357:35588), not gray-100 (secondary).
-import SwitchGroup from '../../atoms/switch-group/SwitchGroup';
+// D33: SwitchGroup replaced with two standalone MenuSwitch buttons (matches Figma 357:35722).
+import MenuSwitch from '../../atoms/menu-switch/MenuSwitch';
 
 export type TopMenuTab = 'all' | 'templates';
 
@@ -37,11 +38,8 @@ export default function TopMenu({
             <span className="type-pixel tracking-[2px] uppercase whitespace-nowrap text-text">Generate report</span>
           </button>
 
-          <SwitchGroup
-            items={[{ label: 'All teams' }, { label: 'All templates' }]}
-            activeIndex={activeTab === 'all' ? 0 : 1}
-            onSelect={(i) => onTabChange?.(i === 0 ? 'all' : 'templates')}
-          />
+          <MenuSwitch active={activeTab === 'all'} onClick={() => onTabChange?.('all')}>All teams</MenuSwitch>
+          <MenuSwitch active={activeTab === 'templates'} onClick={() => onTabChange?.('templates')}>All templates</MenuSwitch>
         </div>
       </div>
 

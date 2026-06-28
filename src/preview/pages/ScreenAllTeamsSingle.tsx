@@ -22,7 +22,7 @@ const TEAM_MEMBERS = [
 export default function ScreenAllTeamsSingle() {
   return (
     <div className="min-h-screen bg-bg-page">
-      <Header activeTab="all" pipelineValue={62} showSecondRow={false} />
+      <Header activeTab="all" showSecondRow={false} />
 
       {/* D32: pt-[90px] off-scale — header h=88, content y=178, gap=90px */}
       <div className="pt-[90px] pb-xxl">

@@ -778,3 +778,19 @@ style={{}}: 3 uses (SwitchGroup indicator animation, Bar/Graph computed sizes) �
 
 ### Build
 `npm run build` → 106 modules, 0 errors, 1.18s. Preview: http://localhost:5173/preview/organisms
+
+---
+
+## [Step 6.1: screen accuracy fixes] — 2026-06-28
+
+### Changes
+
+| Item | File | Change |
+|---|---|---|
+| CardHeader variant | ScreenAllTeamsA | `default` → `variant2` |
+| MetricCard colors | — | Figma confirmed correct, no change |
+| MenuSwitch | atoms/menu-switch/ | Recreated from Figma 357:35722 (deleted Step 5.8) |
+| TopMenu | organisms/top-menu/ | SwitchGroup → two MenuSwitch buttons |
+| Header | organisms/header/ | Removed pipeline Bar + PIPELINE_STAGES |
+| pipelineValue prop | ScreenAllTeamsA, ScreenAllTeamsSingle, ScreenCandidateB, organisms.tsx | Removed (prop deleted from Header) |
+

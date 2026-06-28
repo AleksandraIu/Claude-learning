@@ -35,7 +35,7 @@ const pages = [
   {
     path: '/preview/pages/screen-all-teams-a',
     label: 'All Teams A',
-    desc: 'Header · CardHeader(default) · 4×MetricCard · 6×Team',
+    desc: 'Header · CardHeader(variant2) · 4×MetricCard · 6×Team',
   },
   {
     path: '/preview/pages/screen-all-teams-single',

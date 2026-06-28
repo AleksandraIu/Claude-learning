@@ -674,3 +674,63 @@ Auto-generated from `NOTES.md` via Vite `?raw` import. Parses `## [Step...]` ent
 | `/preview/pages/screen-all-teams-single` | ScreenAllTeamsSingle |
 | `/preview/pages/screen-candidate-b` | ScreenCandidateB |
 | `/preview/release-notes` | ReleaseNotes |
+
+---
+
+## D33. Step 6.1 — Screen accuracy: CardHeader, MetricCard colors, MenuSwitch, bar removal
+
+### D33.1 CardHeader → variant2 in ScreenAllTeamsA
+
+| Item | Before | After |
+|---|---|---|
+| `CardHeader` variant in ScreenAllTeamsA | `variant="default"` | `variant="variant2"` |
+
+Figma 357:58935 shows the card-header instance as variant2 (light). `default` was used by mistake in Step 6 build.
+
+---
+
+### D33.2 MetricCard colors — confirmed correct, no change
+
+Figma 357:58937–58940 confirmed MetricCard bg colors per card:
+
+| Card | Figma token | Figma hex | React token | Match? |
+|---|---|---|---|---|
+| Health | `cards/red` | `#f5cfca` | `bg-pink-100` | ✓ exact |
+| Productivity | `cards/pink` | `#fad5e7` | `bg-rose-100` | ✓ exact |
+| Distribution | `cards/violet` | `#ddd6ef` | `bg-purple-100` | ✓ exact |
+| Hiring | `cards/yellow` | `#e0e2a4` | `bg-olive-100` | ✓ exact |
+
+All 4 colors already matched existing tokens. No new tokens needed. User perception "too muted" matches the actual Figma design — pastels are intentional. No color changes made.
+
+Note: MetricCard component default `bg='bg-mint-100'` matches Figma component node 357:35524 (Default variant = Health in isolation). Screen instances override this per-card with the red/pink/violet/yellow variants above.
+
+---
+
+### D33.3 MenuSwitch — recreated at `atoms/menu-switch/`
+
+Deleted in Step 5.8 when SwitchGroup replaced it. Recreated from Figma 357:35722:
+
+| Property | Value | Token? |
+|---|---|---|
+| height | 32px = h-8 | ✓ |
+| horizontal padding | 10px | ✗ — D24: off token scale, `px-[10px]` |
+| border-radius | 4px = rounded-s | ✓ |
+| ON-state border | 1px solid white | D28: `border-white`; subtle on F2F2F2 bg but matches Figma spec |
+| OFF-state | no border | ✓ |
+| transition | enter-only (ON state only gets `transition-all duration-150`) | ✓ prior fix |
+
+TopMenu.tsx updated: SwitchGroup → two standalone MenuSwitch buttons with gap-m between them (matches Figma 357:35592 flex container). SwitchGroup unchanged everywhere else.
+
+---
+
+### D33.4 Header — pipeline bar removed
+
+| Item | Before | After |
+|---|---|---|
+| `Bar` import | present | removed |
+| `PIPELINE_STAGES` constant | 8 stages | removed |
+| Pipeline bar div | present | removed |
+| `pipelineValue` prop | present | removed |
+
+Figma 357:35619 shows Header = TopMenu + optional SecondRow. No pipeline bar present. All callers updated (ScreenAllTeamsA, ScreenAllTeamsSingle, ScreenCandidateB, organisms.tsx).
+
