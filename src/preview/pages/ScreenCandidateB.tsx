@@ -5,8 +5,9 @@
 // D32: gap-[90px] off-scale in Reports card (Figma space/xxl=90px ≠ our --spacing-xxl=60px)
 // D32 flags: #646905 (yellow-dark text) → text-black; #fffd9e (btn bg) → Button secondary;
 //   #f7e0dd/#ffe3f1 (profile chip bg) → Profile short (bg-peach-100, closest available)
+// D34: CardHeader gets explicit person-profile props (defaults changed to All teams).
 import Header from '../../components/organisms/header/Header';
-import CardHeader from '../../components/organisms/card-header/CardHeader';
+import CardHeader, { PHOTO_PERSON } from '../../components/organisms/card-header/CardHeader';
 import Notify from '../../components/molecules/notify/Notify';
 import Bar from '../../components/atoms/bar/Bar';
 import Button from '../../components/atoms/button/Button';
@@ -42,7 +43,15 @@ export default function ScreenCandidateB() {
       <div className="pt-[90px] pb-xxl">
         <div className="max-w-[830px] mx-auto flex flex-col gap-xxs">
 
-          <CardHeader variant="variant2" />
+          <CardHeader
+            variant="variant2"
+            name="Sarah Mitchell"
+            title="Senior Software Engineer"
+            actions={['promote', 'negotiate', 'suspend', 'fire']}
+            switchItems={[{ label: 'Team' }, { label: 'Projects' }, { label: 'Reviews' }]}
+            photo={PHOTO_PERSON}
+            photoOverlay={undefined}
+          />
 
           <Notify text="Sarah finalized the UX flows, Anya trained three junior engineers, and the team enjoyed a ski trip." />
 

@@ -71,10 +71,13 @@ export default function MoleculesPreview() {
           <Team name="Design Team" memberCount={8} productivity={72} weekHighlight="Sasha delivered the new icon set on time" extraCount={5} />
         </Section>
 
-        {/* METRIC CARDS */}
+        {/* METRIC CARDS — D34: type prop (Figma: red/pink/violet/yellow/green) */}
         <Section title="Metric Card">
-          <MetricCard className="w-[190px]" />
-          <MetricCard title="Performance" label="Overall: Great" bars={[{ value: 100 }, { value: 78 }, { value: 55 }]} className="w-[190px]" />
+          <MetricCard type="red"    title="Health"       label="Overall: Good"    className="w-[190px]" />
+          <MetricCard type="pink"   title="Productivity" label="+12% This Month"  className="w-[190px]" />
+          <MetricCard type="violet" title="Distribution" label="8 Teams Active"   className="w-[190px]" />
+          <MetricCard type="yellow" title="Hiring"       label="15 Open Position" className="w-[190px]" />
+          <MetricCard type="green"  title="Health"       label="Overall: Good"    className="w-[190px]" />
         </Section>
 
         <Section title="Metric Card Tall">

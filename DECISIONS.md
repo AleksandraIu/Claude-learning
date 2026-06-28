@@ -734,3 +734,67 @@ TopMenu.tsx updated: SwitchGroup → two standalone MenuSwitch buttons with gap-
 
 Figma 357:35619 shows Header = TopMenu + optional SecondRow. No pipeline bar present. All callers updated (ScreenAllTeamsA, ScreenAllTeamsSingle, ScreenCandidateB, organisms.tsx).
 
+
+---
+
+## D34. Step 6.2 — Hero full-bleed, 2-row header, MetricCard types, CardHeader text
+
+### D34.1 Hero image — full-bleed breakout
+
+| Item | Before | After |
+|---|---|---|
+| CardHeader variant2 outer div | `overflow-hidden` | removed |
+| Image wrapper | `absolute inset-0` (card-confined) | `absolute top-0 bottom-0 left-[calc(50%_-_50vw)] w-screen` (100vw breakout) |
+| Photo layers | 1 photo | 2 layers: base + `mix-blend-plus-lighter` overlay (Figma 357:58935) |
+| Base bg | `bg-bg` (#ffffff) | `bg-bg-page` (#f2f2f2) |
+| Gradient | `from-transparent to-bg` | `from-transparent to-bg-page` |
+
+Breakout formula: `left: calc(50% - 50vw)` assumes parent is horizontally centered (`mx-auto`). Correct for all screen pages (max-w-[830px] mx-auto).
+
+Photo URLs: Figma MCP assets (expire 7 days). Exported as `PHOTO_PERSON` const for person-profile screen overrides.
+
+---
+
+### D34.2 Header — two rows
+
+| Screen | Before | After |
+|---|---|---|
+| ScreenAllTeamsA | `showSecondRow={false}` (1 row, h≈43px) | removed prop (default=true, 2 rows, h≈88px) |
+| ScreenAllTeamsSingle | `showSecondRow={false}` (1 row) | removed prop (default=true, 2 rows) |
+| ScreenCandidateB | already showSecondRow=true | no change |
+
+SecondRow reused — no new layout markup. `pt-[90px]` remains correct: header 88px + 90px gap = 178px content start (matches Figma 357:58933 y=178).
+
+---
+
+### D34.3 MetricCard — type prop
+
+New `MetricCardType = 'red' | 'pink' | 'violet' | 'yellow' | 'green'` (matching Figma token names).
+
+| Type | Figma token | Hex | React token | New token? |
+|---|---|---|---|---|
+| red | cards/red | #f5cfca | bg-pink-100 | No |
+| pink | cards/pink | #fad5e7 | bg-rose-100 | No |
+| violet | cards/violet | #ddd6ef | bg-purple-100 | No |
+| yellow | cards/yellow | #e0e2a4 | bg-olive-100 | No |
+| green | cards/green | #d4eee7 | bg-mint-100 | No |
+
+All colors mapped to existing tokens. `bg` prop kept as fallback for overrides. ScreenAllTeamsA updated to use `type` prop. Molecules preview updated to show all 5 types.
+
+---
+
+### D34.4 CardHeader text — updated to Figma 357:58935
+
+Variant2 defaults updated (per Figma 357:58935, All Teams A instance):
+
+| Prop | Before | After |
+|---|---|---|
+| name | "Sarah Mitchell" | "All teams" |
+| title | "Senior Software Engineer" | "Overview of all teams\nand their performance metrics" |
+| actions | ['promote','negotiate','suspend','fire'] | ['add team'] |
+| switchItems | [Team, Projects, Reviews] | [Overview, Employees, Report] |
+
+`whitespace-pre-wrap` added to title `<p>` to render the `\n` line break.
+
+ScreenCandidateB and ScreenAllTeamsSingle updated to pass explicit person-profile props (since defaults changed). No component structure changes — only defaults updated.
+

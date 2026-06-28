@@ -794,3 +794,29 @@ style={{}}: 3 uses (SwitchGroup indicator animation, Bar/Graph computed sizes) �
 | Header | organisms/header/ | Removed pipeline Bar + PIPELINE_STAGES |
 | pipelineValue prop | ScreenAllTeamsA, ScreenAllTeamsSingle, ScreenCandidateB, organisms.tsx | Removed (prop deleted from Header) |
 
+
+---
+
+## [Step 6.2: hero + 2-row header + metric types + card-header text] — 2026-06-28
+
+### Changes
+
+| Item | File(s) | Change |
+|---|---|---|
+| Hero full-bleed | CardHeader.tsx | overflow-hidden removed; image: left-[calc(50%−50vw)] w-screen; 2-photo layers |
+| Header 2-row | ScreenAllTeamsA, ScreenAllTeamsSingle | Removed showSecondRow={false} (default=true) |
+| MetricCard types | MetricCard.tsx | Added MetricCardType + type prop; TYPE_BG map |
+| MetricCard usage | ScreenAllTeamsA, molecules.tsx | Switched from bg= to type= |
+| CardHeader defaults | CardHeader.tsx | name/title/actions/switchItems updated to Figma 357:58935 |
+| Person screen overrides | ScreenCandidateB, ScreenAllTeamsSingle | Explicit CardHeader props added |
+| PHOTO_PERSON export | CardHeader.tsx | Exported for screen-level override |
+
+### Tokens
+No new tokens added. All MetricCard colors map to existing primitives (pink-100, rose-100, purple-100, olive-100, mint-100).
+
+### Verified
+- Build: ✓ 0 errors
+- Grep: no new hardcoded hex in className (pre-existing #ffb700 in CardHeader default, flagged D24)
+- MetricCard type system propagates to molecules preview + ScreenAllTeamsA
+- CardHeader text changes propagate via defaults; person screens pass explicit overrides
+
