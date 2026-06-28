@@ -886,3 +886,19 @@ remain flagged from prior steps.
 **Build:** ✓ 0 errors. Screenshots verified: index shows no badges, Pages section compact, 
 descriptions legible (#666666 on #f2f2f2). Organisms shows SecondRow→TopMenu→Header order with
 composition subtitles. Breadcrumb primary/secondary separation visible.
+
+## [Step 6.7: localize images]
+
+**2 local files wired:**
+- `src/assets/card-header_2.png` → `PHOTO_V2_BASE` (variant2 3D objects base)
+- `src/assets/card-head_1.png` → `PHOTO_V2_BLEND` (variant2 golden portrait blend overlay)
+
+Both imported via Vite asset imports in `CardHeader.tsx` — bundled into `dist/assets/` with hashed names.
+
+**External Figma URLs remaining after fix: 5** (not 0 — only 2 local files provided)
+- `PHOTO_DEFAULT`, `PHOTO_PERSON` (CardHeader.tsx) — no local file, likely already expired
+- `katya`, `dog`, `petya` (Avatar.tsx) — no local file, likely already expired
+- These are outside the 2-file scope; flagged in DECISIONS.md for follow-up
+
+**Build:** ✓ 0 errors. Both PNGs visible in dist output.
+**Screenshot:** hero (ScreenAllTeamsA) renders from local files — 3D objects + warm golden overlay visible. No broken image.

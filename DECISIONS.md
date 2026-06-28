@@ -940,3 +940,34 @@ No new hardcoded hex or px values introduced. Pre-existing:
 - `tracking-[1.6px]` throughout preview (pre-existing, no token scale entry)
 - `tracking-[2px]` in organisms tab buttons (pre-existing)
 - `max-w-[830px]`, `w-[160px]` etc. in preview scaffold (pre-existing)
+
+---
+
+## D38 — Localize variant2 hero images (Step 6.7)
+
+### Local file → component mapping
+| Local file | Size | Maps to | Was (Figma URL) | Used in |
+|---|---|---|---|---|
+| `src/assets/card-header_2.png` | 547 KB | `PHOTO_V2_BASE` | `b0beb859-…` (exp. 2026-07-05) | CardHeader variant2 base layer |
+| `src/assets/card-head_1.png` | 198 KB | `PHOTO_V2_BLEND` | `34c9c27a-…` (exp. 2026-07-05) | CardHeader variant2 plus-lighter overlay |
+
+Both imported as Vite asset imports (`import heroBase from '../../../assets/card-header_2.png'`).
+Vite hashes and copies to `dist/assets/` on build. No external fetch at runtime.
+
+### Remaining Figma URLs (no local file — flagged, not touched)
+| Constant | URL | Expires (approx.) | Status |
+|---|---|---|---|
+| `PHOTO_DEFAULT` (CardHeader.tsx) | `cad54573-…` | Earlier session | Likely expired |
+| `PHOTO_PERSON` (CardHeader.tsx) | `dbf30515-…` | Earlier session | Likely expired |
+| `katya` (Avatar.tsx) | `87f1a982-…` | Earlier session | Likely expired |
+| `dog` (Avatar.tsx) | `46e6ff30-…` | Earlier session | Likely expired |
+| `petya` (Avatar.tsx) | `bbd15a5c-…` | Earlier session | Likely expired |
+
+These 5 are outside the scope of the 2 local files provided. Need local files or fresh Figma
+reads to resolve. They do not affect ScreenAllTeamsA (hero works from local files).
+
+### Verified
+- Build: ✓ both PNGs bundled as `dist/assets/card-head_1-*.png` and `dist/assets/card-header_2-*.png`
+- Screenshot: variant2 hero renders correctly (3D objects base + warm golden blend overlay)
+- External URLs remaining for variant2 hero: 0
+- Total external Figma URLs remaining (other assets): 5
