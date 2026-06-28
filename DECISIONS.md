@@ -849,3 +849,46 @@ white bg; `bg-bg-page` would be nearly invisible via multiply on white). MetricC
 `barClassName="bg-bg-page"` — fix applies to all screens using MetricCard. Atoms preview
 unchanged.
 
+
+---
+
+## D36 — Hero behind header: re-diagnosis and fix (Step 6.4)
+
+### Figma structure (357:58932 ScreenAllTeamsA)
+- `header` instance: y=0–88 (SIBLING to card-header in screen layout, transparent overlay)
+- `Frame 1356` (content container): y=178 starts
+- `card-header` instance: x=0, y=0 WITHIN Frame 1356 → y=178 in screen
+- Card-header image wrapper: `left: -306px; top: -178px; width: 1442px; height: 632px`
+  → image starts at screen y=0 (178 + -178 = 0) ✓
+- Figma header TopMenu border: `border-[var(--color/text-&-icon/on-color,white)]` = white (invisible over hero)
+- Figma header outer div: NO border-b
+
+### Root cause of Step 6.3 failure (three independent issues)
+1. **Expired Figma MCP photo URLs** — Figma MCP assets expire after 7 days. PHOTO_V2_BASE
+   and PHOTO_V2_BLEND from Step 6.2 had expired → hero rendered as plain bg-bg-page
+   (#f2f2f2), visually identical to the page background → "image looks missing."
+2. **`border-b border-border` on Header outer div** — our Header had a gray (#eaeaea)
+   bottom border at y≈88 that read as a clear separator edge ("the white band"). Figma
+   Header outer div has NO border-b.
+3. **`border-b border-border` on TopMenu** — should be `border-white` per Figma. A gray
+   border-bottom on TopMenu creates a visible horizontal line at y≈44 inside the header area.
+
+### Changes (D36)
+| File | Change |
+|---|---|
+| CardHeader.tsx | PHOTO_V2_BASE + PHOTO_V2_BLEND refreshed with 2026-06-28 Figma MCP URLs |
+| Header.tsx | Removed `border-b border-border` from outer div (Figma has no border on header wrapper) |
+| TopMenu.tsx | `border-b border-border` → `border-b border-white` (token: --color-white) |
+
+### Tokens
+No new tokens. `border-white` uses existing `--color-white: #ffffff`.
+
+### Pre-existing flags (unchanged)
+- D24: `bg-[#ffb700]` in CardHeader default variant
+- D28: `px-[10px]` in MenuSwitch off token scale
+- D32: `pt-[90px]` off token scale in ScreenAllTeamsA
+
+### Verified
+- Build: ✓ 0 errors
+- Screenshot: hero 3D-object image visible from y=0; header nav overlaid transparently on top;
+  no white/gray separator band; metric cards visible below hero

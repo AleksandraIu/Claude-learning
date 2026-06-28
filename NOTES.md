@@ -843,3 +843,21 @@ No new tokens added. bg-bg-page (existing, #f2f2f2) used for graph bars.
 - Hero image extends from y=0 behind transparent header (no gap)
 - Graph bar colors propagate to all MetricCard instances on all screens
 
+
+## [Step 6.4: hero behind header — re-attempt]
+
+**Why Step 6.3 appeared broken:**
+1. Figma MCP photo URLs expire after 7 days — existing URLs were stale → hero rendered as blank #f2f2f2
+2. `border-b border-border` on Header outer div created a gray separator at y≈88 (Figma: no border on header wrapper)
+3. `border-b border-border` on TopMenu should be `border-white` (Figma: `border-[var(--color/text-&-icon/on-color,white)]`)
+
+**The `top: -178px` CSS approach was already structurally correct.** The image was at y=0 but looked broken due to expired assets + gray border confusion.
+
+**Fixes applied:**
+- CardHeader.tsx: refresh PHOTO_V2_BASE + PHOTO_V2_BLEND (2026-06-28 Figma read)
+- Header.tsx: remove `border-b border-border` from outer wrapper
+- TopMenu.tsx: `border-b border-border` → `border-b border-white`
+
+**Screenshot proof:** hero image (3D spheres/objects) starts flush at y=0; "Hired & Wired" nav overlaid transparently; no visible band; metric cards below with type colors. Build: 0 errors.
+
+**Reminder:** Figma MCP assets expire in 7 days. Re-run D36 when deploying to staging/prod with permanent asset URLs.

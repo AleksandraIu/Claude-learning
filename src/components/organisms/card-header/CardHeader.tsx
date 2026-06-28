@@ -12,8 +12,9 @@ import Dropdown from '../../atoms/dropdown/Dropdown';
 import SwitchGroup from '../../atoms/switch-group/SwitchGroup';
 
 const PHOTO_DEFAULT  = 'https://www.figma.com/api/mcp/asset/cad54573-1c04-43d4-ae95-0f644364ba4d';
-const PHOTO_V2_BASE  = 'https://www.figma.com/api/mcp/asset/a27551eb-67ec-4d56-b39a-dafd2c254a3d';
-const PHOTO_V2_BLEND = 'https://www.figma.com/api/mcp/asset/61343acc-3fba-47c9-bce4-704f9501251f';
+// D36: URLs refreshed 2026-06-28 (Figma MCP assets expire after 7 days).
+const PHOTO_V2_BASE  = 'https://www.figma.com/api/mcp/asset/b0beb859-194e-4a6a-b8bd-4a8f1a87523e';
+const PHOTO_V2_BLEND = 'https://www.figma.com/api/mcp/asset/34c9c27a-b984-4834-8fa9-b13f876628b3';
 // Person profile photo (for screens that override variant2 with person content):
 export const PHOTO_PERSON = 'https://www.figma.com/api/mcp/asset/dbf30515-2c4d-4842-aac5-47224e43f4c6';
 

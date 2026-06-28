@@ -18,7 +18,7 @@ export default function Header({
   className = '',
 }: HeaderProps) {
   return (
-    <div className={`relative z-10 flex flex-col items-start w-full border-b border-border ${className}`}>
+    <div className={`relative z-10 flex flex-col items-start w-full ${className}`}>
       <TopMenu activeTab={activeTab} />
       {showSecondRow && <SecondRow type={secondRowType} />}
     </div>

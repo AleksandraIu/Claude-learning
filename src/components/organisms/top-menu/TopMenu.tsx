@@ -1,5 +1,5 @@
 // TopMenu: app-level navigation bar (Hired & Wired HR app).
-// D31: bg-bg-page (F2F2F2) — border-b border-border replaces white border.
+// D31: bg-bg-page (F2F2F2) — border-b border-border replaces white border. D36: reverted to border-white per Figma (header transparent over hero).
 // D26: Generate Report bg = bg-bg (white per Figma 357:35588), not gray-100 (secondary).
 // D33: SwitchGroup replaced with two standalone MenuSwitch buttons (matches Figma 357:35722).
 import MenuSwitch from '../../atoms/menu-switch/MenuSwitch';
@@ -24,7 +24,7 @@ export default function TopMenu({
   className = '',
 }: TopMenuProps) {
   return (
-    <div className={`flex items-center justify-between px-m py-s border-b border-border w-full ${className}`}>
+    <div className={`flex items-center justify-between px-m py-s border-b border-white w-full ${className}`}>
       {/* Left: logo + nav tabs */}
       <div className="flex items-center gap-xxl">
         <p className="type-h2 text-black whitespace-nowrap tracking-[-0.4px]">Hired &amp; Wired</p>
