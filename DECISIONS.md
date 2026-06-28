@@ -798,3 +798,54 @@ Variant2 defaults updated (per Figma 357:58935, All Teams A instance):
 
 ScreenCandidateB and ScreenAllTeamsSingle updated to pass explicit person-profile props (since defaults changed). No component structure changes — only defaults updated.
 
+
+---
+
+## D35. Step 6.3 — Hero behind header + metric-card graph colors
+
+### D35.1 Hero behind header (layering fix)
+
+**Root cause**: CardHeader variant2 image wrapper used `top-0` relative to card container
+(at y=178). Image started at y=178, leaving a 178px gap of page bg above the hero. Header
+had opaque `bg-bg-page` covering that gap.
+
+**Figma geometry** (357:58935): image wrapper `top-[-178px] h-[632px]` — the image starts at
+`card_y - 178 = 178 - 178 = 0` (viewport top). Header at y=0 to y=88 sits ON the image.
+
+| File | Change | Rationale |
+|---|---|---|
+| Header.tsx | Removed `bg-bg-page`; added `relative z-10` | Transparent → hero shows through. z-10 + relative → header paints above extended image |
+| CardHeader.tsx | Image wrapper: `top-0 bottom-0` → `style={{ top: imageTopOffset, height: imageHeight }}` | Matches Figma geometry |
+| CardHeader.tsx | Added `imageTopOffset?: number` (default -178) and `imageHeight?: number` (default 632) props | Matches Figma; screens with different header heights can override |
+
+Gap analysis:
+- Before: header (88px, solid) + gap (90px) + image start → ~178px visible gap above hero
+- After: header (transparent, z-10) + gap (90px) + card starts → image extends from y=0 behind header, gap invisible
+
+### D35.2 Header spacing — confirmed correct
+
+After layering fix: content still starts at y≈178 (header h≈88 + pt-[90px] = 178). Matches
+Figma y=178. No additional indent change needed. pt-[90px] stays (flagged D32 as off-scale;
+nearest token xxl=60px, but 90px is the Figma-accurate value).
+
+### D35.3 Metric-card graph/bar colors per type
+
+All 4 Figma card types (357:58937–58940) use identical bar color:
+`var(--color/background/base, #f2f2f2)` = `bg-bg-page` + `mix-blend-multiply`.
+
+| Type | Figma bar color | Token | Before | After | New token? |
+|---|---|---|---|---|---|
+| red (Health) | #f2f2f2 + multiply | bg-bg-page | bg-[#979797] | bg-bg-page | No |
+| pink (Productivity) | #f2f2f2 + multiply | bg-bg-page | bg-[#979797] | bg-bg-page | No |
+| violet (Distribution) | #f2f2f2 + multiply | bg-bg-page | bg-[#979797] | bg-bg-page | No |
+| yellow (Hiring) | #f2f2f2 + multiply | bg-bg-page | bg-[#979797] | bg-bg-page | No |
+
+Visual effect: mix-blend-multiply × card bg color = slightly darker, card-colored bars.
+E.g. on pink-100 (#f5cfca): #f2f2f2 × #f5cfca ≈ #e9c5c0 (darker pink). Type-specific
+appearance from a single token.
+
+Graph atom: `barClassName` prop added (default: `bg-[#979797]` for standalone atoms preview on
+white bg; `bg-bg-page` would be nearly invisible via multiply on white). MetricCard passes
+`barClassName="bg-bg-page"` — fix applies to all screens using MetricCard. Atoms preview
+unchanged.
+

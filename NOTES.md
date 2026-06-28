@@ -820,3 +820,26 @@ No new tokens added. All MetricCard colors map to existing primitives (pink-100,
 - MetricCard type system propagates to molecules preview + ScreenAllTeamsA
 - CardHeader text changes propagate via defaults; person screens pass explicit overrides
 
+
+---
+
+## [Step 6.3: hero behind header + graph colors] — 2026-06-28
+
+### Changes
+
+| Item | File | Change |
+|---|---|---|
+| Header transparent + z-index | Header.tsx | bg-bg-page removed; relative z-10 added |
+| CardHeader image position | CardHeader.tsx | top-0 bottom-0 → style top=-178px h=632px; imageTopOffset/imageHeight props added |
+| Graph bar color | Graph.tsx | barClassName prop added (default: bg-[#979797] for standalone) |
+| MetricCard → Graph | MetricCard.tsx | Passes barClassName="bg-bg-page" to Graph (all types, matches Figma) |
+
+### Tokens
+No new tokens added. bg-bg-page (existing, #f2f2f2) used for graph bars.
+
+### Verified
+- Build: ✓ 0 errors
+- Grep: only pre-existing bg-[#ffb700] (D24, CardHeader default golden tint)
+- Hero image extends from y=0 behind transparent header (no gap)
+- Graph bar colors propagate to all MetricCard instances on all screens
+

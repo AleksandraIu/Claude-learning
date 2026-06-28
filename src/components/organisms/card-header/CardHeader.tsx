@@ -29,6 +29,10 @@ interface CardHeaderProps {
   actions?: string[];
   photo?: string;
   photoOverlay?: string;
+  /** D35: px above card top the image extends (matches Figma top-[-178px]; = header+gap height) */
+  imageTopOffset?: number;
+  /** D35: full image height in px (matches Figma h-[632px]) */
+  imageHeight?: number;
   className?: string;
 }
 
@@ -54,6 +58,8 @@ export default function CardHeader({
   actions = ['add team'],
   photo,
   photoOverlay,
+  imageTopOffset = -178,
+  imageHeight = 632,
   className = '',
 }: CardHeaderProps) {
   const isDefault = variant === 'default';
@@ -107,11 +113,13 @@ export default function CardHeader({
   const imgOverlay = photoOverlay ?? PHOTO_V2_BLEND;
   return (
     <div className={`relative flex flex-col h-[480px] p-xl rounded-[12px] gap-[160px] items-center justify-end ${className}`}>
-      {/* Full-bleed photo bg: breaks out of card to full viewport width via calc(50% − 50vw) */}
-      {/* D34: no overflow-hidden on outer div; image spans 100vw centered on viewport center */}
+      {/* Full-bleed photo bg: breaks out to 100vw AND extends up to viewport top */}
+      {/* D35: top=-178px (card starts at y=178; image extends behind header to y=0) */}
+      {/* D35: h=632px per Figma. imageTopOffset/imageHeight props for per-screen override. */}
       <div
         aria-hidden
-        className="absolute pointer-events-none top-0 bottom-0 w-screen left-[calc(50%_-_50vw)]"
+        className="absolute pointer-events-none w-screen left-[calc(50%_-_50vw)]"
+        style={{ top: imageTopOffset, height: imageHeight }}
       >
         <div className="absolute inset-0 bg-bg-page" />
         <img src={imgSrc} alt="" className="absolute inset-0 size-full object-cover" />
