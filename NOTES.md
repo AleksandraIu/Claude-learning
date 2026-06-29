@@ -902,3 +902,16 @@ Both imported via Vite asset imports in `CardHeader.tsx` — bundled into `dist/
 
 **Build:** ✓ 0 errors. Both PNGs visible in dist output.
 **Screenshot:** hero (ScreenAllTeamsA) renders from local files — 3D objects + warm golden overlay visible. No broken image.
+
+## [Step 6.8] — 2026-06-29
+
+**Fix:** Hero image now starts at y=0 — behind the FULL header including TopMenu row.
+
+**Root cause (diagnosed):** `imageTopOffset=-178` in CardHeader assumed header height = 88px.
+Measured actual header: 125px. CardHeader at y=215 → image at 215-178=37, not 0.
+
+**Fix applied:** Lifted hero to ScreenAllTeamsA page level (`absolute inset-x-0 top-0`).
+CardHeader receives `imageTopOffset={0} imageHeight={0}` to suppress its built-in image.
+Content div gets `relative z-10` to paint above the absolute hero.
+
+**Verified:** Screenshot confirms hero texture at y=0 with "Hired & Wired" + nav overlaid directly on it.

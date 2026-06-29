@@ -1,7 +1,11 @@
 // screen-all-teams-a — Figma node 357:58932
 // Composition: Header(2-row) + CardHeader(variant2, All teams) + 4×MetricCard + 6×Team (2-col grid)
-// D32: pt-[90px] off-scale (header h=88 with SecondRow, content y=178, gap=90px)
+// D32: pt-[90px] off-scale (header h per Figma content-y=178, gap=90px)
 // D34: Header now shows SecondRow (2 rows). MetricCard uses type prop. CardHeader full-bleed hero.
+// D38: hero images localised. D39: hero lifted to screen level — always starts at y=0 regardless
+//   of header height. CardHeader imageTopOffset={0} imageHeight={0} suppresses its built-in image.
+import heroBase  from '../../assets/card-header_2.png';
+import heroBlend from '../../assets/card-head_1.png';
 import Header from '../../components/organisms/header/Header';
 import CardHeader from '../../components/organisms/card-header/CardHeader';
 import MetricCard, { MetricCardType } from '../../components/molecules/metric-card/MetricCard';
@@ -25,17 +29,33 @@ const TEAMS = [
 
 export default function ScreenAllTeamsA() {
   return (
-    <div className="min-h-screen bg-bg-page">
-      {/* D34: SecondRow now shown (header h≈88 with 2 rows, matching Figma 357:58933) */}
+    // relative: anchors the hero absolute div. bg-bg-page: shows below/after hero area.
+    <div className="relative min-h-screen bg-bg-page">
+
+      {/* D39: Hero at SCREEN level — position absolute from top-0, always y=0 regardless of
+          header height. This replaces the fragile top:-178px hack inside CardHeader which
+          assumed the header was exactly 88px (measured actual: 125px → image was at y=37). */}
+      <div
+        aria-hidden
+        className="absolute inset-x-0 top-0 pointer-events-none"
+        style={{ height: 632 }}
+      >
+        <div className="absolute inset-0 bg-bg-page" />
+        <img src={heroBase}  alt="" className="absolute inset-0 size-full object-cover" />
+        <img src={heroBlend} alt="" className="absolute inset-0 size-full object-cover mix-blend-plus-lighter" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-bg-page" />
+      </div>
+
+      {/* Header: z-10, transparent, overlaid on hero from y=0 */}
       <Header activeTab="all" />
 
-      {/* D32: pt-[90px] off-scale — header h=88, content y=178, gap=90px */}
-      <div className="pt-[90px] pb-xxl">
+      {/* Content: relative z-10 ensures it paints above the hero absolute div */}
+      <div className="relative z-10 pt-[90px] pb-xxl">
         <div className="max-w-[830px] mx-auto flex flex-col gap-xxs">
 
-          {/* D34: full-bleed hero (CardHeader variant2 image breaks to 100vw) */}
-          {/* Content: "All teams" + description + "add team" + [Overview/Employees/Report] */}
-          <CardHeader variant="variant2" />
+          {/* CardHeader: text/buttons/switch only — built-in image suppressed (imageHeight=0).
+              The hero background comes from the screen-level div above. */}
+          <CardHeader variant="variant2" imageTopOffset={0} imageHeight={0} />
 
           {/* 4 MetricCards — equal width, gap-xxs (4px), using Figma type names */}
           <div className="flex gap-xxs">

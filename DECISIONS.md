@@ -971,3 +971,38 @@ reads to resolve. They do not affect ScreenAllTeamsA (hero works from local file
 - Screenshot: variant2 hero renders correctly (3D objects base + warm golden blend overlay)
 - External URLs remaining for variant2 hero: 0
 - Total external Figma URLs remaining (other assets): 5
+
+## D39 — Hero image lifted to screen level (Step 6.8)
+
+### Problem
+`imageTopOffset = -178` in CardHeader was hardcoded assuming header height = 88px.
+Measured actual header height: 125px. CardHeader starts at y = 125 + 90 = 215.
+`215 - 178 = 37` → image started at y=37, not y=0. User saw the top bar (TopMenu row)
+on a solid white background; image only started at the breadcrumb/SecondRow.
+
+### Root cause
+The negative-offset approach in CardHeader is inherently fragile — it depends on
+knowing the exact pixel height of every ancestor above CardHeader. That height changes
+with font loading, viewport, padding, and future layout changes.
+
+### Fix
+Lifted the hero image to ScreenAllTeamsA page level:
+- Outer div: `relative` (stacking context)
+- Hero div: `absolute inset-x-0 top-0 h-[632px]` — anchored to y=0, always
+- Content div: `relative z-10` (paints above the absolute hero)
+- CardHeader: `imageTopOffset={0} imageHeight={0}` — zero-height wrapper renders nothing
+  (the `style={{ top: 0, height: 0 }}` div is invisible; no images painted by CardHeader)
+
+### Changes
+| File | Change |
+|---|---|
+| `src/preview/pages/ScreenAllTeamsA.tsx` | Import heroBase+heroBlend; add page-level hero div at top-0; add `relative` on outer, `relative z-10` on content div; pass `imageTopOffset={0} imageHeight={0}` to CardHeader |
+
+### Tokens / hardcoded values
+No new tokens. `h-[632px]` (hero height) retained from Figma spec — same value as D34.
+`pt-[90px]` on content div retained (gap between header bottom and content top per Figma).
+
+### Verified
+- Build: ✓ (112 modules, 0 errors)
+- Screenshot: hero texture visible at y=0, "Hired & Wired" logo + all nav items render
+  directly on the image — no solid strip above the image anywhere in the 200px crop
