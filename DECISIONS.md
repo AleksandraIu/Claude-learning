@@ -1006,3 +1006,40 @@ No new tokens. `h-[632px]` (hero height) retained from Figma spec — same value
 - Build: ✓ (112 modules, 0 errors)
 - Screenshot: hero texture visible at y=0, "Hired & Wired" logo + all nav items render
   directly on the image — no solid strip above the image anywhere in the 200px crop
+
+## D40 — Remove hero yellow tint: replace wrong blend overlay asset (Step 6.9)
+
+### Exact cause
+| Element | Property | Value / Effect |
+|---|---|---|
+| `<img src={heroBlend}>` in ScreenAllTeamsA.tsx | `mix-blend-plus-lighter` | Adds pixel values of overlay to base |
+| `card-head_1.png` (local file) | Image content | **Wrong file** — solid saturated-yellow monochromatic portrait (nearly R=1, G≈0.8, B=0 across most pixels) |
+| Base image `card-header_2.png` | Color | Light gray (~0.9, 0.9, 0.9) 3D objects |
+
+`plus-lighter` math: result = min(src + dst, 1). Adding near-black overlay (correct Figma file)
+to a light gray base barely shifts the gray. Adding solid-yellow overlay to light gray raises
+R and G channels toward 1, leaving B unchanged → yellow cast on every pixel of the hero.
+
+The LOCAL file `card-head_1.png` was the wrong file — it was a yellow illustration portrait,
+NOT the Figma Rectangle230 layer. Figma's Rectangle230 (`bcb63797-6e3b-4bfe-90fc-f5eb2c6d38fb`)
+is a dark near-black teal noise/glitch texture (2884×1264, mostly 0–5% luminance). When
+THAT dark image is plus-lightered over the light gray 3D objects, the result is nearly
+unchanged (dark adds ~0 to the gray), matching Figma's gray-blue render.
+
+### Fix
+Replaced both local assets with freshly fetched Figma versions:
+| File | Old | New |
+|---|---|---|
+| `src/assets/card-head_1.png` | Wrong: solid yellow portrait (198KB) | Correct: dark teal noise texture (1.8MB, from Rectangle230) |
+| `src/assets/card-header_2.png` | Correct but lower-res (547KB) | Updated: higher-res same image (9.5MB, from Rectangle229) |
+
+No code changes. Only the asset files were replaced. The Vite import path and component code
+are unchanged — Vite re-hashes the new file automatically.
+
+### Hardcoded values
+None introduced. Assets are Vite-bundled PNGs; no URLs or hex values changed.
+
+### Verified
+- Build: ✓ 0 errors
+- Screenshot: hero renders gray-blue/silver 3D objects with no yellow cast; matches Figma
+  node 357:58935 screenshot exactly. Header legible over the neutral image.

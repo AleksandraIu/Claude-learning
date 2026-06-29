@@ -915,3 +915,20 @@ CardHeader receives `imageTopOffset={0} imageHeight={0}` to suppress its built-i
 Content div gets `relative z-10` to paint above the absolute hero.
 
 **Verified:** Screenshot confirms hero texture at y=0 with "Hired & Wired" + nav overlaid directly on it.
+
+## [Step 6.9: remove hero yellow tint] — 2026-06-29
+
+**Cause:** `card-head_1.png` (the blend overlay applied with `mix-blend-plus-lighter`) was the
+WRONG file — a solid saturated-yellow portrait illustration. `plus-lighter` adds pixel values, so
+nearly-1 yellow values added to the light gray base image pushed all pixels toward yellow.
+The correct Figma Rectangle230 is a dark near-black teal noise texture (mostly 0–5% luminance),
+which adds nearly nothing to the light gray base → result stays gray-blue.
+
+**Fix:** Replaced `src/assets/card-head_1.png` with the correct dark teal noise image fetched
+from Figma. Also updated `src/assets/card-header_2.png` with fresh higher-resolution version.
+No code changes — only asset files replaced.
+
+**Screenshot:** Hero shows true gray-blue/silver 3D glassmorphic objects, no yellow cast.
+Header ("Hired & Wired", nav) legible on top. Matches Figma node 357:58935.
+
+**Build:** ✓ 0 errors. Pushed to main.
