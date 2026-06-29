@@ -1045,3 +1045,43 @@ Pages were already linked from `/preview` index. Release Notes was NOT — it wa
 ### Build: PASS (0 errors)
 
 breadcrumb layers-only + bigger: y | Pages/Release Notes still reachable: y | build: ✓
+
+---
+
+## [Step 6.15: unify page header spacing] — 2026-06-29
+
+### Pattern chosen
+
+One common header structure across all 4 layer pages:
+- Outer: `min-h-screen bg-bg-page text-text p-xxl`
+- Inner: `max-w-5xl mx-auto`
+- `<PreviewNav />` (inline, no sticky, no divider)
+- `<h1 className="type-h1 mb-xxl">` — 60px gap below h1
+- `<section className="mb-xxl">` per section — 60px between sections
+
+Nav→h1 gap comes from PreviewNav's own `mb-xxl`. All gaps are `--spacing-xxl: 60px`. No hardcoded px.
+
+Divider decision: **none** — consistent with Atoms/Molecules/Organisms.
+
+### Pages updated
+
+Only `styles.tsx` was the outlier. Atoms, Molecules, Organisms already matched the pattern.
+
+| Before (Styles) | After |
+|---|---|
+| Sticky nav wrapper with `border-b border-border` | Inline `<PreviewNav />` |
+| `p-xxl space-y-xxl` on content div | `p-xxl` on outer, no `space-y-*` |
+| h1→section gap: ~120px (double) | h1→section gap: 60px (`mb-xxl`) |
+| `<section>` (no class) | `<section className="mb-xxl">` |
+
+### Example pages
+
+Not modified — All Teams A / Single / Candidate B use the app `Header` organism, not `PreviewNav`. Different structure, not in scope.
+
+### Hardcoded grep
+
+0 new hardcoded px in header zones. Pre-existing `gridTemplateColumns` inline styles in Styles content (color swatch grids) — not header spacing.
+
+### Build: PASS (0 errors)
+
+common pattern applied to all layer pages: y | divider consistent (none): y | gaps tokenized: y | build: ✓

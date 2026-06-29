@@ -1224,3 +1224,51 @@ Pages (All Teams A, Single, Candidate B) were already linked from `/preview` ind
 ### Hardcoded values grep
 
 0 new hardcoded hex or px values. Pre-existing `tracking-[1.6px]` in nav links — documented gap from D37.
+
+---
+
+## D45. Step 6.15 — Unify layer page header spacing (2026-06-29)
+
+### Audit — before
+
+| Page | Nav style | Nav divider | nav→h1 gap | h1→first section gap |
+|---|---|---|---|---|
+| Styles | Sticky wrapper | YES (`border-b border-border`) | sticky bar + `p-xxl` | ~120px (`mb-xxl` on h1 + `space-y-xxl` on container — double) |
+| Atoms | Inline | None | `mb-xxl` (60px) from PreviewNav | `mb-xxl` (60px) from h1 |
+| Molecules | Inline | None | `mb-xxl` (60px) | `mb-xxl` (60px) |
+| Organisms | Inline | None | `mb-xxl` (60px) | `mb-xxl` (60px) |
+
+### Chosen common pattern
+
+| Zone | Token | Value |
+|---|---|---|
+| Nav → h1 gap | `mb-xxl` on PreviewNav (set in D44) | 60px |
+| h1 → first section | `mb-xxl` on h1 | 60px |
+| Between sections | `mb-xxl` on each `<section>` | 60px |
+| Divider on nav | **None** | — |
+
+All gaps use `--spacing-xxl: 60px`. No new tokens.
+
+### Divider decision
+
+No divider — consistent with Atoms/Molecules/Organisms. Styles had `border-b border-border` on its sticky nav wrapper; this is removed. Space alone is sufficient for the preview context.
+
+### Fixed in: styles.tsx only (the outlier)
+
+Atoms, Molecules, Organisms already followed the common pattern. No changes to those files.
+
+| Change | Before | After |
+|---|---|---|
+| Outer div | `min-h-screen bg-bg-page text-text` (no padding on outer; nav in sticky child) | `min-h-screen bg-bg-page text-text p-xxl` |
+| Nav placement | Sticky `<div sticky top-0 border-b border-border>` wrapper | Inline `<PreviewNav />` — no sticky, no divider |
+| Content div | `max-w-5xl mx-auto p-xxl space-y-xxl` | `max-w-5xl mx-auto` |
+| h1 | `type-h1 mb-xxl` — already correct | Unchanged |
+| Sections | `<section>` (no mb — spaced by `space-y-xxl` on parent) | `<section className="mb-xxl">` — self-contained |
+
+### Example pages (All Teams A / Single / Candidate B)
+
+These use the app `Header` organism, not `PreviewNav`. They don't share the layer-page header structure. Not modified.
+
+### Hardcoded px grep (header zone of all 4 layer pages)
+
+No hardcoded px in the header zones. Pre-existing `gridTemplateColumns` inline styles in Styles page content (color swatch grid) — out of scope, not header spacing.

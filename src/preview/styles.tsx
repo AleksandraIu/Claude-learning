@@ -69,19 +69,13 @@ function SubLabel({ children }: { children: React.ReactNode }) {
 
 export default function StylesPreview() {
   return (
-    <div className="min-h-screen bg-bg-page text-text">
-      {/* Nav */}
-      <div className="sticky top-0 bg-bg-page border-b border-border z-10">
-        <div className="max-w-5xl mx-auto px-xxl py-xs">
-          <PreviewNav />
-        </div>
-      </div>
-
-      <div className="max-w-5xl mx-auto p-xxl space-y-xxl">
+    <div className="min-h-screen bg-bg-page text-text p-xxl">
+      <div className="max-w-5xl mx-auto">
+        <PreviewNav />
         <h1 className="type-h1 mb-xxl">Styles</h1>
 
         {/* ── COLORS ── */}
-        <section>
+        <section className="mb-xxl">
           <SectionLabel>Colors</SectionLabel>
 
           <SubLabel>Primitive palette — 11 tokens</SubLabel>
@@ -124,7 +118,7 @@ export default function StylesPreview() {
         </section>
 
         {/* ── TYPOGRAPHY ── */}
-        <section>
+        <section className="mb-xxl">
           <SectionLabel>Typography</SectionLabel>
           <div className="space-y-l">
             {typeStyles.map(({ name, cls, sample, meta }) => (
@@ -140,7 +134,7 @@ export default function StylesPreview() {
         </section>
 
         {/* ── SPACING ── */}
-        <section>
+        <section className="mb-xxl">
           <SectionLabel>Spacing</SectionLabel>
           <div className="space-y-xs">
             {spacingScale.map(({ name, value, tw }) => (
@@ -158,7 +152,7 @@ export default function StylesPreview() {
         </section>
 
         {/* ── RADIUS ── */}
-        <section>
+        <section className="mb-xxl">
           <SectionLabel>Radius</SectionLabel>
           <div className="flex gap-l flex-wrap">
             {[
@@ -185,3 +179,4 @@ export default function StylesPreview() {
     </div>
   );
 }
+
