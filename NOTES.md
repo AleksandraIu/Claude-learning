@@ -1110,3 +1110,37 @@ No changes to CardHeader.tsx, Dropdown.tsx, or any component.
 ### Build: PASS (0 errors)
 
 golden-hero fully visible: y | dropdown not clipped: y | no overlap: y | build: ✓
+
+---
+
+## [Step 6.17: fix CardHeader golden-hero cropping on Candidate B page] — 2026-06-29
+
+### Cause
+
+`CardHeader` default variant root div had `h-[480px] overflow-hidden`. On Candidate B (4 actions + 4 team-tag dropdowns), this:
+- Hard-clips content at 480px (no growth room)
+- Clips Dropdown open menus (`absolute top-full z-20`) at the card boundary
+
+The `overflow-hidden` was redundant — the hero image layers are inside their own inner `<div aria-hidden ... rounded-[12px] overflow-hidden>` which clips the image to the card shape independently.
+
+Step 6.16 had applied `!overflow-visible` in organisms.tsx as a workaround; this step fixes the root in the component, making that override obsolete.
+
+### Fix
+
+| File | Change |
+|---|---|
+| `src/components/organisms/card-header/CardHeader.tsx` | Default root div: `h-[480px] overflow-hidden` → `min-h-[480px]` |
+| `src/preview/organisms.tsx` | Removed `!overflow-visible` from default CardHeader (redundant after component fix); updated comment |
+
+### Regressions checked
+
+| Location | Uses | Affected? |
+|---|---|---|
+| ScreenAllTeamsA | variant2 | No (separate code path) |
+| ScreenAllTeamsSingle | variant2 | No (separate code path) |
+| ScreenCandidateB | default | Fixed ✓ |
+| Organisms preview | default + variant2 | Default fixed; variant2 imageTopOffset/imageHeight still in place ✓ |
+
+### Build: PASS (0 errors)
+
+card not cropped: y | dropdowns can open: y | no variant2 regression: y | build: ✓

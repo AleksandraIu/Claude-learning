@@ -1305,3 +1305,38 @@ CardHeader variant2 uses `imageTopOffset=-178` (default). In the preview's stack
 - `imageTopOffset={0} imageHeight={480}`: image starts at card top (no upward bleed), height matches card (no downward bleed); card layout (title, SwitchGroup) visible against bg-page background in preview context
 
 ### No changes to CardHeader.tsx, Dropdown.tsx, or any other component.
+
+---
+
+## D47. Step 6.17 — Fix CardHeader golden-hero cropping on Candidate B page (2026-06-29)
+
+### Root cause — `h-[480px] overflow-hidden` on CardHeader default root div (component level)
+
+On the Candidate B page, `CardHeader` (default variant) clips its own content:
+
+1. **`overflow-hidden`**: clips Dropdown open menus (`absolute top-full z-20`) at the card boundary — dropdowns can't show when opened
+2. **`h-[480px]`**: fixed height only — on Candidate B, 4 action buttons + default 4 team-tag dropdowns push the content to fill the exact 480px, leaving no visual breathing room at the bottom and making the background cut feel hard
+
+### Why `overflow-hidden` on the outer div was always redundant
+
+The hero image layers sit inside their own inner div:
+```tsx
+<div aria-hidden className="absolute inset-0 pointer-events-none rounded-[12px] overflow-hidden">
+  <img ... className="absolute inset-0 size-full object-cover" />
+  <div className="absolute inset-0 bg-black mix-blend-color" />
+  <div className="absolute inset-0 bg-[#ffb700] mix-blend-hard-light" />
+</div>
+```
+This inner div has its own `rounded-[12px] overflow-hidden` and clips the image to the card shape independently. The outer `overflow-hidden` was doubly clipping the image (same boundaries) and served no visual purpose — while it actively clipped the dropdowns.
+
+### Fix — CardHeader.tsx, default variant root div (line 72)
+
+| Property | Before | After | Effect |
+|---|---|---|---|
+| `overflow-hidden` | present | removed | Dropdowns can open without clipping; image still clipped by inner div |
+| `h-[480px]` | present | removed | — |
+| `min-h-[480px]` | absent | added | Card is at least 480px; grows to content if needed |
+
+Step 6.16 had applied `!overflow-visible` in organisms.tsx as a preview-level workaround. With D47 fixing the root in the component, that override is now redundant and has been removed from organisms.tsx (comment updated to D46/D47).
+
+### No change to variant2 (separate root path in CardHeader.tsx)

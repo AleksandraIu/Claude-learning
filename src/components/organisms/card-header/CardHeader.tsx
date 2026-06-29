@@ -68,8 +68,9 @@ export default function CardHeader({
 
   if (isDefault) {
     const imgSrc = photo ?? PHOTO_DEFAULT;
+    // D47: min-h not h (card grows to content); overflow removed (inner aria-hidden div clips image; outer was clipping dropdowns)
     return (
-      <div className={`relative flex flex-col h-[480px] p-xl rounded-[12px] overflow-hidden items-start justify-between ${className}`}>
+      <div className={`relative flex flex-col min-h-[480px] p-xl rounded-[12px] items-start justify-between ${className}`}>
         <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[12px] overflow-hidden">
           <img src={imgSrc} alt="" className="absolute inset-0 size-full object-cover" />
           <div className="absolute inset-0 bg-black mix-blend-color" />
