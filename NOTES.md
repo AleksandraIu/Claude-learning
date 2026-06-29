@@ -956,3 +956,30 @@ Header ("Hired & Wired", nav) legible on top. Matches Figma node 357:58935.
 
 **Verified:** Build ✓, ATS image top+true-color ✓, Candidate B image top+true-color ✓,
 profile 16px right margin ✓, profile colors per Figma ✓, external URLs 2 (pre-existing, flagged).
+
+---
+
+## [Step 6.11: All Teams Single team list — bars + statuses + reorg] — 2026-06-29
+
+### What changed
+
+| File | Change |
+|---|---|
+| `src/components/molecules/profile/Profile.tsx` | Added `statusVariant?: StatusVariant` prop (default `'green'`); Status: hardcoded `"green"` → `{statusVariant}`; Bar: `flex-1 min-w-0` → `flex-1 min-w-0 overflow-hidden` |
+| `src/preview/pages/ScreenAllTeamsSingle.tsx` | TEAM_MEMBERS: added `status: StatusVariant` field per Figma 357:59004–59013; `statusVariant={member.status}` threaded to each Profile |
+
+### Bug 1 — Bar overflow
+
+Bars rendered ~700px (100 dots × 7px) inside a `flex-1` container that was narrower. Root cause: dots use `shrink-0` → they don't shrink with the flex parent → overflow. Fix: `overflow-hidden` on Bar root clips dots at container boundary. Matches Figma `overflow-clip`.
+
+### Bug 2 — Statuses
+
+All 10 rows showed "On Track" green because `<Status variant="green" />` was hardcoded. Fixed with `statusVariant` prop. Status data from Figma (7 sampled, 3 inferred from row-block pattern):
+- Rows 0–4: green / purple / green / green / green
+- Rows 5–9: all red
+
+### Reorg — no action
+
+Profile `long` variant already is the team-member row molecule (Avatar + name/role + Status + Bar). No extraction required.
+
+### Build: PASS (0 errors)

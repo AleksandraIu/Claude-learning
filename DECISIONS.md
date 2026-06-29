@@ -1103,3 +1103,44 @@ No new external URLs introduced in this step.
 - Candidate B: yellow portrait at y=0, header overlaid, card shows golden-tinted portrait ✓
 - Profile cards: distinct bg colors per card ✓; 16px right padding visible ✓
 - "Febrary 2026" typo matches Figma ✓
+
+---
+
+## D42. Step 6.11 — All Teams Single team list: bar overflow + per-member statuses + reorg (2026-06-29)
+
+### Bug 1 — Progress bar overflow
+
+| Aspect | Before | After |
+|---|---|---|
+| Bar in Profile long variant | `<Bar className="flex-1 min-w-0" />` — Bar rendered ~700px of `shrink-0` dots; flex container shrinks but dots overflow | `<Bar className="flex-1 min-w-0 overflow-hidden" />` — dots clipped at rendered container width |
+| Root cause | Bar renders 100 × (5px dot + 2px gap) = ~700px via `shrink-0` spans. The flex parent shrinks to `flex-1` width but dots have `shrink-0` so they overflow the container bounds. | |
+| Fix | `overflow-hidden` on Bar's root div clips overflowing dots at the container edge. Matches Figma `overflow-clip` on bar wrapper node 357:35448. | |
+| Token? | No new token. `overflow-hidden` is a Tailwind utility. | |
+
+### Bug 2 — All statuses hardcoded green
+
+| Aspect | Before | After |
+|---|---|---|
+| Status in Profile long | `<Status variant="green" />` — hardcoded, same for every row | `<Status variant={statusVariant} />` — prop-driven |
+| Prop added | `statusVariant?: StatusVariant` to Profile interface; default `'green'` (backward-compatible) | |
+| Data source | Figma nodes 357:59004–59013 (10 profile rows). Sampled 7: 59004=green, 59005=purple, 59006=green, 59008=green, 59009=red, 59011=red, 59013=red. | |
+| Inferred rows | Rows 3 (59007), 6 (59010), 8 (59012) not fetched. Pattern: rows 0–4 = green/purple block; rows 5–9 = red block. Inference: row3=green, row6=red, row8=red. Documented in screen file comment. | |
+| Final assignment | Sarah Johnson=green, Michael Lee=purple, Emily Carter=green, David Smith=green, Jessica Martinez=green, Daniel Wilson=red, Laura Thompson=red, James Garcia=red, Anna Schmidt=red, Robert Brown=red | |
+
+### Item 3 — Reorg assessment
+
+| Finding | Decision |
+|---|---|
+| Profile `long` variant already is the team-member row molecule | No extraction needed. It composes Avatar + name/role text + Status + Bar — exactly one molecule already covers the pattern. No new file, no wrapper component. |
+
+### Files changed
+
+| File | Change |
+|---|---|
+| `src/components/molecules/profile/Profile.tsx` | Added `statusVariant?: StatusVariant` prop; `<Status variant="green">` → `<Status variant={statusVariant} />`; Bar className: `flex-1 min-w-0` → `flex-1 min-w-0 overflow-hidden` |
+| `src/preview/pages/ScreenAllTeamsSingle.tsx` | Added `status: StatusVariant` to TEAM_MEMBERS array; `statusVariant={member.status}` passed to each Profile; StatusVariant import added; comment documents inference for rows 3/6/8 |
+
+### Verified
+
+- Build: ✓ `vite build` 0 errors, 0 type errors
+- Visual screenshot: dev server headless environment — puppeteer-core not installed; screencapture blocked. Verification is TypeScript build + Figma node 357:59001 screenshot as reference.

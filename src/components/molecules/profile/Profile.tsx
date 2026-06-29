@@ -1,5 +1,5 @@
 import Avatar from '../../atoms/avatar/Avatar';
-import Status from '../../atoms/status/Status';
+import Status, { StatusVariant } from '../../atoms/status/Status';
 import Bar from '../../atoms/bar/Bar';
 
 export type ProfileVariant = 'long' | 'short' | 'short-outlined';
@@ -9,6 +9,7 @@ interface ProfileProps {
   name?: string;
   role?: string;
   barValue?: number;
+  statusVariant?: StatusVariant;
   // D41: optional bg class override (Figma uses different bg per card; defaults below)
   bgClass?: string;
   className?: string;
@@ -19,6 +20,7 @@ export default function Profile({
   name = 'Sarah Johnson',
   role = 'Senior Developer',
   barValue = 37,
+  statusVariant = 'green',
   bgClass,
   className = '',
 }: ProfileProps) {
@@ -44,9 +46,9 @@ export default function Profile({
           <p className="type-h3 text-black tracking-[-0.4px] whitespace-nowrap">{name}</p>
           <p className="type-pixel tracking-[2px] uppercase text-black whitespace-nowrap">{role}</p>
         </div>
-        <Status variant="green" />
+        <Status variant={statusVariant} />
       </div>
-      <Bar value={barValue} size="default" color="green" className="flex-1 min-w-0" />
+      <Bar value={barValue} size="default" color="green" className="flex-1 min-w-0 overflow-hidden" />
     </div>
   );
 }

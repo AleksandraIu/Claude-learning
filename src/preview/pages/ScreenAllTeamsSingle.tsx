@@ -4,23 +4,26 @@
 // D34: Header shows SecondRow. CardHeader uses explicit content.
 // D41: Hero lifted to screen level (same as All Teams A, D39) — all-team-single.png at y=0,
 //   CardHeader imageTopOffset={0} imageHeight={0} suppresses built-in image.
+// D42: Per-member status from Figma 357:59004–59013. Rows 0-4 green/purple, rows 5-9 red.
+//   Rows 3, 6, 8 inferred (not fetched) — pattern confirmed by sampled adjacent rows.
 import heroSingle from '../../assets/all-team-single.png';
 import Header from '../../components/organisms/header/Header';
 import CardHeader from '../../components/organisms/card-header/CardHeader';
 import Notify from '../../components/molecules/notify/Notify';
 import Profile from '../../components/molecules/profile/Profile';
+import { StatusVariant } from '../../components/atoms/status/Status';
 
-const TEAM_MEMBERS = [
-  { name: 'Sarah Johnson',    role: 'Senior Developer',      barValue: 37 },
-  { name: 'Michael Lee',      role: 'Product Manager',       barValue: 62 },
-  { name: 'Emily Carter',     role: 'UX Designer',           barValue: 55 },
-  { name: 'David Smith',      role: 'Data Analyst',          barValue: 48 },
-  { name: 'Jessica Martinez', role: 'Marketing Specialist',  barValue: 71 },
-  { name: 'Daniel Wilson',    role: 'Systems Administrator', barValue: 83 },
-  { name: 'Laura Thompson',   role: 'Product Owner',         barValue: 44 },
-  { name: 'James Garcia',     role: 'Frontend Engineer',     barValue: 68 },
-  { name: 'Anna Schmidt',     role: 'Backend Engineer',      barValue: 59 },
-  { name: 'Robert Brown',     role: 'DevOps Engineer',       barValue: 76 },
+const TEAM_MEMBERS: { name: string; role: string; barValue: number; status: StatusVariant }[] = [
+  { name: 'Sarah Johnson',    role: 'Senior Developer',      barValue: 37, status: 'green'  },
+  { name: 'Michael Lee',      role: 'Product Manager',       barValue: 62, status: 'purple' },
+  { name: 'Emily Carter',     role: 'UX Designer',           barValue: 55, status: 'green'  },
+  { name: 'David Smith',      role: 'Data Analyst',          barValue: 48, status: 'green'  },
+  { name: 'Jessica Martinez', role: 'Marketing Specialist',  barValue: 71, status: 'green'  },
+  { name: 'Daniel Wilson',    role: 'Systems Administrator', barValue: 83, status: 'red'    },
+  { name: 'Laura Thompson',   role: 'Product Owner',         barValue: 44, status: 'red'    },
+  { name: 'James Garcia',     role: 'Frontend Engineer',     barValue: 68, status: 'red'    },
+  { name: 'Anna Schmidt',     role: 'Backend Engineer',      barValue: 59, status: 'red'    },
+  { name: 'Robert Brown',     role: 'DevOps Engineer',       barValue: 76, status: 'red'    },
 ];
 
 export default function ScreenAllTeamsSingle() {
@@ -68,6 +71,7 @@ export default function ScreenAllTeamsSingle() {
                   name={member.name}
                   role={member.role}
                   barValue={member.barValue}
+                  statusVariant={member.status}
                 />
               ))}
             </div>
