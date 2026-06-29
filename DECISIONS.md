@@ -1144,3 +1144,40 @@ No new external URLs introduced in this step.
 
 - Build: ✓ `vite build` 0 errors, 0 type errors
 - Visual screenshot: dev server headless environment — puppeteer-core not installed; screencapture blocked. Verification is TypeScript build + Figma node 357:59001 screenshot as reference.
+
+---
+
+## D43. Step 6.12 — Candidate B: remove screen-level hero (plain gray page bg) (2026-06-29)
+
+### Root cause
+
+`ScreenCandidateB.tsx` had a screen-level hero div (same D39/D41 pattern as All Teams A and Single) with `screen-candidate-b.png` (the yellow portrait) rendered as a full-bleed `absolute inset-x-0 top-0 h-[632px]` image behind the page. This was added in Step 6.10 under the assumption Candidate B should follow the same hero pattern — but Figma node 357:59014 shows a plain gray page background with NO hero image.
+
+### Scope check — shared or screen-local?
+
+The hero div was entirely local to `ScreenCandidateB.tsx`. All Teams A and All Teams Single each have their own screen-local hero divs. Removing it from Candidate B has zero effect on the other two screens.
+
+### Fix
+
+| File | Change |
+|---|---|
+| `src/preview/pages/ScreenCandidateB.tsx` | Removed hero `<div aria-hidden …>` block (lines 51-59 of prior version). Outer div: dropped `relative` (no longer needed for absolute positioning). Content div: dropped `relative z-10` (no stacking context needed). Page bg `bg-bg-page` retained. |
+
+### First block unchanged
+
+`<CardHeader variant="default" photo={candidateBHero} …>` is untouched. The import of `candidateBHero` is kept — it feeds the photo prop on the CardHeader (golden-tinted portrait inside the card, correct per Figma 357:59017).
+
+### Regression check — All Teams A + Single
+
+Both screens retain their screen-level hero divs (`absolute inset-x-0 top-0 pointer-events-none`). No shared organism modified. Confirmed by grep: hero class present in A+Single, absent in Candidate B.
+
+### Tokens
+
+No new tokens. `bg-bg-page` = `--color-bg-page: var(--color-gray-200)` = #f2f2f2 — existing semantic token.
+
+### Verified
+
+- Build: ✓ 0 errors
+- External URL grep: 0 hits in all three screen files
+- Absolute path grep: 0 hits
+- Hero present in ScreenAllTeamsA.tsx: ✓ | ScreenAllTeamsSingle.tsx: ✓ | ScreenCandidateB.tsx: ✗ (correct)

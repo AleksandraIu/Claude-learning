@@ -1,9 +1,8 @@
 // screen-candidate-b — Figma node 357:59014
-// Composition: Header + screen-level hero + CardHeader(default, Sarah Mitchell) +
+// Composition: Header + CardHeader(default, Sarah Mitchell) +
 //   Notify + Achievements + Personal Development + Reports to / Mentoring
 // D32: pt-[90px] off-scale (header h=88, content y=178, gap=90px)
-// D41: Hero lifted to screen level — screen-candidate-b.png at y=0 (yellow portrait, no tint/blend).
-//   CardHeader changed to variant="default" (matches Figma 357:59017 layout: TEAMS labels,
+// D41: CardHeader variant="default" (matches Figma 357:59017 layout: TEAMS labels,
 //   golden portrait inside card, action buttons, team tags at bottom).
 // D41: Personal Development gap fixed: Next Level→Prediction gap = gap-s (14px per Figma),
 //   not gap-l (24px). Text "Febrary 2026" matches Figma node 357:59050 exactly (Figma typo).
@@ -11,6 +10,7 @@
 //   Token near-misses flagged: peach-100≠#f7e0dd (Figma "red"), rose-100≠#ffe3f1 (Figma "pink").
 // D32: gap-[90px] in Reports/Mentoring card — Figma space/xxl=90px; our --spacing-xxl=60px.
 // D32 flag: profile chip bg colors (#f7e0dd, #ffe3f1) — no exact token; using peach-100/rose-100.
+// D43: No screen-level hero — Figma 357:59014 page bg is plain gray (#f2f2f2 / bg-bg-page).
 import candidateBHero from '../../assets/screen-candidate-b.png';
 import Header from '../../components/organisms/header/Header';
 import CardHeader from '../../components/organisms/card-header/CardHeader';
@@ -43,24 +43,11 @@ const MENTORING = [
 
 export default function ScreenCandidateB() {
   return (
-    <div className="relative min-h-screen bg-bg-page">
-
-      {/* D41: Hero at screen level — yellow portrait at y=0, no blend overlay/tint.
-          Gradient fades to bg-page at bottom. The CardHeader (default variant) also
-          renders the same photo inside the card with golden tint treatment. */}
-      <div
-        aria-hidden
-        className="absolute inset-x-0 top-0 pointer-events-none"
-        style={{ height: 632 }}
-      >
-        <div className="absolute inset-0 bg-bg-page" />
-        <img src={candidateBHero} alt="" className="absolute inset-0 size-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-bg-page" />
-      </div>
+    <div className="min-h-screen bg-bg-page">
 
       <Header activeTab="all" />
 
-      <div className="relative z-10 pt-[90px] pb-xxl">
+      <div className="pt-[90px] pb-xxl">
         <div className="max-w-[830px] mx-auto flex flex-col gap-xxs">
 
           {/* CardHeader default variant — matches Figma 357:59017 layout exactly:

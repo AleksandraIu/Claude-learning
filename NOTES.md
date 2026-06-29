@@ -983,3 +983,29 @@ All 10 rows showed "On Track" green because `<Status variant="green" />` was har
 Profile `long` variant already is the team-member row molecule (Avatar + name/role + Status + Bar). No extraction required.
 
 ### Build: PASS (0 errors)
+
+---
+
+## [Step 6.12: Candidate B gray background] — 2026-06-29
+
+### Cause
+
+`ScreenCandidateB.tsx` had a screen-level hero `<div>` (added Step 6.10, D41 pattern) rendering `screen-candidate-b.png` (yellow portrait) as a `absolute inset-x-0 top-0 h-[632px]` full-bleed image. Figma 357:59014 page bg is plain gray (#f2f2f2) — no hero image behind the page.
+
+### Fix
+
+Removed the hero div entirely from `ScreenCandidateB.tsx`. Outer div dropped `relative` class; content div dropped `relative z-10`. Page background remains `bg-bg-page` (#f2f2f2). The `candidateBHero` import is retained — it still feeds `CardHeader photo={candidateBHero}` (the golden-tinted portrait inside the first card block, correct per Figma 357:59017).
+
+### Regression check
+
+Hero divs are screen-local (not in any shared organism). All Teams A and All Teams Single both retain their heroes unchanged — confirmed by grep.
+
+### Verified
+
+- Build: ✓ 0 errors
+- External URL grep: 0
+- Absolute path grep: 0
+- Hero in A+Single: ✓ unregressed
+- Candidate B: plain bg-bg-page, first block (CardHeader default, Sarah Mitchell) untouched
+
+gray bg: y | 1st block unchanged: y | other two unregressed: y | build: ✓
