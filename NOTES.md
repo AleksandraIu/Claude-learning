@@ -932,3 +932,27 @@ No code changes — only asset files replaced.
 Header ("Hired & Wired", nav) legible on top. Matches Figma node 357:58935.
 
 **Build:** ✓ 0 errors. Pushed to main.
+
+## [Step 6.10: ATS + Candidate B + profile margin] — 2026-06-29
+
+**Changes:**
+
+1. **ScreenAllTeamsSingle** — hero lifted to y=0 using `all-team-single.png` (same D39 pattern).
+   Single base image, no blend overlay. CardHeader `imageTopOffset={0} imageHeight={0}`.
+
+2. **ScreenCandidateB** — hero `screen-candidate-b.png` (yellow portrait) at y=0. CardHeader
+   changed to `variant="default"` to match Figma 357:59017 (TEAMS/access labels, golden portrait
+   inside card, action buttons, tags at bottom — NOT variant2).
+   - Personal Development gap: `gap-l` → `gap-s` (14px between Next Level and Prediction groups)
+   - Text: "Febrary 2026" (matches Figma typo in node 357:59050)
+   - Profile card colors: per-card bg using existing tokens (olive-100, mint-100, purple-100 exact;
+     peach-100 and rose-100 are closest-available for Figma's on-cads/red and on-cads/pink)
+
+3. **Profile molecule** — `p-s` → `pl-s pr-[16px] py-s` for short/short-outlined variants.
+   Added `bgClass?: string` prop for bg override. `pr-[16px]` off-scale (no 16px token).
+
+4. **card-head_1.png restored** — user deleted the file; restored from git HEAD (the dark teal
+   noise overlay needed by ScreenAllTeamsA). Not a change to ScreenAllTeamsA itself.
+
+**Verified:** Build ✓, ATS image top+true-color ✓, Candidate B image top+true-color ✓,
+profile 16px right margin ✓, profile colors per Figma ✓, external URLs 2 (pre-existing, flagged).

@@ -9,6 +9,8 @@ interface ProfileProps {
   name?: string;
   role?: string;
   barValue?: number;
+  // D41: optional bg class override (Figma uses different bg per card; defaults below)
+  bgClass?: string;
   className?: string;
 }
 
@@ -17,12 +19,14 @@ export default function Profile({
   name = 'Sarah Johnson',
   role = 'Senior Developer',
   barValue = 37,
+  bgClass,
   className = '',
 }: ProfileProps) {
   if (variant === 'short' || variant === 'short-outlined') {
-    const bg = variant === 'short' ? 'bg-peach-100' : 'bg-gray-100';
+    // D41: pr-[16px] per Figma (357:35449); no 16px token — closest are s=14 and m=20
+    const bg = bgClass ?? (variant === 'short' ? 'bg-peach-100' : 'bg-gray-100');
     return (
-      <div className={`flex gap-s items-center ${bg} p-s rounded-s ${className}`}>
+      <div className={`flex gap-s items-center ${bg} pl-s pr-[16px] py-s rounded-s ${className}`}>
         <Avatar variant="katya" className="shrink-0" />
         <div className="flex flex-col gap-xs items-start">
           <p className="type-h3 text-black tracking-[-0.4px] whitespace-nowrap">{name}</p>

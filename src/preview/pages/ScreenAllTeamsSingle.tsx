@@ -1,42 +1,58 @@
 // screen-all-teams-single — Figma node 357:58993
-// Composition: Header(2-row) + CardHeader(variant2, Engineering Team) + Notify + Team section (10×Profile long)
-// D32: pt-[90px] off-scale (same as screen-all-teams-a)
-// D34: Header shows SecondRow. CardHeader gets explicit content (defaults changed to All teams).
+// Composition: Header(2-row) + CardHeader(variant2, Engineering Team) + Notify + 10×Profile (long)
+// D32: pt-[90px] off-scale (header h=88, content y=178, gap=90px)
+// D34: Header shows SecondRow. CardHeader uses explicit content.
+// D41: Hero lifted to screen level (same as All Teams A, D39) — all-team-single.png at y=0,
+//   CardHeader imageTopOffset={0} imageHeight={0} suppresses built-in image.
+import heroSingle from '../../assets/all-team-single.png';
 import Header from '../../components/organisms/header/Header';
-import CardHeader, { PHOTO_PERSON } from '../../components/organisms/card-header/CardHeader';
+import CardHeader from '../../components/organisms/card-header/CardHeader';
 import Notify from '../../components/molecules/notify/Notify';
 import Profile from '../../components/molecules/profile/Profile';
 
 const TEAM_MEMBERS = [
-  { name: 'Sarah Johnson',    role: 'Senior Developer',     barValue: 37 },
-  { name: 'Michael Lee',      role: 'Product Manager',      barValue: 62 },
-  { name: 'Emily Carter',     role: 'UX Designer',          barValue: 55 },
-  { name: 'David Smith',      role: 'Data Analyst',         barValue: 48 },
-  { name: 'Jessica Martinez', role: 'Marketing Specialist', barValue: 71 },
-  { name: 'Daniel Wilson',    role: 'Systems Administrator',barValue: 83 },
-  { name: 'Laura Thompson',   role: 'Product Owner',        barValue: 44 },
-  { name: 'James Garcia',     role: 'Frontend Engineer',    barValue: 68 },
-  { name: 'Anna Schmidt',     role: 'Backend Engineer',     barValue: 59 },
-  { name: 'Robert Brown',     role: 'DevOps Engineer',      barValue: 76 },
+  { name: 'Sarah Johnson',    role: 'Senior Developer',      barValue: 37 },
+  { name: 'Michael Lee',      role: 'Product Manager',       barValue: 62 },
+  { name: 'Emily Carter',     role: 'UX Designer',           barValue: 55 },
+  { name: 'David Smith',      role: 'Data Analyst',          barValue: 48 },
+  { name: 'Jessica Martinez', role: 'Marketing Specialist',  barValue: 71 },
+  { name: 'Daniel Wilson',    role: 'Systems Administrator', barValue: 83 },
+  { name: 'Laura Thompson',   role: 'Product Owner',         barValue: 44 },
+  { name: 'James Garcia',     role: 'Frontend Engineer',     barValue: 68 },
+  { name: 'Anna Schmidt',     role: 'Backend Engineer',      barValue: 59 },
+  { name: 'Robert Brown',     role: 'DevOps Engineer',       barValue: 76 },
 ];
 
 export default function ScreenAllTeamsSingle() {
   return (
-    <div className="min-h-screen bg-bg-page">
+    <div className="relative min-h-screen bg-bg-page">
+
+      {/* D41: Hero at screen level — same pattern as All Teams A (D39).
+          Single image, no blend overlay. Gradient fades hero to bg-page. */}
+      <div
+        aria-hidden
+        className="absolute inset-x-0 top-0 pointer-events-none"
+        style={{ height: 632 }}
+      >
+        <div className="absolute inset-0 bg-bg-page" />
+        <img src={heroSingle} alt="" className="absolute inset-0 size-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-bg-page" />
+      </div>
+
       <Header activeTab="all" />
 
-      {/* D32: pt-[90px] off-scale — header h=88, content y=178, gap=90px */}
-      <div className="pt-[90px] pb-xxl">
+      <div className="relative z-10 pt-[90px] pb-xxl">
         <div className="max-w-[830px] mx-auto flex flex-col gap-xxs">
 
+          {/* CardHeader: imageTopOffset/Height=0 suppresses built-in hero; text/switch remain */}
           <CardHeader
             variant="variant2"
             name="Engineering Team"
             title="Team overview and member performance"
             actions={['add member']}
             switchItems={[{ label: 'Overview' }, { label: 'Members' }, { label: 'Projects' }]}
-            photo={PHOTO_PERSON}
-            photoOverlay={undefined}
+            imageTopOffset={0}
+            imageHeight={0}
           />
 
           <Notify text="Sarah finalized the UX flows, Anya trained three junior engineers, and the team enjoyed a ski trip." />

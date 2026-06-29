@@ -1043,3 +1043,63 @@ None introduced. Assets are Vite-bundled PNGs; no URLs or hex values changed.
 - Build: ✓ 0 errors
 - Screenshot: hero renders gray-blue/silver 3D objects with no yellow cast; matches Figma
   node 357:58935 screenshot exactly. Header legible over the neutral image.
+
+## D41 — ATS Single hero + Candidate B hero + Profile margin (Step 6.10)
+
+### Image mappings
+| Local file | Screen | Role |
+|---|---|---|
+| `src/assets/all-team-single.png` | All Teams Single | Screen-level hero (single image, no blend overlay) |
+| `src/assets/screen-candidate-b.png` | Candidate B | Screen-level hero (single image, no tint/blend overlay) + CardHeader default photo |
+| `src/assets/card-head_1.png` | All Teams A | Existing blend overlay (dark teal noise, D40) — restored from git after user deleted it |
+
+### All Teams Single hero fix
+Same pattern as All Teams A (D39): screen-level `absolute inset-x-0 top-0 h-[632px]`, single base
+image, gradient from transparent to bg-page. CardHeader `imageTopOffset={0} imageHeight={0}`
+suppresses its built-in image. Content `relative z-10`.
+
+### Candidate B hero fix + CardHeader variant change
+Figma 357:59017 uses the **default** CardHeader variant (TEAMS/access labels, golden portrait
+inside card, action buttons, team tags at bottom) — not variant2. Changed from `variant="variant2"`
+to `variant="default"`.
+
+Screen-level hero: `screen-candidate-b.png` (yellow portrait) behind full header from y=0, no
+blend overlay, gradient fades to bg-page. CardHeader default also uses the same photo with its
+built-in golden tint treatment (bg-black mix-blend-color + #ffb700 mix-blend-hard-light).
+
+### Candidate B layout corrections
+| Section | Fix | Figma source |
+|---|---|---|
+| Personal Development | Outer gap Next Level→Prediction: `gap-l`→`gap-s` (14px, Figma Frame 1378: y=36→y=50, gap=14px) | 357:59044/48 |
+| Personal Development | Text "Febrary 2026" (Figma node name 357:59050 has typo; task says match Figma exactly) | 357:59050 |
+| Reports/Mentoring | gap-[90px] retained (Figma space/xxl=90px; our --spacing-xxl=60px — flagged D32) | 357:59052 |
+
+### Profile card colors (Figma 357:59055/59062)
+Each profile card in Candidate B has a distinct background color per Figma:
+| Position | Figma token/hex | React token | Exact match? |
+|---|---|---|---|
+| Reports to #1 | `--color/background/on-cads/red` #f7e0dd | `bg-peach-100` #f5cfca | ≠ (closest available) |
+| Reports to #2 | `--color/background/on-cads/green` #d4eee7 | `bg-mint-100` #d4eee7 | ✓ exact |
+| Reports to #3 | `--color/background/on-cads/pink` #ffe3f1 | `bg-rose-100` #fad5e7 | ≠ (closest available) |
+| Mentoring #1 | `--color/background/on-cads/yellow` #e0e2a4 | `bg-olive-100` #e0e2a4 | ✓ exact |
+| Mentoring #2 | `--color/background/on-cads/violet` #ddd6ef | `bg-purple-100` #ddd6ef | ✓ exact |
+| Mentoring #3 | `--color/background/on-cads/red` #f7e0dd | `bg-peach-100` #f5cfca | ≠ (closest available) |
+
+Added `bgClass?: string` prop to Profile molecule so callers can pass the background token class.
+Default behaviour unchanged: short=bg-peach-100, short-outlined=bg-gray-100.
+
+### Profile margin (357:35449)
+Figma: `pl-[var(--space/s,14px)] pr-[16px] py-[var(--space/s,14px)]` (14px all except right=16px).
+No 16px token exists (tokens: xs=8, s=14, m=20). Changed `p-s` → `pl-s pr-[16px] py-s`.
+Logged as off-scale: `pr-[16px]` (flagged).
+
+### Remaining external Figma URLs (pre-existing, unchanged)
+5 URLs flagged in D38: PHOTO_DEFAULT + PHOTO_PERSON (CardHeader.tsx), katya + dog + petya (Avatar.tsx).
+No new external URLs introduced in this step.
+
+### Verified
+- Build: ✓ 0 errors, all 4 images bundled
+- All Teams Single: image (gray tunnel) at y=0, true colors, header overlaid ✓
+- Candidate B: yellow portrait at y=0, header overlaid, card shows golden-tinted portrait ✓
+- Profile cards: distinct bg colors per card ✓; 16px right padding visible ✓
+- "Febrary 2026" typo matches Figma ✓
