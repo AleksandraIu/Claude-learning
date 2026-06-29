@@ -1009,3 +1009,39 @@ Hero divs are screen-local (not in any shared organism). All Teams A and All Tea
 - Candidate B: plain bg-bg-page, first block (CardHeader default, Sarah Mitchell) untouched
 
 gray bg: y | 1st block unchanged: y | other two unregressed: y | build: ✓
+
+---
+
+## [Step 6.14: layers-only breadcrumb] — 2026-06-29
+
+### Change
+
+Simplified `PreviewNav.tsx` to one row: Design System / Styles / Atoms / Molecules / Organisms.
+
+- Removed Release Notes from the breadcrumb LAYERS array
+- Removed the entire secondary Pages row (SCREENS data + div)
+- Font-size bump: `type-grotesk` (11px) → `type-h4` (15px); both Akkurat grotesk — one scale step up via existing token. No hardcoded px.
+
+### Reachability check
+
+Pages were already linked from `/preview` index. Release Notes was NOT — it was breadcrumb-only. Added Release Notes link section to `preview/index.tsx` (border-l compact style, consistent with Pages). All 4 routes now reachable from the index:
+
+| Route | Reachable via |
+|---|---|
+| /preview/pages/* (3 screens) | /preview → Pages ✓ |
+| /preview/release-notes | /preview → Release Notes ✓ (newly added) |
+
+### Files changed
+
+| File | Change |
+|---|---|
+| `src/preview/PreviewNav.tsx` | LAYERS: removed Release Notes; SCREENS array deleted; secondary div deleted; `type-grotesk` → `type-h4` on links + separator |
+| `src/preview/index.tsx` | Added Release Notes section with border-l link |
+
+### Hardcoded grep
+
+0 new hardcoded hex or px. `tracking-[1.6px]` pre-existing (D37).
+
+### Build: PASS (0 errors)
+
+breadcrumb layers-only + bigger: y | Pages/Release Notes still reachable: y | build: ✓

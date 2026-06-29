@@ -79,7 +79,7 @@ export default function PreviewIndex() {
 
         {/* Pages — secondary hierarchy: examples, not system layers */}
         <h2 className="type-h4 text-text-subtle mb-m pb-xxs border-b border-border uppercase tracking-[1.6px]">Pages</h2>
-        <div className="flex flex-col gap-xxs">
+        <div className="flex flex-col gap-xxs mb-xxl">
           {pages.map(({ path, label, desc }) => (
             <Link
               key={path}
@@ -91,6 +91,16 @@ export default function PreviewIndex() {
             </Link>
           ))}
         </div>
+
+        {/* Release Notes — system doc, reachable from index since removed from breadcrumb nav */}
+        <h2 className="type-h4 text-text-subtle mb-m pb-xxs border-b border-border uppercase tracking-[1.6px]">Release Notes</h2>
+        <Link
+          to="/preview/release-notes"
+          className="flex items-baseline gap-m border-l-2 border-border pl-m py-xs hover:border-black transition-colors duration-150 cursor-pointer group"
+        >
+          <span className="type-h4 text-black group-hover:underline whitespace-nowrap shrink-0">Release Notes</span>
+          <span className="type-grotesk text-text-subtle leading-h3">Running log of every step, decision, and change in this migration</span>
+        </Link>
       </div>
     </div>
   );

@@ -1181,3 +1181,46 @@ No new tokens. `bg-bg-page` = `--color-bg-page: var(--color-gray-200)` = #f2f2f2
 - External URL grep: 0 hits in all three screen files
 - Absolute path grep: 0 hits
 - Hero present in ScreenAllTeamsA.tsx: ✓ | ScreenAllTeamsSingle.tsx: ✓ | ScreenCandidateB.tsx: ✗ (correct)
+
+---
+
+## D44. Step 6.14 — Preview nav: layers-only breadcrumb + size bump (2026-06-29)
+
+### Breadcrumb scope change
+
+| Before | After |
+|---|---|
+| Primary row: Design System / Styles / Atoms / Molecules / Organisms / **Release Notes** | Primary row: Design System / Styles / Atoms / Molecules / Organisms |
+| Secondary row: Pages › All Teams A · All Teams Single · Candidate B | **Removed entirely** |
+
+Both rows were in `PreviewNav.tsx`. The secondary SCREENS row and its data array were deleted. Release Notes removed from the LAYERS array.
+
+### Font-size bump
+
+| Before | After | Tokens |
+|---|---|---|
+| `type-grotesk` = 11px (Akkurat) | `type-h4` = 15px (Akkurat) | Both are `font-grotesk`; one scale step up. No hardcoded px. |
+
+Separator `/` updated from `type-grotesk` to `type-h4` to match. `tracking-[1.6px]` and `uppercase` retained — pre-existing flagged gaps, not new.
+
+### Reachability — Pages + Release Notes
+
+Pages (All Teams A, Single, Candidate B) were already linked from `/preview` index. Release Notes was NOT previously linked from the index — it was only in the breadcrumb. To prevent stranding, added Release Notes as a link section to `preview/index.tsx` (same compact border-l list style as Pages). Both are now accessible from `/preview` even with no breadcrumb links.
+
+| Route | Path to it |
+|---|---|
+| `/preview/pages/screen-all-teams-a` | `/preview` → Pages → All Teams A ✓ |
+| `/preview/pages/screen-all-teams-single` | `/preview` → Pages → All Teams Single ✓ |
+| `/preview/pages/screen-candidate-b` | `/preview` → Pages → Candidate B ✓ |
+| `/preview/release-notes` | `/preview` → Release Notes ✓ (newly added to index) |
+
+### Files changed
+
+| File | Change |
+|---|---|
+| `src/preview/PreviewNav.tsx` | Removed Release Notes from LAYERS; deleted SCREENS array + secondary nav div; `type-grotesk` → `type-h4` on links and separator; removed now-unused screen link style constants |
+| `src/preview/index.tsx` | Added Release Notes section (border-l link, same style as Pages) so it remains reachable |
+
+### Hardcoded values grep
+
+0 new hardcoded hex or px values. Pre-existing `tracking-[1.6px]` in nav links — documented gap from D37.
