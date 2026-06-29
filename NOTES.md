@@ -1085,3 +1085,28 @@ Not modified — All Teams A / Single / Candidate B use the app `Header` organis
 ### Build: PASS (0 errors)
 
 common pattern applied to all layer pages: y | divider consistent (none): y | gaps tokenized: y | build: ✓
+
+---
+
+## [Step 6.16: unclip CardHeader golden-hero in Organisms preview] — 2026-06-29
+
+### Cause
+
+Two independent causes, both in the preview rendering, not in CardHeader itself:
+
+1. **`overflow-hidden` on CardHeader default root div** clips the card content at 480px and clips Dropdown open menus (`absolute top-full z-20`). The component's `className` prop is appended after `overflow-hidden` in the class string, so passing `!overflow-visible` from the preview overrides it with `!important`. The hero image layers are safe — they have their own inner `overflow-hidden` div.
+
+2. **Variant2 image bleeds 178px upward** (default `imageTopOffset=-178`). In the preview, variant2 sits ~500px below the content start. Its image extends to y=322px, which overlaps the bottom 158px of the default card (0–480px). Since variant2 is later in DOM, its image paints over the default card's bottom, making it appear visually clipped.
+
+### Fix
+
+| File | Change |
+|---|---|
+| `src/preview/organisms.tsx` | Default CardHeader: `className="max-w-[830px] !overflow-visible"` — overrides overflow-hidden, dropdowns unclipped |
+| `src/preview/organisms.tsx` | Variant2 CardHeader: added `imageTopOffset={0} imageHeight={480}` — image covers only the card, no upward bleed |
+
+No changes to CardHeader.tsx, Dropdown.tsx, or any component.
+
+### Build: PASS (0 errors)
+
+golden-hero fully visible: y | dropdown not clipped: y | no overlap: y | build: ✓

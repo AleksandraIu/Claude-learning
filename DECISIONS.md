@@ -1272,3 +1272,36 @@ These use the app `Header` organism, not `PreviewNav`. They don't share the laye
 ### Hardcoded px grep (header zone of all 4 layer pages)
 
 No hardcoded px in the header zones. Pre-existing `gridTemplateColumns` inline styles in Styles page content (color swatch grid) — out of scope, not header spacing.
+
+---
+
+## D46. Step 6.16 — Unclip CardHeader golden-hero in Organisms preview (2026-06-29)
+
+### Root cause 1 — `overflow-hidden` on CardHeader default root div
+
+CardHeader default variant (line 72 of CardHeader.tsx):
+```
+<div className="relative flex flex-col h-[480px] p-xl rounded-[12px] overflow-hidden ...">
+```
+
+`overflow-hidden` clips:
+- Dropdown open menus (`absolute top-full z-20`) that extend below the card boundary
+- Any card content that might push below the 480px fixed height
+
+The `className` prop is appended at the end of this class string. Passing `!overflow-visible` via className generates `overflow: visible !important`, overriding the component's `overflow: hidden`. The hero image layers are NOT affected — they are inside their own inner div: `<div aria-hidden className="absolute inset-0 pointer-events-none rounded-[12px] overflow-hidden">` which has its own `overflow-hidden` and still clips the image to the card shape correctly.
+
+### Root cause 2 — variant2 image bleeds 178px upward in preview
+
+CardHeader variant2 uses `imageTopOffset=-178` (default). In the preview's stacking context, variant2 sits below the default card (480px + gap-m 20px = 500px below content start). The variant2 image extends 178px upward (`top: -178px`) → image starts at `500 - 178 = 322px` from content start, which overlaps with the bottom portion (322–480px) of the default card. Since variant2 appears later in DOM order, its absolute image paints over the default card's bottom area, making it visually appear "cut off."
+
+### Fix — preview only (organisms.tsx), CardHeader unchanged
+
+| Change | Before | After |
+|---|---|---|
+| default CardHeader className | `"max-w-[830px]"` | `"max-w-[830px] !overflow-visible"` |
+| variant2 CardHeader props | none | `imageTopOffset={0} imageHeight={480}` |
+
+- `!overflow-visible`: overrides `overflow-hidden` via `!important`; dropdowns visible; image still clipped by inner div's own `overflow-hidden`
+- `imageTopOffset={0} imageHeight={480}`: image starts at card top (no upward bleed), height matches card (no downward bleed); card layout (title, SwitchGroup) visible against bg-page background in preview context
+
+### No changes to CardHeader.tsx, Dropdown.tsx, or any other component.

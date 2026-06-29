@@ -99,14 +99,18 @@ export default function OrganismsPreview() {
         </Section>
 
         {/* CARD HEADER */}
+        {/* D46: !overflow-visible on default — overrides component's overflow-hidden so dropdowns
+            aren't clipped. Image layers still clipped by their own inner overflow-hidden div.
+            variant2 gets imageTopOffset=0 so its image doesn't bleed 178px into the default
+            card above; imageHeight=480 matches the card height so no bleed below either. */}
         <Section title="CardHeader">
           <div>
             <Label>default (golden hero)</Label>
-            <CardHeader variant="default" className="max-w-[830px]" />
+            <CardHeader variant="default" className="max-w-[830px] !overflow-visible" />
           </div>
           <div>
             <Label>variant2 (full-bleed light hero — used in all 3 screens)</Label>
-            <CardHeader variant="variant2" className="max-w-[830px]" />
+            <CardHeader variant="variant2" className="max-w-[830px]" imageTopOffset={0} imageHeight={480} />
           </div>
         </Section>
 
