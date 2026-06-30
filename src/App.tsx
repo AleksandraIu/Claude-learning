@@ -7,6 +7,7 @@ import OrganismsPreview from './preview/organisms';
 import ScreenAllTeamsA from './preview/pages/ScreenAllTeamsA';
 import ScreenAllTeamsSingle from './preview/pages/ScreenAllTeamsSingle';
 import ScreenCandidateB from './preview/pages/ScreenCandidateB';
+import ScreenNodeLibrary from './preview/pages/ScreenNodeLibrary';
 import ReleaseNotes from './preview/release-notes';
 
 export default function App() {
@@ -22,6 +23,7 @@ export default function App() {
         <Route path="/preview/pages/screen-all-teams-a" element={<ScreenAllTeamsA />} />
         <Route path="/preview/pages/screen-all-teams-single" element={<ScreenAllTeamsSingle />} />
         <Route path="/preview/pages/screen-candidate-b" element={<ScreenCandidateB />} />
+        <Route path="/preview/pages/screen-node-library" element={<ScreenNodeLibrary />} />
         <Route path="/preview/release-notes" element={<ReleaseNotes />} />
       </Routes>
     </BrowserRouter>

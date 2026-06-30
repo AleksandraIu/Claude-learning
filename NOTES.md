@@ -1144,3 +1144,56 @@ Step 6.16 had applied `!overflow-visible` in organisms.tsx as a workaround; this
 ### Build: PASS (0 errors)
 
 card not cropped: y | dropdowns can open: y | no variant2 regression: y | build: ✓
+
+---
+
+## [Step 6.19: node library editor — React Flow canvas] — 2026-06-30
+
+### What was built
+Full automation editor screen at `/preview/pages/screen-node-library`:
+- **Left sidebar** (350px): "Automation" heading, automation name input, Node Library with 7 categorized items, Templates pill tags
+- **Center**: React Flow canvas — 3 initial nodes (Applicant Screening / Interview Stage / Final Decision), 2 smoothstep edges, dot-grid background, zoom controls
+- **Right sidebar** (350px): Node Properties panel with node name input, tab switcher (Parameters / Custom Code), 4 textarea fields, Save button
+
+### New dependency
+`@xyflow/react` v12.11.1 — first external UI library. Handles mechanics only; all visuals use our tokens.
+
+### New files
+| File | Purpose |
+|---|---|
+| `src/components/organisms/automation/AutomationNode.tsx` | Custom React Flow node organism |
+| `src/styles/reactflow.css` | ReactFlow visual overrides, scoped to `.rf-canvas` |
+| `src/preview/pages/ScreenNodeLibrary.tsx` | Main automation editor screen |
+
+### Modified files
+| File | Change |
+|---|---|
+| `styles/tokens.css` | Added `salmon-100`, `blush-100` primitives; `node-trigger`, `node-blush` semantic aliases |
+| `src/App.tsx` | Added route `/preview/pages/screen-node-library` |
+| `src/preview/index.tsx` | Added "Node Library" to Pages section |
+| `src/preview/organisms.tsx` | Added AutomationNode preview section (2 canvases: single node + all variants) |
+
+### New tokens
+- `--color-salmon-100: #f7e0dd` (Figma on-cads/red: trigger-type library items)
+- `--color-blush-100: #ffe3f1` (Figma on-cads/pink: notify/learning-type library items)
+- `--color-node-trigger: var(--color-salmon-100)`
+- `--color-node-blush: var(--color-blush-100)`
+
+### Interactions verified
+- Drag nodes: y (React Flow useNodesState + onNodesChange)
+- Draw connections: y (dragging from handle to handle, onConnect + addEdge)
+- Delete connections/nodes: y (Delete key, deleteKeyCode="Delete")
+- Pan canvas: y (default panOnDrag)
+- Zoom canvas: y (default zoomOnScroll + Controls)
+
+### No style bleed
+ReactFlow CSS uses `.react-flow__*` prefix selectors. Overrides scoped to `.rf-canvas` class. Other pages unaffected.
+
+### Grep clean
+- External Figma URLs: 0
+- Absolute /Users paths: 0
+- Hardcoded hex in new source files: 0
+
+### Build: PASS (0 errors, 0 TS errors)
+
+canvas works (drag/connect/delete/pan/zoom — y/y/y/y/y) | nodes match Figma appearance (y) | no style bleed (y) | new dep: @xyflow/react | new components: AutomationNode | new tokens: salmon-100, blush-100, node-trigger, node-blush | regressions: none | build: ✓

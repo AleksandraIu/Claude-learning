@@ -1,9 +1,16 @@
 import { useState } from 'react';
+import {
+  ReactFlow, Background, BackgroundVariant, Controls,
+  type NodeTypes,
+} from '@xyflow/react';
+import '@xyflow/react/dist/style.css';
+import '../styles/reactflow.css';
 import PreviewNav from './PreviewNav';
 import {
   SecondRow, TopMenu, Header,
   Kanban, Task, CardHeader,
 } from '../components/organisms';
+import AutomationNode, { type AutomationNodeData } from '../components/organisms/automation/AutomationNode';
 
 function Section({ title, subtitle, children }: { title: string; subtitle?: string; children: React.ReactNode }) {
   return (
@@ -110,6 +117,62 @@ export default function OrganismsPreview() {
           <div>
             <Label>variant2 (full-bleed light hero — used in all 3 screens)</Label>
             <CardHeader variant="variant2" className="max-w-[830px]" imageTopOffset={0} imageHeight={480} />
+          </div>
+        </Section>
+
+        {/* AUTOMATION NODE */}
+        {/* D49: AutomationNode requires ReactFlow context; previewed here in a minimal canvas */}
+        <Section title="AutomationNode" subtitle="Custom React Flow node — drag, connect, delete. Used in Node Library screen.">
+          <div>
+            <Label>pink (Applicant Screening)</Label>
+            <div className="rf-canvas h-[260px] rounded-s overflow-hidden border border-border">
+              <ReactFlow
+                nodeTypes={{ automation: AutomationNode } as NodeTypes}
+                nodes={[{ id: 'p', type: 'automation', position: { x: 60, y: 60 },
+                  data: { label: 'Applicant Screening', sublabel: 'Review resumes and applications', variant: 'pink' } satisfies AutomationNodeData }]}
+                edges={[]}
+                fitView
+                fitViewOptions={{ padding: 0.4 }}
+                nodesDraggable={false}
+                nodesConnectable={false}
+                elementsSelectable={false}
+                zoomOnScroll={false}
+                panOnDrag={false}
+                preventScrolling={false}
+                style={{ background: 'var(--color-bg-page)' }}
+              >
+                <Background variant={BackgroundVariant.Dots} gap={20} size={1} color="var(--color-border)" />
+              </ReactFlow>
+            </div>
+          </div>
+          <div>
+            <Label>all variants side-by-side</Label>
+            <div className="rf-canvas h-[360px] rounded-s overflow-hidden border border-border">
+              <ReactFlow
+                nodeTypes={{ automation: AutomationNode } as NodeTypes}
+                nodes={[
+                  { id: 'n1', type: 'automation', position: { x: 20,  y: 50 }, data: { label: 'Applicant Screening', sublabel: 'Review resumes',        variant: 'pink'    } satisfies AutomationNodeData },
+                  { id: 'n2', type: 'automation', position: { x: 20,  y: 220}, data: { label: 'Interview Stage',     sublabel: 'Initial interviews',      variant: 'purple'  } satisfies AutomationNodeData },
+                  { id: 'n3', type: 'automation', position: { x: 330, y: 50 }, data: { label: 'Final Decision',      sublabel: 'Extend offer',            variant: 'rose'    } satisfies AutomationNodeData },
+                  { id: 'n4', type: 'automation', position: { x: 330, y: 220}, data: { label: 'Email Notification',  sublabel: 'Send automated emails',   variant: 'olive'   } satisfies AutomationNodeData },
+                ]}
+                edges={[
+                  { id: 'e1', source: 'n1', target: 'n3', type: 'smoothstep' },
+                  { id: 'e2', source: 'n2', target: 'n3', type: 'smoothstep' },
+                ]}
+                fitView
+                fitViewOptions={{ padding: 0.15 }}
+                nodesDraggable={false}
+                nodesConnectable={false}
+                elementsSelectable={false}
+                zoomOnScroll={false}
+                panOnDrag={false}
+                preventScrolling={false}
+                style={{ background: 'var(--color-bg-page)' }}
+              >
+                <Background variant={BackgroundVariant.Dots} gap={20} size={1} color="var(--color-border)" />
+              </ReactFlow>
+            </div>
           </div>
         </Section>
 

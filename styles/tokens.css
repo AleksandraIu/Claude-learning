@@ -70,6 +70,8 @@
   --color-olive-100:  #e0e2a4;
   --color-mint-100:   #d4eee7;
   --color-peach-100:  #f5dedb;
+  --color-salmon-100: #f7e0dd;  /* D48: Figma on-cads/red — trigger-type node library items */
+  --color-blush-100:  #ffe3f1;  /* D48: Figma on-cads/pink — notify-type node library items */
 
   /* === SEMANTIC — COLOR ALIASES === */
   --color-bg:             var(--color-white);
@@ -90,6 +92,9 @@
   --color-status-olive:   var(--color-olive-100);
   --color-status-mint:    var(--color-mint-100);
   --color-status-peach:   var(--color-peach-100);
+  /* D48: automation node library item category colors */
+  --color-node-trigger:   var(--color-salmon-100); /* trigger/action type items */
+  --color-node-blush:     var(--color-blush-100);  /* notify/learning type items */
 
   /* === FONT FAMILIES → font-{name} utilities === */
   --font-serif:   'Instrument Serif', serif;

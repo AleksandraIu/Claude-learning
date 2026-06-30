@@ -1340,3 +1340,75 @@ This inner div has its own `rounded-[12px] overflow-hidden` and clips the image 
 Step 6.16 had applied `!overflow-visible` in organisms.tsx as a preview-level workaround. With D47 fixing the root in the component, that override is now redundant and has been removed from organisms.tsx (comment updated to D46/D47).
 
 ### No change to variant2 (separate root path in CardHeader.tsx)
+
+---
+
+## D48. Step 6.19 — New tokens for automation node category colors (2026-06-30)
+
+Two canvas node library colors in Figma don't map to existing primitives:
+- `var(--color/background/on-cads/red, #f7e0dd)`: light salmon, used for Trigger-type sidebar items. ≠ pink-100 (#f5cfca) — different chroma.
+- `var(--color/background/on-cads/pink, #ffe3f1)`: light blush, used for Notify-type sidebar items. No match in current palette.
+
+### New tokens
+
+| Layer | Token | Value | Maps to Figma |
+|---|---|---|---|
+| Primitive | `--color-salmon-100` | `#f7e0dd` | `on-cads/red` |
+| Primitive | `--color-blush-100` | `#ffe3f1` | `on-cads/pink` |
+| Semantic | `--color-node-trigger` | `var(--color-salmon-100)` | Trigger category nodes |
+| Semantic | `--color-node-blush` | `var(--color-blush-100)` | Notify/learning category nodes |
+
+Existing tokens reused for remaining canvas/library colors:
+- Canvas node "Applicant Screening": `bg-status-pink` (pink-100 = #f5cfca = Figma `cards/red`)
+- Canvas node "Interview Stage": `bg-status-purple` (purple-100 = #ddd6ef = Figma `cards/violet`)
+- Canvas node "Final Decision": `bg-status-rose` (rose-100 = #fad5e7 = Figma `cards/pink`)
+- Library items Email/Conditional: `bg-status-olive` (olive-100 = #e0e2a4 = Figma `on-cads/yellow`)
+- Library item Progress Tracker: `bg-status-purple` (purple-100 = #ddd6ef = Figma `on-cads/violet`)
+
+---
+
+## D49. Step 6.19 — @xyflow/react dependency + React Flow styling strategy (2026-06-30)
+
+### Dependency
+`@xyflow/react` is the first external UI library added. It handles ONLY canvas mechanics:
+- Node drag/drop positioning
+- Edge routing (bezier/smoothstep curves)
+- Pan and zoom
+- Selection, deletion (Delete key)
+- Connection validation and creation
+
+All VISIBLE STYLING is driven by our design system tokens. React Flow's default visual styles are overridden.
+
+### Style isolation
+React Flow's CSS is imported inside screen and organisms preview files. Its selectors are all `.react-flow__*`-prefixed — they don't touch global elements.
+Visual overrides scoped to `.rf-canvas` wrapper class in `src/styles/reactflow.css`:
+- Handles: 10px black circles (matching Figma 10px ellipse ports)
+- Edges: 1.5px black smoothstep (matching Figma connector SVGs)
+- Controls: `bg-bg`, `border-border`, `rounded-s` tokens
+- Node wrapper: transparent, no default border/shadow
+
+### Handle positioning decision
+Figma shows connection dots at the BOTTOM ROW of each node card. React Flow's standard handle positioning is center-left (target) and center-right (source). Using standard center positioning because:
+1. Bottom-positioned handles require fighting ReactFlow's transform/top CSS, which risks routing bugs at edge cases
+2. The handle circles (10px) at center-left/right are immediately recognizable as connection points — functionally correct
+3. The visual bottom-row circles in the node card are cosmetic indicators matching Figma; actual routing handles are on the node edges
+
+### Node → component mapping
+
+| Canvas element | Implementation |
+|---|---|
+| Canvas nodes | `AutomationNode` (custom React Flow node organism) |
+| Node library sidebar items | `LibraryItem` (inline component in screen — no ReactFlow dep) |
+| Canvas | `<ReactFlow>` + `<Background>` (dots pattern, token-colored) |
+| Zoom controls | `<Controls>` — overridden with our token styles |
+| Properties form inputs | Inline `FieldInput` / `FieldTextarea` components |
+
+### AutomationNode is ReactFlow-context-only
+`AutomationNode` uses ReactFlow's `Handle` component which requires `ReactFlowProvider` context. It is previewed in the Organisms preview inside a minimal `<ReactFlow>` canvas wrapper — not as a bare component.
+
+---
+
+## D50. Step 6.19 — Node radius uses 8px (Figma radius/m = 8px for this screen) (2026-06-30)
+
+The automation canvas nodes use `rounded-[8px]` (arbitrary Tailwind value) rather than `rounded-m`.
+Reason: Figma uses `var(--radius/m, 8px)` for node cards, with fallback = 8px — the actual Figma `radius/m` token for this context is 8px. Our existing `--radius-m: 4px` was set from the global tokens sheet (all radii mapped to 4px per D1). This is a screen-specific variant; rather than changing the system-wide `--radius-m`, we use an inline arbitrary value for the node component only. The deviation is recorded here.

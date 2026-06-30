@@ -43,6 +43,11 @@ const pages = [
     label: 'Candidate B',
     desc: 'Header · CardHeader(variant2) · Notify · Achievements · Personal Dev · Reports',
   },
+  {
+    path: '/preview/pages/screen-node-library',
+    label: 'Node Library',
+    desc: 'Automation editor — drag nodes, draw connections, pan/zoom — powered by React Flow',
+  },
 ];
 
 function LayerCard({ path, label, status, desc }: typeof layers[0]) {
