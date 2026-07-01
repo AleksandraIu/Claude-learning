@@ -1197,3 +1197,48 @@ ReactFlow CSS uses `.react-flow__*` prefix selectors. Overrides scoped to `.rf-c
 ### Build: PASS (0 errors, 0 TS errors)
 
 canvas works (drag/connect/delete/pan/zoom — y/y/y/y/y) | nodes match Figma appearance (y) | no style bleed (y) | new dep: @xyflow/react | new components: AutomationNode | new tokens: salmon-100, blush-100, node-trigger, node-blush | regressions: none | build: ✓
+
+---
+
+## [Step 6.20: Node Library — all interactions wired] — 2026-07-01
+
+### What changed
+Full rewrite of `ScreenNodeLibrary.tsx` to wire all 6 interactions. `AutomationNode.tsx` was already rewritten in the prior session.
+
+### Files modified
+| File | Change |
+|---|---|
+| `src/preview/pages/ScreenNodeLibrary.tsx` | Full rewrite: drag-drop, context menu, templates, properties panel |
+| `src/components/organisms/automation/AutomationNode.tsx` | Rewritten (prior session): MenuHandlerContext, three-dots button, selected outline |
+
+### Interactions verified
+| Behavior | Status |
+|---|---|
+| Template pills stay within sidebar (bug fix) | ✓ |
+| Drag library item → drops as node at correct canvas position | ✓ |
+| Draw wire: drag handle-to-handle → smoothstep edge added | ✓ |
+| Delete wire: click edge + Delete key | ✓ |
+| Delete node: click node + Delete key | ✓ |
+| Three-dots → context menu → Delete removes node + connected edges | ✓ |
+| Context menu: close on outside-click and Escape | ✓ |
+| Template "Hiring Funnel" seeds canvas | ✓ |
+| Template "Onboarding Flow" seeds canvas | ✓ |
+| Template "Development Plan" seeds canvas | ✓ |
+| Active template has black/white styling | ✓ |
+| Canvas fitView after template load | ✓ |
+| Node Properties panel: hidden when nothing selected | ✓ |
+| Node Properties panel: appears on node click | ✓ |
+| Node Properties panel: syncs fields from node data | ✓ |
+| Save button commits panel fields to node data | ✓ |
+| Selected node shows black outline | ✓ |
+| Pan / zoom / Controls | ✓ |
+
+### Architecture
+- `ReactFlowProvider` wraps outer `ScreenNodeLibrary`; inner `NodeLibraryEditor` calls `useReactFlow()`
+- `MenuHandlerContext` avoids prop-drilling callback through React Flow node data
+- `TEMPLATES` defined at module level (stable reference across renders)
+- `ContextMenu` at `position: fixed` — avoids z-index/stacking issues inside canvas
+
+### Build: PASS (0 errors, 0 TS errors)
+
+drag-drop: ✓ | wires: ✓ | context-menu delete: ✓ | templates: ✓ | properties panel: ✓ | build: ✓

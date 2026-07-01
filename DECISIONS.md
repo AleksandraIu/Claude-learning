@@ -1412,3 +1412,33 @@ Figma shows connection dots at the BOTTOM ROW of each node card. React Flow's st
 
 The automation canvas nodes use `rounded-[8px]` (arbitrary Tailwind value) rather than `rounded-m`.
 Reason: Figma uses `var(--radius/m, 8px)` for node cards, with fallback = 8px — the actual Figma `radius/m` token for this context is 8px. Our existing `--radius-m: 4px` was set from the global tokens sheet (all radii mapped to 4px per D1). This is a screen-specific variant; rather than changing the system-wide `--radius-m`, we use an inline arbitrary value for the node component only. The deviation is recorded here.
+
+---
+
+## D51. Step 6.20 — Node Library: all interactions wired (2026-07-01)
+
+### Bug fix: templates overflow (item 0)
+Templates pill buttons were overflowing the right edge of the white left-sidebar panel.
+Fix: added `overflow-x-hidden` to the sidebar outer `div` (`w-[350px] shrink-0 overflow-y-auto overflow-x-hidden`). The pills use `max-w-full` and `flex-wrap` so they reflow correctly within the container.
+
+### Palette drag-drop (item 2)
+`PaletteItem` renders each library item as a `draggable` div. `onDragStart` sets `dataTransfer` with `application/rf-node` JSON payload (label, sublabel, variant). Canvas `onDragOver` sets `dropEffect = 'copy'`; `onDrop` reads the payload, calls `rfInstance.screenToFlowPosition({ x: clientX, y: clientY })` for accurate canvas coordinates, and appends a new `AutomationNode` via `setNodes`. `ReactFlowProvider` wraps the outer shell so `useReactFlow()` is available in the inner editor component.
+
+### Context menu — three-dots → Delete (item 4)
+`MenuHandlerContext` (React.createContext) passes the `openMenu` handler into `AutomationNode` without prop-drilling through React Flow node data. The three-dots `<button>` uses the `nodrag` class to prevent drag, calls `e.stopPropagation()` to avoid toggling node selection, and fires `onMenuClick(id, clientX, clientY)`.
+
+A `ContextMenu` component renders at `position: fixed` using the click coordinates. Click-outside detected via `mousedown` listener on `document`; Escape key also closes. Clicking Delete calls `deleteNode(id)` which filters both `nodes` and `edges` arrays.
+
+### Template seeding (item 5)
+`TEMPLATES` constant (module-level) defines three preset graphs: "Hiring Funnel" (5 nodes, 4 edges), "Onboarding Flow" (4 nodes, 4 edges), "Development Plan" (5 nodes, 5 edges). Selecting a template calls `setNodes`/`setEdges` immediately; `rfInstance.fitView` runs in a `setTimeout(, 60)` to fire after the state flush. Active template gets black bg / white text; others use `bg-bg-subtle`.
+
+### Node Properties panel (item 6)
+Panel renders only when `nodes.find(n => n.selected)` returns a truthy value (no selected node → no panel). A `useEffect` keyed on `selectedId` syncs all panel fields from node data. `saveNodeProps` commits panel state back into node data via `setNodes`. Selected node shows `outline outline-2 outline-black`; deselected: `outline-transparent` (smooth CSS transition).
+
+| Decision | Rationale |
+|---|---|
+| `ReactFlowProvider` outer + `NodeLibraryEditor` inner | `useReactFlow()` requires being inside a provider; state hooks work outside it. Pattern avoids a redundant wrapper component. |
+| `MenuHandlerContext` for three-dots | React Flow node data should be serializable; passing function callbacks through `data` is fragile. Context avoids both issues. |
+| `setTimeout(60)` before fitView | State flush happens asynchronously; calling fitView synchronously sees the old node layout. 60ms is enough without a visible delay. |
+| `uid()` with counter + Math.random | Needs to produce unique IDs across drag-drop sessions. Counter alone resets on hot-reload; random suffix makes collisions negligible. |
+| `deleteKeyCode="Delete"` on ReactFlow | Keyboard deletion for edges and nodes (React Flow built-in). Complements the context-menu delete path. |
